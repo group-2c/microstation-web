@@ -41,12 +41,6 @@ class CommonRestfulModel {
    * @memberof CommonRestfulModel
    */
   getByPage(params) {
-
-    params = {
-      sort: "id,asc",
-      ...params
-    }
-
     return new Promise((resolve, reject) => {
       request.get(
         this._sourceURL + "/page",
@@ -171,7 +165,10 @@ class CommonRestfulModel {
    */
    deleteManyById(ids) {
     return new Promise((resolve, reject) => {
-      request.post(this._sourceURL + "/delete", ids)
+      const array = this._sourceURL.split("/")
+      request.delete(`/batch_${array.pop()}`, { params: {
+        ids: ids.join(",")
+      } })
         .then(() => {
           resolve(1)
         }, err => {

@@ -5,38 +5,46 @@
 <template>
   <div class="menuLayer">
     <a-menu
-      mode="inline"
+      class="menu"
+      mode="horizontal"
       theme="dark"
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKeys"
     >
-      <a-menu-item key="overview">
-        <router-link to="/challengeGame/overview">
-          <template #icon><FileExcelOutlined /></template>
-          <span>11111</span>
+      <a-menu-item key="dashboard">
+        <router-link to="/dashboard">
+          <HomeOutlined />
+          <span>首页</span>
         </router-link>
       </a-menu-item>
+      <a-sub-menu class="sub-menu" key="operations">
+        <template #icon><AppstoreOutlined /></template>
+        <template #title>基础数据</template>
+        <a-menu-item key="user">
+          <router-link to="/operations/user">
+            <span>用户管理</span>
+          </router-link>
+        </a-menu-item>
+      </a-sub-menu>
     </a-menu>
   </div>
 </template>
 
 <script setup>
   import { watch, ref } from "vue"
-  import { FileExcelOutlined } from "@ant-design/icons-vue"
+  import { HomeOutlined, AppstoreOutlined } from "@ant-design/icons-vue"
   import { useRoute } from "vue-router"
 
   const route = useRoute()
-
   const selectedKeys = ref([])
   const openKeys = ref([])
 
-  const matchNewRouteKey = path => {
+  const matchNewRouteKey = path => {  
     const routeKey = path.substring(
-      path.lastIndexOf('/') + 1
+      path.lastIndexOf("/") + 1
     )
     selectedKeys.value.splice(0, 1, routeKey)
   }
-
   matchNewRouteKey(route.path)
 
   watch(() => route.path, matchNewRouteKey)

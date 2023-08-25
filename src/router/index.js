@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from "vue-router"
 import { getStorageItem } from "_utils/storage"
 import { AUTH_TOKEN } from "@/store/mutation-types"
 import Login from "@/views/Login/index.vue"
+import Layout from "@/views/Layout/index.vue"
 import Dashboard from "@/views/Dashboard/index.vue"
+import User from "@/views/operations/User/index.vue"
 
 export const routes = [
   { 
@@ -14,6 +16,7 @@ export const routes = [
     path: "/",
     name: "Index",
     redirect: "/dashboard",
+    component: Layout,
     children: [
       {
         path: "dashboard",
@@ -22,6 +25,20 @@ export const routes = [
       }
     ]
   },
+  {
+    path: "/operations/",
+    name: "Operations",
+    component: Layout,
+    redirect: "/operations/user",
+    children: [
+      {
+        path: "user",
+        name: "User",
+        meta: { title: "用户管理" },
+        component: User,
+      }
+    ]
+  }
 ]
 
 const router = createRouter({

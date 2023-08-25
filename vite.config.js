@@ -14,6 +14,7 @@ export default defineConfig({
       '_request': fileURLToPath(new URL('./src/utils/request', import.meta.url)),
       '_constant': fileURLToPath(new URL('./public/constant', import.meta.url)),
       '_api': fileURLToPath(new URL('./src/api', import.meta.url)),
+      '_components': fileURLToPath(new URL('./src/components', import.meta.url)),
     }
   },
   css: {
