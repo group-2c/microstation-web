@@ -26,6 +26,7 @@
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
+              size="large"
               @search="handleSearch"
             />
           </a-col>
@@ -38,7 +39,6 @@
           :data-source="dataCenter.tableList" 
           :pagination="dataCenter.pagination"
           :row-selection="rowSelection"
-          bordered
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
@@ -65,7 +65,7 @@
         </a-table>
       </div>
     </a-spin>
-    <edit-modal ref="editModalRef" :onOk="editModalConfirm"/>
+    <edit-drawer ref="editDrawerRef" :onOk="editDrawerConfirm"/>
   </div>
 </template>
 
@@ -73,10 +73,11 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
+  import { dict_departments } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import userApi from "_api/user"
-  import EditModal from "./EditModal.vue"
+  import EditDrawer from "./EditDrawer.vue"
 
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
@@ -111,7 +112,7 @@
       dataCenter.value.selectedRowKeys = selectedRowKeys
     }
   })
-  const editModalRef = ref()
+  const editDrawerRef = ref()
 
   const operationDisabled = computed(() => {
     return dataCenter.value.selectedRowKeys.length === 0
@@ -126,7 +127,10 @@
 
     try {
       const res = await userApi.getByPage(data)
-      dataCenter.value.tableList = res.data
+      dataCenter.value.tableList = res.data.map(item => {
+        item.department_name = dict_departments.find(x => x.key === item.department_id)?.value
+        return item
+      })
       dataCenter.value.pagination.total = res.total
       dataCenter.value.pagination.current = res.page_num
     } catch(err) {
@@ -148,11 +152,11 @@
   }
 
   const handleEditItem = row => {
-    editModalRef.value.handleShow(row)
+    editDrawerRef.value.handleShow(row)
   }
 
   const handleAdd = () => {
-    editModalRef.value.handleShow({})
+    editDrawerRef.value.handleShow({})
   }
 
   const batchOperationChange = type => {
@@ -228,7 +232,7 @@
     ExportXlsx.downloadExcel(dataArray, `${pageName}信息表_${new Date().toLocaleString()}`)
   }
 
-  const editModalConfirm = () => {
+  const editDrawerConfirm = () => {
     _getTableList()
   }
 

@@ -22,13 +22,29 @@
   .searchContainer {
     margin-bottom: 20px;
   }
+  .contentContainer {
+    width: 100%;
+    height: calc(100vh - 230px);
+  }
 }
 
-.editModal {
-  .ant-modal-body {
+
+.editDrawer {
+  .ant-drawer-body {
     padding: 20px 20px 0 0;
     .ant-input-number, .ant-picker, .ant-input-number-group-wrapper {
       width: 100%;
+    }
+  }
+  .ant-drawer-footer {
+    text-align: right;
+    .ant-btn {
+      height: 40px;
+      padding: 4px 25px;
+      margin-right: 20px !important;
+      &:last-child {
+        margin-right: 0 !important;
+      }
     }
   }
 }

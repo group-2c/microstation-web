@@ -1,14 +1,10 @@
 <template>
-  <a-modal
-    class="editModal"
+  <a-drawer
     :title="dataCenter.record.id ? '编辑' : '新增'"
-    :width="900"
+    :width="1000"
     :open="dataCenter.visible"
-    :confirm-loading="dataCenter.loading"
     :closable="false"
-    centered
-    @ok="handleOk"
-    @cancel="handleCancel"
+    class="editDrawer"
   > 
     <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 6 }">
       <a-row :gutter="30"> 
@@ -42,8 +38,8 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label="所属部门" name="department_id">
-            <a-select v-model:value="dataCenter.record.department_id" popupClassName="modalSelect" placeholder="请选择部门">
-              <a-select-option v-for="item in dataCenter.departmentList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
+            <a-select v-model:value="dataCenter.record.department_id" popupClassName="modalSelect" placeholder="请选择所属部门">
+              <a-select-option v-for="item in dict_departments" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -54,14 +50,18 @@
         </a-col>
       </a-row>
     </a-form>
-  </a-modal>
+    <template #footer>
+      <a-button style="margin-right: 8px" @click="handleCancel">取消</a-button>
+      <a-button type="primary" @click="handleOk">确定</a-button>
+    </template>
+  </a-drawer>
 </template>
 
 <script setup>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
+import { dict_departments } from "_utils/dictionary"
 import userApi from "_api/user"
-import departmentApi from "_api/department"
 import Lodash from "lodash"
 
 const formRules = ref({
@@ -98,15 +98,6 @@ const dataDefault = {
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
 const formRef = ref()
 
-const _getDepartmentList = async () => {
-  try {
-    const res = await departmentApi.getAll()
-    dataCenter.value.departmentList = res.data
-  } catch(err) {
-    message.error("部门获取失败: " + err)
-  }
-}
-
 const handleShow = (item = {}) => {
   Lodash.merge(formRules.value, passwordRule)
   dataCenter.value.visible = true
@@ -114,7 +105,6 @@ const handleShow = (item = {}) => {
     ...Lodash.cloneDeep(item),
     password: ""
   }
-  _getDepartmentList()
 }
 
 const _validateForm = callback => {

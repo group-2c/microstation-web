@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-08-19 10:24:52
+ * @date: 2023-08-25 15:46:56
  * @fileName: user.js
  * @filePath: src/api/user.js
- * @description: 用户接口
+ * @description: 用户接口 
  */
 import CommonRestfulModel from "./CommonRestful"
 import Lodash from "lodash"
