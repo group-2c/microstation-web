@@ -35,12 +35,20 @@
           <span>实时视频</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item key="dataAnalysis">
-        <router-link to="/dataAnalysis">
-          <ProjectOutlined />
-          <span>数据分析</span>
-        </router-link>
-      </a-menu-item>
+      <a-sub-menu class="sub-menu" key="dataAnalysis">
+        <template #icon><ProjectOutlined /></template>
+        <template #title>数据分析</template>
+        <a-menu-item key="temperatureEquipmentValue">
+          <router-link to="/dataAnalysis/temperatureEquipmentValue">
+            <span>数显温湿度设备数据</span>
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="waterImmersionSensorValue">
+          <router-link to="/dataAnalysis/waterImmersionSensorValue">
+            <span>水浸传感器数据</span>
+          </router-link>
+        </a-menu-item>
+      </a-sub-menu>
       <a-menu-item key="alarmManagement">
         <router-link to="/alarmManagement">
           <AlertOutlined />
@@ -65,19 +73,9 @@
             <span>数显温湿度设备</span>
           </router-link>
         </a-menu-item>
-        <a-menu-item key="temperatureEquipmentValue">
-          <router-link to="/operations/temperatureEquipmentValue">
-            <span>数显温湿度设备数据</span>
-          </router-link>
-        </a-menu-item>
         <a-menu-item key="waterImmersionSensor">
           <router-link to="/operations/waterImmersionSensor">
             <span>水浸传感器</span>
-          </router-link>
-        </a-menu-item>
-        <a-menu-item key="waterImmersionSensorValue">
-          <router-link to="/operations/waterImmersionSensorValue">
-            <span>水浸传感器数据</span>
           </router-link>
         </a-menu-item>
       </a-sub-menu>

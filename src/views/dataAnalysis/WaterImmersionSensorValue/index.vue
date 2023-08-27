@@ -2,7 +2,7 @@
  * @author: zzp
  * @date: 2023-08-27 15:59:33
  * @fileName: index.vue
- * @filePath: src/views/operations/WateImmersionSensorValue/index.vue
+ * @filePath: src/views/dataAnalysis/WateImmersionSensorValue/index.vue
  * @description: 水浸传感器数据
  */
  <template>

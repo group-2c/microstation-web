@@ -2,7 +2,7 @@
  * @author: zzp
  * @date: 2023-08-27 15:43:13
  * @fileName: index.vue
- * @filePath: src/views/operations/TemperatureEquipmentValue/index.vue
+ * @filePath: src/views/dataAnalysis/TemperatureEquipmentValue/index.vue
  * @description: 数显温湿度设备数据记录
  */
  <template>

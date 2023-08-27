@@ -24,7 +24,7 @@
     map = new T.Map("map", {
       projection: "EPSG:4326",
     })
-    map.centerAndZoom(new T.LngLat(118.46489, 39.49825), 13)
+    map.centerAndZoom(new T.LngLat(102.72, 25.04), 18)
     map.setStyle("indigo")
   }
 

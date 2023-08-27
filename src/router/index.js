@@ -7,9 +7,9 @@ import Dashboard from "@/views/Dashboard/index.vue"
 import User from "@/views/operations/User/index.vue"
 import Controller from "@/views/operations/Controller/index.vue"
 import TemperatureEquipment from "@/views/operations/TemperatureEquipment/index.vue"
-import TemperatureEquipmentValue from "@/views/operations/TemperatureEquipmentValue/index.vue"
 import WaterImmersionSensor from "@/views/operations/WaterImmersionSensor/index.vue"
-import WaterImmersionSensorValue from "@/views/operations/WaterImmersionSensorValue/index.vue"
+import TemperatureEquipmentValue from "@/views/dataAnalysis/TemperatureEquipmentValue/index.vue"
+import WaterImmersionSensorValue from "@/views/dataAnalysis/WaterImmersionSensorValue/index.vue"
 
 export const routes = [
   { 
@@ -28,6 +28,24 @@ export const routes = [
         name: "Dashboard",
         component: Dashboard
       }
+    ]
+  },
+  {
+    path: "/dataAnalysis",
+    name: "DataAnalysis",
+    component: Layout,
+    redirect: "/dataAnalysis/temperatureEquipmentValue",
+    children: [
+      {
+        path: "temperatureEquipmentValue",
+        name: "TemperatureEquipmentValue",
+        component: TemperatureEquipmentValue,
+      },
+      {
+        path: "waterImmersionSensorValue",
+        name: "WaterImmersionSensorValue",
+        component: WaterImmersionSensorValue,
+      },
     ]
   },
   {
@@ -52,19 +70,9 @@ export const routes = [
         component: TemperatureEquipment,
       },
       {
-        path: "temperatureEquipmentValue",
-        name: "TemperatureEquipmentValue",
-        component: TemperatureEquipmentValue,
-      },
-      {
         path: "waterImmersionSensor",
         name: "WaterImmersionSensor",
         component: WaterImmersionSensor,
-      },
-      {
-        path: "waterImmersionSensorValue",
-        name: "WaterImmersionSensorValue",
-        component: WaterImmersionSensorValue,
       }
     ]
   }
