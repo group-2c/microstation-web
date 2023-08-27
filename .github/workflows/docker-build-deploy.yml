@@ -1,0 +1,49 @@
+name: Build And Push Image
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: 安装 Node.js
+        uses: actions/setup-node@v3 
+        with:
+          node-version: 16
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v2
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
+          
+      - name: 打包项目
+        run: |
+          pnpm install
+          pnpm build
+      - name: 构建镜像
+        run: docker build --file Dockerfile --tag registry.cn-beijing.aliyuncs.com/zhangzhengpeng/microstation-web .
+      - name: 登录 docker 镜像仓库
+        run: echo "${{ secrets.ALI_REGISTRY_PASSWORD }}" | docker login --username=luqilina --password-stdin registry.cn-beijing.aliyuncs.com
+      - name: 推送镜像到仓库
+        run: docker push registry.cn-beijing.aliyuncs.com/zhangzhengpeng/microstation-web
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 初始化ssh并执行sh更新容器
+        run: |
+          eval $(ssh-agent -s)
+          echo "${{secrets.SERVER_SSH_PRIV_KEY}}" > deploy.key
+          mkdir -p ~/.ssh
+          chmod 0600 deploy.key
+          ssh-add deploy.key
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+          ssh root@${{secrets.SERVER_IP}} "cd /root/update_project && sh microstation.sh"
+
+    needs: build
