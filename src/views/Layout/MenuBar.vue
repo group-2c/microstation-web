@@ -60,6 +60,11 @@
             <span>微站控制器</span>
           </router-link>
         </a-menu-item>
+        <a-menu-item key="temperatureEquipment">
+          <router-link to="/operations/temperatureEquipment">
+            <span>数显温湿度设备</span>
+          </router-link>
+        </a-menu-item>
       </a-sub-menu>
     </a-menu>
   </div>

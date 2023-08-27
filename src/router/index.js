@@ -6,6 +6,7 @@ import Layout from "@/views/Layout/index.vue"
 import Dashboard from "@/views/Dashboard/index.vue"
 import User from "@/views/operations/User/index.vue"
 import Controller from "@/views/operations/Controller/index.vue"
+import TemperatureEquipment from "@/views/operations/TemperatureEquipment/index.vue"
 
 export const routes = [
   { 
@@ -43,6 +44,12 @@ export const routes = [
         name: "Controller",
         meta: { title: "微站控制器" },
         component: Controller,
+      },
+      {
+        path: "temperatureEquipment",
+        name: "TemperatureEquipment",
+        meta: { title: "数显温湿度设备" },
+        component: TemperatureEquipment,
       }
     ]
   }
