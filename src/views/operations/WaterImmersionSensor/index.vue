@@ -1,4 +1,11 @@
-<template>
+/*
+ * @author: zzp
+ * @date: 2023-08-27 15:51:21
+ * @fileName: index.vue
+ * @filePath: src/views/operations/WaterImmersionSensor/index.vue
+ * @description: 水浸传感器
+ */
+ <template>
   <div class="parcel">
     <a-spin :spinning="dataCenter.loading" >
       <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">
@@ -72,18 +79,22 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_departments } from "_utils/dictionary"
+  import { dict_waterSensor_manufacturers } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
-  import userApi from "_api/user"
+  import waterImmersionSensorApi from "_api/waterImmersionSensor"
   import EditDrawer from "./EditDrawer.vue"
 
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
-    { title: "用户名", dataIndex: "username", align: "left" },    
-    { title: "所属部门", dataIndex: "department_name", align: "left" },    
-    { title: "联系电话", dataIndex: "mobile", align: "left" },
-    { title: "真实姓名", dataIndex: "name", align: "left" },
+    { title: "设备名称", dataIndex: "name", align: "left" },    
+    { title: "设备地址", dataIndex: "slave_id", align: "left" },
+    { title: "波特率", dataIndex: "baud_rate", align: "left" },
+    { title: "数据位", dataIndex: "data_bit", align: "left" },
+    { title: "停止位", dataIndex: "stop_bit", align: "left" },
+    { title: "校验位", dataIndex: "parity", align: "left" },
+    { title: "所属微站", dataIndex: "controller_name", align: "left" },
+    { title: "制造商", dataIndex: "manufacturer_name", align: "left" },
     { title: "创建时间", dataIndex: "created_at", align: "left" },
     { title: "更新时间", dataIndex: "updated_at", align: "left" },
     { title: "操 作", dataIndex: "operation", align: "center", width: 250 }
@@ -92,7 +103,7 @@
   const dataDefault = {
     loading: false,
     operationKey: undefined,
-    pageName: "用户",
+    pageName: "水浸传感器",
     searchForm: {},
     tableList: [],
     selectedRowKeys: [],
@@ -125,9 +136,9 @@
     const data = { ...searchForm, page_num: current, page_size: pageSize }
 
     try {
-      const res = await userApi.getByPage(data)
+      const res = await waterImmersionSensorApi.getByPage(data)
       dataCenter.value.tableList = res.data.map(item => {
-        item.department_name = dict_departments.find(x => x.key === item.department_id)?.value
+        item.manufacturer_name = dict_waterSensor_manufacturers.find(x => x.key === item.manufacturer)?.value
         return item
       })
       dataCenter.value.pagination.total = res.total
@@ -150,6 +161,7 @@
     _getTableList()
   }
 
+  
   const handleEditItem = row => {
     editDrawerRef.value.handleShow(row)
   }
@@ -174,7 +186,7 @@
       dataCenter.value.loading = true
       try {
         const { selectedRowKeys } = dataCenter.value
-        await userApi.deleteManyById(selectedRowKeys)
+        await waterImmersionSensorApi.deleteManyById(selectedRowKeys)
       } catch(err) {
         message.error("删除失败: " + err)
       } finally {
@@ -199,7 +211,7 @@
   const handleDeleteItem = async row => {
     dataCenter.value.loading = true
     try {
-      await userApi.deleteById(row.id)
+      await waterImmersionSensorApi.deleteById(row.id)
     } catch(err) {
       message.error("删除失败: " + err)
     } finally {
@@ -216,11 +228,15 @@
 
     const dataArray = [{
       id: `${pageName}id`,
-      name: "真实姓名",
-      mobile: "联系电话",
-      username: "用户名",
-      department_name: "部门名称",
-      created_at: "创建时间"
+      name: "设备名称",
+      slave_id: "设备地址",
+      baud_rate: "波特率",
+      data_bit: "数据位",
+      stop_bit: "停止位",
+      parity: "校验位",
+      controller_name: "所属微站",
+      manufacturer_name: "制造商",
+      created_at: "创建时间",
     }]
 
     tableList.forEach(item => {

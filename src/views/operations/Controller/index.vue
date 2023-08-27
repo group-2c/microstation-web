@@ -33,7 +33,6 @@
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
-              size="large"
               @search="handleSearch"
             />
           </a-col>

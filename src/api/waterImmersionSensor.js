@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-08-27 15:25:28
- * @fileName: temperatureEquipment.js
- * @filePath: src/api/temperatureEquipment.js
- * @description: 数显温湿度设备接口
+ * @date: 2023-08-27 15:52:05
+ * @fileName: waterImmersionSensor.js
+ * @filePath: src/api/waterImmersionSensor.js
+ * @description: 水浸传感器接口
  */
 import CommonRestfulModel from "./CommonRestful"
 import Lodash from "lodash"
@@ -22,15 +22,15 @@ const toSubmitFields = values => {
   ])
 }
 
-class temperatureEquipmentApi extends CommonRestfulModel {
+class waterImmersionSensorApi extends CommonRestfulModel {
 
   constructor() {
     super({
-      sourceURL: "/temperatureEquipment",
+      sourceURL: "/waterImmersionSensor",
       toSubmitFields
     })
   }
 
 }
 
-export default new temperatureEquipmentApi()
+export default new waterImmersionSensorApi()
