@@ -5,6 +5,7 @@ import Login from "@/views/Login/index.vue"
 import Layout from "@/views/Layout/index.vue"
 import Dashboard from "@/views/Dashboard/index.vue"
 import User from "@/views/operations/User/index.vue"
+import Controller from "@/views/operations/Controller/index.vue"
 
 export const routes = [
   { 
@@ -36,6 +37,12 @@ export const routes = [
         name: "User",
         meta: { title: "用户管理" },
         component: User,
+      },
+      {
+        path: "controller",
+        name: "Controller",
+        meta: { title: "微站控制器" },
+        component: Controller,
       }
     ]
   }

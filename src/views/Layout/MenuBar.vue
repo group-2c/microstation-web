@@ -17,12 +17,47 @@
           <span>首页</span>
         </router-link>
       </a-menu-item>
+      <a-menu-item key="unmanned">
+        <router-link to="/unmanned">
+          <GlobalOutlined />
+          <span>无人微站</span>
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="distributionMonitoring">
+        <router-link to="/distributionMonitoring">
+          <NodeCollapseOutlined />
+          <span>配电监控</span>
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="realTimeVideo">
+        <router-link to="/realTimeVideo">
+          <VideoCameraOutlined />
+          <span>实时视频</span>
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="dataAnalysis">
+        <router-link to="/dataAnalysis">
+          <ProjectOutlined />
+          <span>数据分析</span>
+        </router-link>
+      </a-menu-item>
+      <a-menu-item key="alarmManagement">
+        <router-link to="/alarmManagement">
+          <AlertOutlined />
+          <span>报警管理</span>
+        </router-link>
+      </a-menu-item>
       <a-sub-menu class="sub-menu" key="operations">
         <template #icon><AppstoreOutlined /></template>
         <template #title>基础数据</template>
         <a-menu-item key="user">
           <router-link to="/operations/user">
             <span>用户管理</span>
+          </router-link>
+        </a-menu-item>
+        <a-menu-item key="controller">
+          <router-link to="/operations/controller">
+            <span>微站控制器</span>
           </router-link>
         </a-menu-item>
       </a-sub-menu>
@@ -32,7 +67,15 @@
 
 <script setup>
   import { watch, ref } from "vue"
-  import { HomeOutlined, AppstoreOutlined } from "@ant-design/icons-vue"
+  import { 
+    HomeOutlined, 
+    AppstoreOutlined,
+    GlobalOutlined,
+    NodeCollapseOutlined,
+    VideoCameraOutlined,
+    ProjectOutlined,
+    AlertOutlined,
+  } from "@ant-design/icons-vue"
   import { useRoute } from "vue-router"
 
   const route = useRoute()
