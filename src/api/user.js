@@ -11,11 +11,11 @@ import Lodash from "lodash"
 const toSubmitFields = values => {
   return Lodash.pick(values, [
     "id",
-    "name",
+    "realname",
     "password",
-    "mobile",
+    "telephone",
     "username",
-    "department_id",
+    "department",
   ])
 }
 

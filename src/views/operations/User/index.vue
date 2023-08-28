@@ -82,8 +82,8 @@
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
     { title: "用户名", dataIndex: "username", align: "left" },    
     { title: "所属部门", dataIndex: "department_name", align: "left" },    
-    { title: "联系电话", dataIndex: "mobile", align: "left" },
-    { title: "真实姓名", dataIndex: "name", align: "left" },
+    { title: "联系电话", dataIndex: "telephone", align: "left" },
+    { title: "真实姓名", dataIndex: "realname", align: "left" },
     { title: "创建时间", dataIndex: "created_at", align: "left" },
     { title: "更新时间", dataIndex: "updated_at", align: "left" },
     { title: "操 作", dataIndex: "operation", align: "center", width: 250 }
@@ -122,16 +122,17 @@
     
     const { searchForm, pagination } = dataCenter.value
     const { current, pageSize } = pagination
-    const data = { ...searchForm, page_num: current, page_size: pageSize }
+    const data = { ...searchForm, page: current, size: pageSize }
 
     try {
       const res = await userApi.getByPage(data)
-      dataCenter.value.tableList = res.data.map(item => {
+      console.log(res)
+      dataCenter.value.tableList = res.content.map(item => {
         item.department_name = dict_departments.find(x => x.key === item.department_id)?.value
         return item
       })
-      dataCenter.value.pagination.total = res.total
-      dataCenter.value.pagination.current = res.page_num
+      dataCenter.value.pagination.total = res.totalElements
+      dataCenter.value.pagination.current = res.number
     } catch(err) {
       message.error("获取列表失败: " + err)
     } finally {
@@ -216,8 +217,8 @@
 
     const dataArray = [{
       id: `${pageName}id`,
-      name: "真实姓名",
-      mobile: "联系电话",
+      realname: "真实姓名",
+      telephone: "联系电话",
       username: "用户名",
       department_name: "部门名称",
       created_at: "创建时间"

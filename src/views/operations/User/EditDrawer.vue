@@ -14,8 +14,8 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="真实姓名" name="name">
-            <a-input v-model:value="dataCenter.record.name" placeholder="请输入真实姓名" />
+          <a-form-item label="真实姓名" name="realname">
+            <a-input v-model:value="dataCenter.record.realname" placeholder="请输入真实姓名" />
           </a-form-item>
         </a-col>
         <div v-if="dataCenter.record.id" style="width: 100%;">
@@ -37,15 +37,15 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="所属部门" name="department_id">
-            <a-select v-model:value="dataCenter.record.department_id" popupClassName="modalSelect" placeholder="请选择所属部门">
+          <a-form-item label="所属部门" name="department">
+            <a-select v-model:value="dataCenter.record.department" popupClassName="modalSelect" placeholder="请选择所属部门">
               <a-select-option v-for="item in dict_departments" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="联系电话" name="mobile">
-            <a-input-number v-model:value="dataCenter.record.mobile" :maxlength="11"/>
+          <a-form-item label="联系电话" name="telephone">
+            <a-input-number v-model:value="dataCenter.record.telephone" :maxlength="11"/>
           </a-form-item>
         </a-col>
       </a-row>
@@ -66,8 +66,8 @@ import Lodash from "lodash"
 
 const formRules = ref({
   username: [{ required: true, message: "请输入用户名" }],
-  name: [{ required: true, message: "请输入真实姓名" }],
-  department_id: [{ required: true, message: "请选择部门" }]
+  realname: [{ required: true, message: "请输入真实姓名" }],
+  department: [{ required: true, message: "请选择部门" }]
 })
 
 const passwordRule = {
@@ -130,10 +130,6 @@ const handleOk = async () => {
 
     if((isEditPassword || !record.id) && record.rPassword !== record.password) {
       return message.error("两次密码输入不一致！")
-    }
-
-    if(record.mobile) {
-      record.mobile = record.mobile.toString() 
     }
 
     try {

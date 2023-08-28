@@ -25,7 +25,7 @@ class CommonRestfulModel {
     return new Promise((resolve, reject) => {
       request.get(this._sourceURL)
         .then(res => {
-          resolve(res.data)
+          resolve(res)
         }, err => {
           reject(err)
         })
@@ -47,7 +47,7 @@ class CommonRestfulModel {
         { params }
       )
         .then(res => {
-          resolve(res.data)
+          resolve(res)
         }, err => {
           reject(err)
         })
@@ -66,7 +66,7 @@ class CommonRestfulModel {
     return new Promise((resolve, reject) => {
       request.get(this._sourceURL + `/${id}`)
         .then(res => {
-          resolve(res.data)
+          resolve(res)
         }, err => {
           reject(err)
         })
@@ -85,7 +85,7 @@ class CommonRestfulModel {
     return new Promise((resolve, reject) => {
       request.post(this._sourceURL, this._toSubmitFields(values))
         .then(res => {
-          resolve(res.data)
+          resolve(res)
         }, err => {
           reject(err)
         })
@@ -107,7 +107,7 @@ class CommonRestfulModel {
         values.map(x => this._toSubmitFields(x))
       )
         .then(res => {
-          resolve(res.data)
+          resolve(res)
         }, err => {
           reject(err)
         })
@@ -129,7 +129,7 @@ class CommonRestfulModel {
         this._toSubmitFields(values)
       )
         .then(res => {
-          resolve(res.data)
+          resolve(res)
         }, err => {
           reject(err)
         })

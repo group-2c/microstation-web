@@ -26,8 +26,8 @@ axiosInstance.interceptors.response.use(
 )
 
 function handleMaybeResponse(res) {
-  if (res.data.code < 400) {
-    return Promise.resolve(res)
+  if (res.status < 400) {
+    return Promise.resolve(res.data)
   } else {
     const errorsStr = toMaybeErrorsMessage(res)
     throw (errorsStr || res.data?.message || res.data || res.code)
