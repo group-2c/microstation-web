@@ -5,7 +5,7 @@
  * @filePath: src/views/dataAnalysis/TemperatureEquipmentValue/index.vue
  * @description: 数显温湿度设备数据记录
  */
- <template>
+<template>
   <div class="parcel">
     <a-spin :spinning="dataCenter.loading" >
       <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">

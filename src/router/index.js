@@ -10,6 +10,7 @@ import TemperatureEquipment from "@/views/operations/TemperatureEquipment/index.
 import WaterImmersionSensor from "@/views/operations/WaterImmersionSensor/index.vue"
 import TemperatureEquipmentValue from "@/views/dataAnalysis/TemperatureEquipmentValue/index.vue"
 import WaterImmersionSensorValue from "@/views/dataAnalysis/WaterImmersionSensorValue/index.vue"
+import RealTimeVideo from "@/views/RealTimeVideo/index.vue"
 
 export const routes = [
   { 
@@ -27,6 +28,11 @@ export const routes = [
         path: "dashboard",
         name: "Dashboard",
         component: Dashboard
+      },
+      {
+        path: "realTimeVideo",
+        name: "RealTimeVideo",
+        component: RealTimeVideo
       }
     ]
   },
