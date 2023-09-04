@@ -132,6 +132,11 @@ const handleOk = async () => {
       return message.error("两次密码输入不一致！")
     }
 
+    if(!isEditPassword && record.id) {
+      delete dataCenter.value.record.rPassword 
+      delete dataCenter.value.record.password
+    }
+
     try {
       dataCenter.value.loading = true
  

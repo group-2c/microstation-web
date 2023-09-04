@@ -18,7 +18,7 @@
           <a-col />
           <a-col>
             <a-input-search
-              v-model:value="dataCenter.searchForm.key_word"
+              v-model:value="dataCenter.searchForm.name"
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
@@ -53,8 +53,8 @@
     { title: "泄漏阻抗", dataIndex: "leakage_impedance", align: "left" },
     { title: "工作电流", dataIndex: "current", align: "left" },
     { title: "泄露电流", dataIndex: "leakage_current", align: "left" },
-    { title: "创建时间", dataIndex: "created_at", align: "left" },
-    { title: "更新时间", dataIndex: "updated_at", align: "left" }
+    { title: "创建时间", dataIndex: "createAt", align: "left" },
+    { title: "更新时间", dataIndex: "updateAt", align: "left" }
   ]
 
   const dataDefault = {
@@ -77,7 +77,7 @@
     
     const { searchForm, pagination } = dataCenter.value
     const { current, pageSize } = pagination
-    const data = { ...searchForm, page_num: current, page_size: pageSize }
+    const data = { ...searchForm, page: current, size: pageSize }
 
     try {
       const res = await waterImmersionSensorValueApi.getByPage(data)
@@ -108,7 +108,7 @@
       leakage_impedance: "泄漏阻抗",
       current: "工作电流",
       leakage_current: "泄露电流",
-      created_at: "创建时间",
+      createAt: "创建时间",
     }]
 
     tableList.forEach(item => {

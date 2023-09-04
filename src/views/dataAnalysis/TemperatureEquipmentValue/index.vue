@@ -18,7 +18,7 @@
           <a-col />
           <a-col>
             <a-input-search
-              v-model:value="dataCenter.searchForm.key_word"
+              v-model:value="dataCenter.searchForm.name"
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
@@ -53,8 +53,8 @@
     { title: "湿度测量值", dataIndex: "humidity", align: "left" },
     { title: "数显温湿度设备ID", dataIndex: "temperature_humidity_equipment_id", align: "left" },
     { title: "数显温湿度设备名称", dataIndex: "temperature_humidity_equipment_name", align: "left" },
-    { title: "创建时间", dataIndex: "created_at", align: "left" },
-    { title: "更新时间", dataIndex: "updated_at", align: "left" }
+    { title: "创建时间", dataIndex: "createAt", align: "left" },
+    { title: "更新时间", dataIndex: "updateAt", align: "left" }
   ]
 
   const dataDefault = {
@@ -77,7 +77,7 @@
     
     const { searchForm, pagination } = dataCenter.value
     const { current, pageSize } = pagination
-    const data = { ...searchForm, page_num: current, page_size: pageSize }
+    const data = { ...searchForm, page: current, size: pageSize }
 
     try {
       const res = await temperatureEquipmentValueApi.getByPage(data)
@@ -108,7 +108,7 @@
       humidity: "湿度测量值",
       temperature_humidity_equipment_id: "数显温湿度设备id",
       temperature_humidity_equipment_name: "数显温湿度设备名称",
-      created_at: "创建时间",
+      createAt: "创建时间",
     }]
 
     tableList.forEach(item => {

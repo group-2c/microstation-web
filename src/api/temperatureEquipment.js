@@ -26,7 +26,7 @@ class temperatureEquipmentApi extends CommonRestfulModel {
 
   constructor() {
     super({
-      sourceURL: "/temperatureEquipment",
+      sourceURL: "/temperatureHumidityEquipments",
       toSubmitFields
     })
   }

@@ -26,7 +26,7 @@ class waterImmersionSensorApi extends CommonRestfulModel {
 
   constructor() {
     super({
-      sourceURL: "/waterImmersionSensor",
+      sourceURL: "/waterImmersionSensors",
       toSubmitFields
     })
   }

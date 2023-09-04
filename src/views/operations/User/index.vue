@@ -22,7 +22,7 @@
           </a-col>
           <a-col>
             <a-input-search
-              v-model:value="dataCenter.searchForm.key_word"
+              v-model:value="dataCenter.searchForm.name"
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
@@ -76,7 +76,7 @@
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import userApi from "_api/user"
-  import EditDrawer from "./EditDrawer.vue"
+  import EditDrawer from "@/views/operations/User/EditDrawer.vue"
 
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
@@ -84,9 +84,9 @@
     { title: "所属部门", dataIndex: "department_name", align: "left" },    
     { title: "联系电话", dataIndex: "telephone", align: "left" },
     { title: "真实姓名", dataIndex: "realname", align: "left" },
-    { title: "创建时间", dataIndex: "created_at", align: "left" },
-    { title: "更新时间", dataIndex: "updated_at", align: "left" },
-    { title: "操 作", dataIndex: "operation", align: "center", width: 250 }
+    { title: "创建时间", dataIndex: "createAt", align: "left" },
+    { title: "更新时间", dataIndex: "createAt", align: "left" },
+    { title: "操 作", dataIndex: "operation", align: "center", width: 200 }
   ]
 
   const dataDefault = {
@@ -126,13 +126,12 @@
 
     try {
       const res = await userApi.getByPage(data)
-      console.log(res)
-      dataCenter.value.tableList = res.content.map(item => {
-        item.department_name = dict_departments.find(x => x.key === item.department_id)?.value
+      dataCenter.value.tableList = res.data.content.map(item => {
+        item.department_name = dict_departments.find(x => x.key === item.department)?.value
         return item
       })
-      dataCenter.value.pagination.total = res.totalElements
-      dataCenter.value.pagination.current = res.number
+      dataCenter.value.pagination.total = res.data.totalElements
+      dataCenter.value.pagination.current = res.data.number
     } catch(err) {
       message.error("获取列表失败: " + err)
     } finally {
@@ -221,7 +220,7 @@
       telephone: "联系电话",
       username: "用户名",
       department_name: "部门名称",
-      created_at: "创建时间"
+      createAt: "创建时间"
     }]
 
     tableList.forEach(item => {

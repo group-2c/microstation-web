@@ -90,7 +90,10 @@ const pickCoordinateRef = ref()
 
 const handleShow = (item = {}) => {
   dataCenter.value.visible = true
-  dataCenter.value.record = Lodash.cloneDeep(item)
+  dataCenter.value.record = {
+    ...Lodash.cloneDeep(item),
+    installation_date: item.installation_date ? dayjs(item.installation_date) : ""
+  }
 }
 
 const _validateForm = callback => {

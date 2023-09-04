@@ -29,7 +29,7 @@
           </a-col>
           <a-col>
             <a-input-search
-              v-model:value="dataCenter.searchForm.key_word"
+              v-model:value="dataCenter.searchForm.name"
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
@@ -45,6 +45,7 @@
           :data-source="dataCenter.tableList" 
           :pagination="dataCenter.pagination"
           :row-selection="rowSelection"
+          :scroll="{ y: 'calc(100vh - 320px)', x: 1800 }"
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
@@ -86,18 +87,18 @@
   import EditDrawer from "./EditDrawer.vue"
 
   const constColumns = [
-    { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
-    { title: "设备名称", dataIndex: "name", align: "left" },    
-    { title: "设备地址", dataIndex: "slave_id", align: "left" },
-    { title: "波特率", dataIndex: "baud_rate", align: "left" },
-    { title: "数据位", dataIndex: "data_bit", align: "left" },
-    { title: "停止位", dataIndex: "stop_bit", align: "left" },
-    { title: "校验位", dataIndex: "parity", align: "left" },
-    { title: "所属微站", dataIndex: "controller_name", align: "left" },
-    { title: "制造商", dataIndex: "manufacturer_name", align: "left" },
-    { title: "创建时间", dataIndex: "created_at", align: "left" },
-    { title: "更新时间", dataIndex: "updated_at", align: "left" },
-    { title: "操 作", dataIndex: "operation", align: "center", width: 250 }
+    { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1 },    
+    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
+    { title: "设备地址", dataIndex: "slave_id", align: "left", width: 250 },
+    { title: "波特率", dataIndex: "baud_rate", align: "left", width: 160 },
+    { title: "数据位", dataIndex: "data_bit", align: "left", width: 160 },
+    { title: "停止位", dataIndex: "stop_bit", align: "left", width: 160 },
+    { title: "校验位", dataIndex: "parity", align: "left", width: 160 },
+    { title: "所属微站", dataIndex: "controller_name", align: "left", width: 250, ellipsis: true },
+    { title: "制造商", dataIndex: "manufacturer_name", align: "left", width: 250, ellipsis: true },
+    { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
+    { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
+    { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
   ]
 
   const dataDefault = {
@@ -133,16 +134,16 @@
     
     const { searchForm, pagination } = dataCenter.value
     const { current, pageSize } = pagination
-    const data = { ...searchForm, page_num: current, page_size: pageSize }
+    const data = { ...searchForm, page: current, size: pageSize }
 
     try {
       const res = await waterImmersionSensorApi.getByPage(data)
-      dataCenter.value.tableList = res.data.map(item => {
+      dataCenter.value.tableList = res.data.content.map(item => {
         item.manufacturer_name = dict_waterSensor_manufacturers.find(x => x.key === item.manufacturer)?.value
         return item
       })
-      dataCenter.value.pagination.total = res.total
-      dataCenter.value.pagination.current = res.page_num
+      dataCenter.value.pagination.total = res.data.totalElements
+      dataCenter.value.pagination.current = res.data.number
     } catch(err) {
       message.error("获取列表失败: " + err)
     } finally {
@@ -236,7 +237,7 @@
       parity: "校验位",
       controller_name: "所属微站",
       manufacturer_name: "制造商",
-      created_at: "创建时间",
+      createAt: "创建时间",
     }]
 
     tableList.forEach(item => {

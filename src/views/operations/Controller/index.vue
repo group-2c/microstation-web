@@ -29,7 +29,7 @@
           </a-col>
           <a-col>
             <a-input-search
-              v-model:value="dataCenter.searchForm.key_word"
+              v-model:value="dataCenter.searchForm.name"
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
@@ -45,6 +45,7 @@
           :data-source="dataCenter.tableList" 
           :pagination="dataCenter.pagination"
           :row-selection="rowSelection"
+          :scroll="{ y: 'calc(100vh - 320px)', x: 1800 }"
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
@@ -87,17 +88,17 @@
 
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
-    { title: "设备名称", dataIndex: "name", align: "left" },    
-    { title: "设备编号", dataIndex: "code", align: "left" },
-    { title: "设备IP地址", dataIndex: "ip", align: "left" },
-    { title: "经度", dataIndex: "longitude", align: "left" },
-    { title: "纬度", dataIndex: "latitude", align: "left" },
-    { title: "安装位置", dataIndex: "location", align: "left" },
-    { title: "制造商", dataIndex: "manufacturer_name", align: "left" },
-    { title: "安装日期", dataIndex: "installation_date", align: "left" },
-    { title: "创建时间", dataIndex: "created_at", align: "left" },
-    { title: "更新时间", dataIndex: "updated_at", align: "left" },
-    { title: "操 作", dataIndex: "operation", align: "center", width: 250 }
+    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
+    { title: "设备编号", dataIndex: "code", align: "left", width: 200, ellipsis: true },
+    { title: "设备IP地址", dataIndex: "ip", align: "left", width: 200 },
+    { title: "经度", dataIndex: "longitude", align: "left", width: 200 },
+    { title: "纬度", dataIndex: "latitude", align: "left", width: 200 },
+    { title: "安装位置", dataIndex: "location", align: "left", width: 200, ellipsis: true },
+    { title: "制造商", dataIndex: "manufacturer_name", align: "left", width: 200, ellipsis: true },
+    { title: "安装日期", dataIndex: "installation_date", align: "left", width: 200 },
+    { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
+    { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
+    { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
   ]
 
   const dataDefault = {
@@ -133,16 +134,16 @@
     
     const { searchForm, pagination } = dataCenter.value
     const { current, pageSize } = pagination
-    const data = { ...searchForm, page_num: current, page_size: pageSize }
+    const data = { ...searchForm, page: current, size: pageSize }
 
     try {
       const res = await controllerApi.getByPage(data)
-      dataCenter.value.tableList = res.data.map(item => {
+      dataCenter.value.tableList = res.data.content.map(item => {
         item.manufacturer_name = dict_controller_manufacturers.find(x => x.key === item.manufacturer)?.value
         return item
       })
-      dataCenter.value.pagination.total = res.total
-      dataCenter.value.pagination.current = res.page_num
+      dataCenter.value.pagination.total = res.data.totalElements
+      dataCenter.value.pagination.current = res.data.number
     } catch(err) {
       message.error("获取列表失败: " + err)
     } finally {
@@ -236,7 +237,7 @@
       location: "安装位置",
       manufacturer: "制造商",
       installation_date: "安装日期",
-      created_at: "创建时间",
+      createAt: "创建时间",
     }]
 
     tableList.forEach(item => {
