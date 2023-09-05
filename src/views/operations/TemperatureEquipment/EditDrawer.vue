@@ -48,7 +48,7 @@
         <a-col :span="12">
           <a-form-item label="制造商" name="manufacturer">
             <a-select v-model:value="dataCenter.record.manufacturer" popupClassName="modalSelect" placeholder="请选择制造商">
-              <a-select-option v-for="item in dict_controller_manufacturers" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
+              <a-select-option v-for="item in dict_manufacturers" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -64,7 +64,7 @@
 <script setup>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
-import { dict_controller_manufacturers } from "_utils/dictionary"
+import { dict_manufacturers } from "_utils/dictionary"
 import temperatureEquipmentApi from "_api/temperatureEquipment"
 import controllerApi from "_api/controller"
 import Lodash from "lodash"

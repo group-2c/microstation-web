@@ -1,11 +1,11 @@
 /*
  * @author: zzp
- * @date: 2023-08-27 15:24:54
+ * @date: 2023-09-05 14:57:23
  * @fileName: index.vue
- * @filePath: src/views/operations/TemperatureEquipment/index.vue
- * @description: 数显温湿度设备
+ * @filePath: src/views/operations/Screen/index.vue
+ * @description: JK01B直流屏
  */
- <template>
+<template>
   <div class="parcel">
     <a-spin :spinning="dataCenter.loading" >
       <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">
@@ -45,7 +45,6 @@
           :data-source="dataCenter.tableList" 
           :pagination="dataCenter.pagination"
           :row-selection="rowSelection"
-          :scroll="{ y: 'calc(100vh - 320px)', x: 1800 }"
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
@@ -80,10 +79,10 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_manufacturers } from "_utils/dictionary"
+  import { dict_departments } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
-  import temperatureEquipmentApi from "_api/temperatureEquipment"
+  import screenApi from "_api/screen"
   import EditDrawer from "./EditDrawer.vue"
 
   const constColumns = [
@@ -104,7 +103,7 @@
   const dataDefault = {
     loading: false,
     operationKey: undefined,
-    pageName: "数显温湿度设备",
+    pageName: "JK01B直流屏",
     searchForm: {},
     tableList: [],
     selectedRowKeys: [],
@@ -137,9 +136,9 @@
     const data = { ...searchForm, page: current, size: pageSize }
 
     try {
-      const res = await temperatureEquipmentApi.getByPage(data)
+      const res = await screenApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.manufacturer_name = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
+        item.department_name = dict_departments.find(x => x.key === item.department)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
@@ -162,7 +161,6 @@
     _getTableList()
   }
 
-  
   const handleEditItem = row => {
     editDrawerRef.value.handleShow(row)
   }
@@ -187,7 +185,7 @@
       dataCenter.value.loading = true
       try {
         const { selectedRowKeys } = dataCenter.value
-        await temperatureEquipmentApi.deleteManyById(selectedRowKeys)
+        await screenApi.deleteManyById(selectedRowKeys)
       } catch(err) {
         message.error("删除失败: " + err)
       } finally {
@@ -212,7 +210,7 @@
   const handleDeleteItem = async row => {
     dataCenter.value.loading = true
     try {
-      await temperatureEquipmentApi.deleteById(row.id)
+      await screenApi.deleteById(row.id)
     } catch(err) {
       message.error("删除失败: " + err)
     } finally {

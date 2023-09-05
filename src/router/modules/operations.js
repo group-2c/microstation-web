@@ -9,6 +9,7 @@ import User from "@/views/operations/User/index.vue"
 import Controller from "@/views/operations/Controller/index.vue"
 import TemperatureEquipment from "@/views/operations/TemperatureEquipment/index.vue"
 import WaterImmersionSensor from "@/views/operations/WaterImmersionSensor/index.vue"
+import Screen from "@/views/operations/Screen/index.vue"
 
 const route = {
   path: "operations",
@@ -39,6 +40,12 @@ const route = {
       name: "WaterImmersionSensor",
       component: WaterImmersionSensor,
       meta: { title: "水浸传感器" }
+    },
+    {
+      path: "screen",
+      name: "Screen",
+      component: Screen,
+      meta: { title: "直流屏" }
     }
   ]
 }

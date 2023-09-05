@@ -65,7 +65,7 @@
 import { ref } from "vue"
 import { message } from "ant-design-vue"
 import { dict_manufacturers } from "_utils/dictionary"
-import waterImmersionSensorApi from "_api/waterImmersionSensor"
+import screenApi from "_api/screen"
 import controllerApi from "_api/controller"
 import Lodash from "lodash"
 
@@ -121,10 +121,10 @@ const handleOk = async () => {
       dataCenter.value.loading = true
  
       if (!values.id) {
-        await waterImmersionSensorApi.create(values)
+        await screenApi.create(values)
         message.success("新增成功！")
       } else {
-        await waterImmersionSensorApi.updateById(values.id, values)
+        await screenApi.updateById(values.id, values)
         message.success("编辑成功！")
       }
 

@@ -80,7 +80,7 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_waterSensor_manufacturers } from "_utils/dictionary"
+  import { dict_manufacturers } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import waterImmersionSensorApi from "_api/waterImmersionSensor"
@@ -139,7 +139,7 @@
     try {
       const res = await waterImmersionSensorApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.manufacturer_name = dict_waterSensor_manufacturers.find(x => x.key === item.manufacturer)?.value
+        item.manufacturer_name = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements

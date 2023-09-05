@@ -5,7 +5,7 @@
  * @filePath: src/api/controller.js
  * @description: 微站控制器接口
  */
-import CommonRestfulModel from "./CommonRestful"
+import CommonRestfulModel from "./CommonRestful.js"
 import Lodash from "lodash"
 
 const toSubmitFields = values => {

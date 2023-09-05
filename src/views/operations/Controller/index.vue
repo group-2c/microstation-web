@@ -80,7 +80,7 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_controller_manufacturers } from "_utils/dictionary"
+  import { dict_manufacturers } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import controllerApi from "_api/controller"
@@ -140,7 +140,7 @@
       const res = await controllerApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
         item.coordinates = `${item.longitude},${item.latitude}`
-        item.manufacturer_name = dict_controller_manufacturers.find(x => x.key === item.manufacturer)?.value
+        item.manufacturer_name = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
