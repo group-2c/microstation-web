@@ -10,6 +10,11 @@ import Controller from "@/views/operations/Controller/index.vue"
 import TemperatureEquipment from "@/views/operations/TemperatureEquipment/index.vue"
 import WaterImmersionSensor from "@/views/operations/WaterImmersionSensor/index.vue"
 import Screen from "@/views/operations/Screen/index.vue"
+import Inverter from "@/views/operations/Inverter/index.vue"
+import DryTemperatureController from "@/views/operations/DryTemperatureController/index.vue"
+import DoublePowerController from "@/views/operations/DoublePowerController/index.vue"
+import Ups from "@/views/operations/UPS/index.vue"
+import Eps from "@/views/operations/EPS/index.vue"
 
 const route = {
   path: "operations",
@@ -46,6 +51,36 @@ const route = {
       name: "Screen",
       component: Screen,
       meta: { title: "直流屏" }
+    },
+    {
+      path: "inverter",
+      name: "Inverter",
+      component: Inverter,
+      meta: { title: "逆变器" }
+    },
+    {
+      path: "dryTemperatureController",
+      name: "DryTemperatureController",
+      component: DryTemperatureController,
+      meta: { title: "干变温控器" }
+    },
+    {
+      path: "doublePowerController",
+      name: "DoublePowerController",
+      component: DoublePowerController,
+      meta: { title: "双电源控制器" }
+    },
+    {
+      path: "ups",
+      name: "Ups",
+      component: Ups,
+      meta: { title: "UPS电源" }
+    },
+    {
+      path: "eps",
+      name: "Eps",
+      component: Eps,
+      meta: { title: "EPS电源" }
     }
   ]
 }
