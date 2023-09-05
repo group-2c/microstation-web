@@ -10,103 +10,123 @@
       theme="dark"
       v-model:selectedKeys="selectedKeys"
       v-model:openKeys="openKeys"
+      @openChange="setOpenKeys"
+      @click="toRoute" 
     >
-      <a-menu-item key="dashboard">
-        <router-link to="/dashboard">
-          <HomeOutlined />
-          <span>首页</span>
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="unmanned">
-        <router-link to="/unmanned">
-          <GlobalOutlined />
-          <span>无人微站</span>
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="distributionMonitoring">
-        <router-link to="/distributionMonitoring">
-          <NodeCollapseOutlined />
-          <span>配电监控</span>
-        </router-link>
-      </a-menu-item>
-      <a-menu-item key="realTimeVideo">
-        <router-link to="/realTimeVideo">
-          <VideoCameraOutlined />
-          <span>实时视频</span>
-        </router-link>
-      </a-menu-item>
-      <a-sub-menu class="sub-menu" key="dataAnalysis">
-        <template #icon><ProjectOutlined /></template>
-        <template #title>数据分析</template>
-        <a-menu-item key="temperatureEquipmentValue">
-          <router-link to="/dataAnalysis/temperatureEquipmentValue">
-            <span>数显温湿度设备数据</span>
-          </router-link>
+      <template v-for="route in menuRoutes" :key="route.name">
+        <a-menu-item
+          v-if="!route.children || !route.children.filter(item => !item.meta.hidden).length || isHiddenSub(route)"
+          :key="route.name"
+          class="menuItem"
+        >
+          <dynamic-icon :name="route.meta.icon" />
+          <span>{{ route.meta.title }}</span>
         </a-menu-item>
-        <a-menu-item key="waterImmersionSensorValue">
-          <router-link to="/dataAnalysis/waterImmersionSensorValue">
-            <span>水浸传感器数据</span>
-          </router-link>
-        </a-menu-item>
-      </a-sub-menu>
-      <a-menu-item key="alarmManagement">
-        <router-link to="/alarmManagement">
-          <AlertOutlined />
-          <span>报警管理</span>
-        </router-link>
-      </a-menu-item>
-      <a-sub-menu class="sub-menu" key="operations">
-        <template #icon><AppstoreOutlined /></template>
-        <template #title>基础数据</template>
-        <a-menu-item key="user">
-          <router-link to="/operations/user">
-            <span>用户管理</span>
-          </router-link>
-        </a-menu-item>
-        <a-menu-item key="controller">
-          <router-link to="/operations/controller">
-            <span>微站控制器</span>
-          </router-link>
-        </a-menu-item>
-        <a-menu-item key="temperatureEquipment">
-          <router-link to="/operations/temperatureEquipment">
-            <span>数显温湿度设备</span>
-          </router-link>
-        </a-menu-item>
-        <a-menu-item key="waterImmersionSensor">
-          <router-link to="/operations/waterImmersionSensor">
-            <span>水浸传感器</span>
-          </router-link>
-        </a-menu-item>
-      </a-sub-menu>
+
+        <a-sub-menu
+          v-else
+          :key="route.name"
+          class="menuItem"
+          popupClassName="subMenu"
+        >
+          <template #icon v-if="route.meta.icon">
+            <dynamic-icon :name="route.meta.icon" />
+          </template>
+          <template #title>
+            <span>{{ route.meta.title }} </span>
+          </template>
+          <a-menu-item v-for="subRoute in route.children" :key="subRoute.name">
+            {{ subRoute.meta.title }}
+          </a-menu-item>
+        </a-sub-menu>
+      </template>
     </a-menu>
   </div>
 </template>
 
 <script setup>
-  import { watch, ref } from "vue"
-  import { 
-    HomeOutlined, 
-    AppstoreOutlined,
-    GlobalOutlined,
-    NodeCollapseOutlined,
-    VideoCameraOutlined,
-    ProjectOutlined,
-    AlertOutlined,
-  } from "@ant-design/icons-vue"
-  import { useRoute } from "vue-router"
+  import { onMounted, computed, ref } from "vue"
+  import DynamicIcon from "./DynamicIcon.vue"
+  import { getStorageItem, setStorageItem } from "_utils/storage"
+  import { MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
+  import { useRouter, onBeforeRouteUpdate } from "vue-router"
+  import { routes } from "@/router/index.js"
 
-  const route = useRoute()
+  const router = useRouter()
+
   const selectedKeys = ref([])
   const openKeys = ref([])
 
-  const matchNewRouteKey = path => {  
-    const routeKey = path.substring(
-      path.lastIndexOf("/") + 1
-    )
-    selectedKeys.value.splice(0, 1, routeKey)
-  }
-  matchNewRouteKey(route.path)
+  const menuRoutes = computed(() => {
+    const array = routes.find(x => x.name === "App")?.children
+    const list = array.sort((a, b) => a.meta.index - b.meta.index)
+    return list.filter(route => route.meta && !route.meta.hidden)
+  })
+  
+  onBeforeRouteUpdate(to => {
+    selectedKeys.value = [to.name]
+    setStorageItem({ key: MENU_SELECTED_KEYS, value: [to.name] })
+  })
 
-  watch(() => route.path, matchNewRouteKey)
+  const isHiddenSub = route => {
+    return route.meta?.hiddenSub
+  }
+
+  const setOpenKeys = e => {
+    openKeys.value = e
+    setStorageItem({ key: MENU_OPEN_KYES, value: e })
+  }
+
+  const toRoute = ({ key }) => {
+    selectedKeys.value = [key]
+    setStorageItem({ key: MENU_SELECTED_KEYS, value: [key] })
+    router.push({ name: key })
+  }
+
+  const _getCurrentPath = () => {
+    const currentURL = window.location.pathname
+    const lastSegment = currentURL.substring(currentURL.lastIndexOf("/") + 1)
+    const formattedSegment = lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1)
+    let parentName = null
+
+    for (const item of routes) {
+      if (item.name === formattedSegment) {
+        parentName = item.name || null
+        break
+      }
+      if (item.children) {
+        for (const childRoute of item.children) {
+          if (childRoute.name === formattedSegment) {
+            parentName = item.name || null
+            break
+          }
+        }
+      }
+    }
+
+    return {
+      name: formattedSegment,
+      parentName
+    }
+  }
+
+  onMounted(() => {
+    const storageOpenKeys = getStorageItem({ key: MENU_OPEN_KYES })
+    const storageSelectedKeys = getStorageItem({ key: MENU_SELECTED_KEYS })
+
+    if(storageOpenKeys) {
+      openKeys.value = storageOpenKeys
+    }
+    if(storageSelectedKeys) {
+      selectedKeys.value = storageSelectedKeys
+    }
+
+    const data = _getCurrentPath()
+    if(data.name && data.parentName) {
+      openKeys.value = [data.parentName]
+      selectedKeys.value = [data.name]
+      setStorageItem({ key: MENU_OPEN_KYES, value: data.parentName })
+      setStorageItem({ key: MENU_SELECTED_KEYS, value: [data.name] })
+    }
+  })
 </script>

@@ -139,11 +139,12 @@
     try {
       const res = await controllerApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
+        item.coordinates = `${item.longitude},${item.latitude}`
         item.manufacturer_name = dict_controller_manufacturers.find(x => x.key === item.manufacturer)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
-      dataCenter.value.pagination.current = res.data.number
+      dataCenter.value.pagination.current = res.data.pageNumber
     } catch(err) {
       message.error("获取列表失败: " + err)
     } finally {

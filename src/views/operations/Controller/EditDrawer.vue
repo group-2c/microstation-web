@@ -112,8 +112,8 @@ const pickCoordinateCallback = data => {
 
 const handleOk = async () => {
   _validateForm(async () => {
-    const values = dataCenter.value.record
-    values.installation_date = dayjs(values.installation_date).format("YYYY-MM-DD")
+    const values = Lodash.cloneDeep(dataCenter.value.record)
+    values.installation_date = dayjs(values.installation_date).format("YYYY-MM-DD HH:mm:ss")
     try {
       dataCenter.value.loading = true
  
@@ -124,9 +124,8 @@ const handleOk = async () => {
         await controllerApi.updateById(values.id, values)
         message.success("编辑成功！")
       }
-
-      props.onOk()
       handleCancel()
+      props.onOk()
     } catch(err) {
       message.error(`失败: ${err}`)
     } finally {

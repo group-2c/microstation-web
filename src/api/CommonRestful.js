@@ -43,7 +43,7 @@ class CommonRestfulModel {
   getByPage(params) {
     return new Promise((resolve, reject) => {
       request.get(
-        this._sourceURL + "/page",
+        this._sourceURL + "/pageByName",
         { params }
       )
         .then(res => {
