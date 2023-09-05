@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router"
-import { getStorageItem } from "_utils/storage"
-import { AUTH_TOKEN } from "@/store/mutation-types"
+import { getStorageItem, setStorageItem, removeStorageItem } from "_utils/storage"
+import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
+import { getThreeNameParents } from "_utils/function"
+import { message } from "ant-design-vue"
+import Lodash from "lodash"
 
 import Layout from "@/views/Layout/index.vue"
 import Login from "@/views/Login/index.vue"
@@ -58,5 +61,55 @@ router.beforeEach((to, _, next) => {
     }
   }
 })
+
+
+
+/**
+ * 路由跳转
+ * @param {*} param0 
+ * @returns 
+ */
+export const routeJump = ({
+  name,
+  query = undefined,
+}) => {
+  const data = { name }
+  let parentName = ""
+  if(query) data.query = query
+
+  const routeList = getThreeNameParents(routes, name)
+
+  removeStorageItem({ key: MENU_OPEN_KYES })
+  removeStorageItem({ key: MENU_SELECTED_KEYS })
+
+  if(!routeList || routeList.length === 0) {
+    return message.error("路由错误！")
+  } else {
+    if(routeList.length > 1) {
+      setStorageItem({ key: MENU_OPEN_KYES, value: [routeList[1].name] })
+    }
+    setStorageItem({ key: MENU_SELECTED_KEYS, value: [name] })
+    router.push(data)
+  }
+}
+
+/**
+ * 页面重载
+ */
+export const pageReload = () => {
+  const currentURLs = window.location.pathname.split("/")
+
+  removeStorageItem({ key: MENU_OPEN_KYES })
+  removeStorageItem({ key: MENU_SELECTED_KEYS })
+
+  if(currentURLs.length === 3) {
+    setStorageItem({ key: MENU_SELECTED_KEYS, value: [ Lodash.upperFirst(currentURLs[currentURLs.length - 1]) ] })
+  }
+  else if(currentURLs.length === 4) {
+    setStorageItem({ key: MENU_OPEN_KYES, value: [ Lodash.upperFirst(currentURLs[currentURLs.length - 2]) ] })
+    setStorageItem({ key: MENU_SELECTED_KEYS, value: [ Lodash.upperFirst(currentURLs[currentURLs.length - 1]) ] })
+  } 
+}
+
 
 export default router

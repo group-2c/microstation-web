@@ -45,14 +45,14 @@
 </template>
 
 <script setup>
-  import { onMounted, computed, ref } from "vue"
+  import { onMounted, computed, ref, inject } from "vue"
   import DynamicIcon from "./DynamicIcon.vue"
   import { getStorageItem, setStorageItem } from "_utils/storage"
   import { MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
-  import { useRouter, onBeforeRouteUpdate } from "vue-router"
+  import { onBeforeRouteUpdate } from "vue-router"
   import { routes } from "@/router/index.js"
 
-  const router = useRouter()
+  const routeJump = inject("$routeJump")
 
   const selectedKeys = ref([])
   const openKeys = ref([])
@@ -79,54 +79,18 @@
 
   const toRoute = ({ key }) => {
     selectedKeys.value = [key]
-    setStorageItem({ key: MENU_SELECTED_KEYS, value: [key] })
-    router.push({ name: key })
-  }
-
-  const _getCurrentPath = () => {
-    const currentURL = window.location.pathname
-    const lastSegment = currentURL.substring(currentURL.lastIndexOf("/") + 1)
-    const formattedSegment = lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1)
-    let parentName = null
-
-    for (const item of routes) {
-      if (item.name === formattedSegment) {
-        parentName = item.name || null
-        break
-      }
-      if (item.children) {
-        for (const childRoute of item.children) {
-          if (childRoute.name === formattedSegment) {
-            parentName = item.name || null
-            break
-          }
-        }
-      }
-    }
-
-    return {
-      name: formattedSegment,
-      parentName
-    }
+    routeJump({ name: key })
   }
 
   onMounted(() => {
-    const storageOpenKeys = getStorageItem({ key: MENU_OPEN_KYES })
+    // const storageOpenKeys = getStorageItem({ key: MENU_OPEN_KYES })
     const storageSelectedKeys = getStorageItem({ key: MENU_SELECTED_KEYS })
 
-    if(storageOpenKeys) {
-      openKeys.value = storageOpenKeys
-    }
+    // if(storageOpenKeys) {
+    //   openKeys.value = storageOpenKeys
+    // }
     if(storageSelectedKeys) {
       selectedKeys.value = storageSelectedKeys
-    }
-
-    const data = _getCurrentPath()
-    if(data.name && data.parentName) {
-      openKeys.value = [data.parentName]
-      selectedKeys.value = [data.name]
-      setStorageItem({ key: MENU_OPEN_KYES, value: data.parentName })
-      setStorageItem({ key: MENU_SELECTED_KEYS, value: [data.name] })
     }
   })
 </script>
