@@ -4,9 +4,6 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  server:{
-    hmr: true
-  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -26,6 +23,7 @@ export default defineConfig({
     }
   },
   server: {
+    hmr: true, 
     proxy: {
       "/api": {
         target: "http://localhost:8080",
