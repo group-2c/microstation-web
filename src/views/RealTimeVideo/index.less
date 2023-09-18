@@ -1,0 +1,169 @@
+.contentContainer {
+  .videoContainer {
+    ::v-deep(.ant-list) {
+      .ant-list-items {
+        .ant-list-item {
+          cursor: pointer;
+          &.active {
+            background: #1677ff;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+    .videoControls {
+      margin-top: 10px;
+      .title {
+        padding: 20px 10px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #000;
+      }
+      .controlItem {
+        width: 100%;
+        text-align: right;
+        align-items: center;
+        display: -webkit-flex;
+        height: 45px;
+        label {
+          width: 80px;
+          color: #000;
+          font-size: 14px;
+          margin-right: 10px;
+        }
+        .content {
+          ::v-deep(.ant-btn) {
+            margin-right: 10px;
+          }
+        }
+      }
+      .holder {
+        width: 130px;
+        height: 130px;
+        border-radius: 130px;
+        background: #021629;
+        position: relative;
+        left: 55px;
+        top: -15px;
+        .anticon {
+          font-size: 30px;
+          cursor: pointer;
+          color: #bbb;
+          &:hover {
+            color: #1677ff;
+          }
+          &.anticon-up-circle {
+            position: absolute;
+            top: 10px;
+            left: 50px;
+            z-index: 2;
+          }
+          &.anticon-left-circle {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+          }
+          &.anticon-down-circle {
+            position: absolute;
+            top: 90px;
+            left: 50px;
+          }
+          &.anticon-right-circle {
+            position: absolute;
+            top: 50px;
+            left: 90px;
+          }
+        }
+        &::after {
+          content: "";
+          width: 30px;
+          height: 30px;
+          border-radius: 30px;
+          display: inline-block;
+          background: #bbb;
+          position: absolute;
+          top: 50px;
+          left: 50px;
+        }
+      }
+    }
+    
+    .bearBox {
+      width: 100%;
+      height: 100%;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      margin-top: -10px;
+      padding-bottom: 10px;
+      &.fullscreen {
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100vw !important;
+        height: 100vh !important;
+        overflow: visible;
+        background: #000;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+      }
+      .videoElItem {
+        background: #e5e5e5;
+        border: 2px solid #d7d7d7;
+        border-radius: 5px;
+        margin: 10px;
+        display: inline-block;
+        position: relative;
+        &.active {
+          border: 2px solid #2477ff;
+        }
+        .canvas1 {
+          width: 100%;
+          height: 100%;
+        }
+        .canvas2 {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+        }
+        .runningState {
+          position: absolute;
+          top: 10px;
+          left: 10px;
+          font-size: 14px;
+          color: chocolate;
+          z-index: 9;
+        }
+      }
+      &.bearNum-16 {
+        .videoElItem {
+          width: calc(25% - 20px);
+          height: calc(25% - 20px);
+        }
+      }
+      &.bearNum-9 {
+        .videoElItem {
+          width: calc(33.33333% - 20px);
+          height: calc(33.33333% - 20px);
+        }
+      }
+      &.bearNum-4 {
+        .videoElItem {
+          width: calc(50% - 20px);
+          height: calc(50% - 20px);
+        }
+      }
+      &.bearNum-1 {
+        .videoElItem {
+          width: calc(100% - 20px);
+          height: calc(100% - 10px);
+        }
+      }
+    }
+  }
+}
