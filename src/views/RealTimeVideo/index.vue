@@ -76,7 +76,7 @@
             </a-col>
             <a-col :span="16">
               <div :class="['bearBox', `bearNum-${videoNumber}`, isFullScreen ? 'fullscreen' : '']" style="height: calc(100vh - 160px);">
-                <div :class="['videoElItem', item.key === currentCamera?.key ? 'active' : '']" v-for="item in videoElList" :key="item.key" @click.stop="videoElWrapperClick(item)">
+                <div :class="['videoElItem', item.key === currentVideoKey ? 'active' : '']" v-for="item in videoElList" :key="item.key" @click.stop="videoElWrapperClick(item)">
                   <div v-if="item.loading" class="runningState">加载中...</div>
                   <canvas :ref="x => (canvasRefs[item.key] = x)" class="canvas1" v-show="!item.videoVisible" />
                   <video :ref="x => (videoRefs[item.key] = x)" v-show="item.videoVisible" />
@@ -105,6 +105,7 @@
   const videoNumber = ref(4)
   const videoElList = ref([])
   const currentCamera = ref({})
+  const currentVideoKey = ref(null)
   const stepNum = ref(1)
   const isRecording = ref(false)
   const isFullScreen = ref(document.fullScreen)
@@ -153,7 +154,21 @@
   }
 
   const cameraListItemClick = camera => {
+    const videoEl = videoElList.value.find(x => x.key === camera.key)
+
     currentCamera.value = camera
+
+    if(videoEl) {
+      currentVideoKey.value = camera.key
+      videoEl.cameraKey = camera.key
+      videoEl.videoVisible = true
+    } else {
+      const lastVideoEl =  videoElList.value[videoElList.value.length - 1]
+      lastVideoEl.cameraKey = camera.key
+      lastVideoEl.videoVisible = true
+      currentVideoKey.value = lastVideoEl.key
+    }
+
     setIP(`${camera.ip}:${camera.port}`)
     _setSession(sessions[camera.key])
 
@@ -184,9 +199,6 @@
   const onRealPreview = () => {
     const camera = currentCamera.value
     const videoEl = videoElList.value.find(x => x.key === camera.key)
-
-    videoEl.cameraKey = camera.key
-    videoEl.videoVisible = true
 
     const options = cameraOptions(camera)
     const player = new PlayerControl(options)
@@ -228,14 +240,16 @@
   }
 
   const videoElWrapperClick = item => {
-    currentCamera.value = item
+    currentVideoKey.value = item.key
 
     const videoEl = videoElList.value.find(x => x.key === item.key)
-    if (!videoEl?.cameraKey) {
+    if (!videoEl?.cameraKey && videoEl.cameraKey !== 0) {
       return
     }
 
     const camera = cameraList.value.find(x => x.key === videoEl.cameraKey)
+    currentCamera.value = camera
+
     setIP(`${camera.ip}:${camera.port}`)
   }
 
