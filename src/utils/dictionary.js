@@ -17,3 +17,9 @@ export const dict_manufacturers = [
   {key: "2", value: "安徽科技公司2"},
   {key: "3", value: "北京科技公司3"}
 ]
+
+export const dict_deviceStatus = [
+  {key: 0, value: "离线"},
+  {key: 1, value: "在线"},
+  {key: 2, value: "故障"}
+]

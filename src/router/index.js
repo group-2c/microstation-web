@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHashHistory } from "vue-router"
 import { getStorageItem, setStorageItem, removeStorageItem } from "_utils/storage"
 import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
 import { getThreeNameParents } from "_utils/function"
@@ -39,7 +39,7 @@ export const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes
 })
 
@@ -97,7 +97,8 @@ export const routeJump = ({
  * 页面重载
  */
 export const pageReload = () => {
-  const currentURLs = window.location.pathname.split("/")
+  const locHash = window.location.hash.split("/")
+  const currentURLs = locHash.map(item => item.split("?")[0])
 
   removeStorageItem({ key: MENU_OPEN_KYES })
   removeStorageItem({ key: MENU_SELECTED_KEYS })
@@ -110,6 +111,5 @@ export const pageReload = () => {
     setStorageItem({ key: MENU_SELECTED_KEYS, value: [ Lodash.upperFirst(currentURLs[currentURLs.length - 1]) ] })
   } 
 }
-
 
 export default router

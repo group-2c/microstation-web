@@ -10,9 +10,9 @@
 
 <script setup>
   import { ref } from "vue"
-  import dayjs from "dayjs"
   import "dayjs/locale/zh-cn"
   import zhCN from "ant-design-vue/es/locale/zh_CN"
   const locale = ref(zhCN)
 </script>
+
 

@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
+  base: '/ui',
   plugins: [vue()],
   resolve: {
     alias: {
@@ -12,14 +13,6 @@ export default defineConfig({
       '_constant': fileURLToPath(new URL('./public/constant', import.meta.url)),
       '_api': fileURLToPath(new URL('./src/api', import.meta.url)),
       '_components': fileURLToPath(new URL('./src/components', import.meta.url)),
-    }
-  },
-  css: {
-    preprocessorOptions: {
-      less: {
-        charset: false,
-        additionalData: '@import "src/assets/styles/common.less";',
-      }
     }
   },
   server: {
