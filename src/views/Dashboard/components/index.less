@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-08-29 14:14:51
+ * @date: 2023-09-21 15:29:25
  * @fileName: index.less
  * @filePath: src/views/Dashboard/components/index.less
- * @description: 组件样式
+ * @description:  
  */
 .equipmentStatus {
   height: 270px;
@@ -298,25 +298,6 @@
           }
         }
       }
-      .statusTag {
-        border-radius: 2px;
-        font-size: 12px;
-        &[data-name="status-0"] {
-          background-color: rgba(217, 217, 217, 0.2);
-          border: solid 1px #a8a8a8;
-          color: #acacac;
-        }
-        &[data-name="status-1"] {
-          background-color: rgba(146, 204, 255, 0.2);
-          border: solid 1px #00c4ff;
-          color: #00c4ff;
-        }
-        &[data-name="status-2"] {
-          color: #df616b;
-          background-color: #cf132229;
-          border-color: #d63d49;
-        }
-      }
     }
   }
 } 
@@ -325,22 +306,95 @@
 .powerConsumption {
   height: 290px;
   .contentBar {
-
+    width: 100%;
+    height: 230px;
+    .chart {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 
 .lowPressure {
   height: 260px;
   .contentBar {
+    width: 100%;
     height: 200px;
-    overflow-y: auto;
+    .chart {
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 
 .eventInformation {
-  height: 260px;
   .contentBar {
-    height: 200px;
+    margin-top: -5px;
     overflow-y: auto;
+    .smallTable {
+      height: calc(100vh - 720px);
+      overflow-y: auto;
+      ::v-deep(.ant-table) {
+        background: none !important;
+        .ant-table-tbody {
+          tr {
+            background: none;
+            border: none;
+            height: 68px;
+            td {
+              background: none;
+              border: none;
+              padding: 0;
+              .customRow {
+                display: flex;
+                .icon {
+                  background: url("@/assets/images/dashboard/icon/alarm-1.png") no-repeat center center;
+                  background-size: 100% 100%;
+                  width: 98px;
+                  height: 47px;
+                  display: inline-block;
+                  position: relative;
+                  top: 5px;
+                }
+                .rowBody {
+                  width: 316px;
+                  margin-left: 5px;
+                  .title {
+                    background: linear-gradient(90deg, rgba(39,100,147,0) 0%, #193A6B 43%, rgba(39,100,147,0) 100%);
+                    height: 28px;
+                    line-height: 28px;
+                    width: 100%;
+                    font-weight: bold;
+                    color: #D1F1FE;
+                    padding-left: 20px;
+                  }
+                  .lineFeed {
+                    margin-top: 5px;
+                    padding-left: 20px;
+                    .name, .time {
+                      color: #bebebe;
+                      font-size: 14px;
+                      display: inline-block;
+                    }
+                    .time {
+                      float: right;
+                    }
+                  }
+                }
+                &.customRow-2 {
+                  .icon {
+                    background: url("@/assets/images/dashboard/icon/alarm-2.png") no-repeat center center;
+                    background-size: 100% 100%;
+                    width: 98px;
+                    height: 47px;
+                    display: inline-block;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

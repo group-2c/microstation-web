@@ -1,6 +1,6 @@
 /*
  * @author: zzp
- * @date: 2023-08-29 10:50:32
+ * @date: 2023-09-21 15:29:25
  * @fileName: map.js
  * @filePath: src/views/Dashboard/map.js
  * @description: 地图相关
@@ -26,8 +26,6 @@ const newMarker = ({
   marker.data = data
   return marker
 }
-
-
 
 export {
   newMarker

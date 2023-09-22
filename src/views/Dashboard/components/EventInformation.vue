@@ -23,21 +23,17 @@
         :showHeader="false"
         :pagination="false"
       >
-        <a-table-column title="" data-index="description" align="left" width="220px" :ellipsis="true">
+        <a-table-column title="" data-index="name" align="left">
           <template v-slot="obj">
-            <div class="decoration">
+            <div :class="`customRow customRow-${obj.record.status}`">
               <div class="icon" />
-              <span :style="`color: ${obj.record.color}; padding-left: 5px;`">{{ obj.record.description }}</span>
-            </div>
-            <div class="lineFeed">
-              {{ obj.record.device_name }}
-            </div>
-          </template>
-        </a-table-column>
-        <a-table-column title="" data-index="time" align="left">
-          <template v-slot="obj">
-            <div class="independent lineFeed">
-              {{ obj.record.time }}
+              <div class="rowBody">
+                <div class="title">{{ obj.record.description }}</div>
+                <div class="lineFeed">
+                  <div class="name">{{ obj.record.device_name }}</div>
+                  <div class="time">{{ obj.record.time }}</div>
+                </div>
+              </div>
             </div>
           </template>
         </a-table-column>
@@ -58,12 +54,14 @@
         id: 1,
         description: "事件1",
         device_name: "微站1",
+        status: 1,
         time: "2023-09-08 13:02:01"
       },
       {
         id: 2,
         description: "事件2",
         device_name: "微站2",
+        status: 2,
         time: "2023-09-08 13:02:01"
       }
     ]
