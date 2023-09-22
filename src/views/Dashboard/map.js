@@ -15,7 +15,7 @@ const newMarker = ({
   iconUrl,
   data,
   iconSize = [83, 160],
-  iconAnchor = [40, 130],
+  iconAnchor = [40, 130]
 }) => {
   const icon = new T.Icon({
     iconUrl,

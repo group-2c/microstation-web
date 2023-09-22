@@ -13,7 +13,22 @@
 .ant-table-wrapper .ant-table-tbody >tr >td {
   padding: 12px;
 }
-
+.ant-menu-submenu {
+  .ant-menu-title-content {
+    color: #fff;
+  }
+  .ant-menu-item-selected {
+    background: #0c4f8f;
+    .ant-menu-title-content {
+      font-weight: bold;
+    }
+  }
+  .ant-menu-item {
+    &:hover {
+      background: #0c4f8f !important;
+    }
+  }
+}
 .parcel {
   padding: 20px;
   background: #fff;
@@ -93,4 +108,28 @@
     position: relative;
     top: 7px;
   }
+}
+
+
+&::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+}
+&::-webkit-scrollbar-track {
+  background: #e4daff;
+  border-radius: 10px;
+}
+&::-webkit-scrollbar-corner {
+  background: #e4daff;
+  border-radius: 10px;
+}
+&::-webkit-scrollbar-thumb {
+  background: #199cd1;
+  border-radius: 10px;
+}
+&::-webkit-scrollbar-thumb:hover {
+  background: #7fbef2;
+}
+&::-webkit-scrollbar-thumb:active {
+  background: #7fbef2;
 }

@@ -81,25 +81,93 @@
 } 
 
 .dynamo {
-  height: 270px;
-    // background: red;
+  height: 355px;
   .contentBar {
-    margin-top: 10px;
+    margin-top: -5px;
+    .topIcons {
+      padding-left: 107px;
+      .iconItem {
+        width: 100px;
+        text-align: center;
+        display: inline-block;
+        margin-right: 50px;
+        i {
+          width: 66px;
+          height: 71px;
+          display: block;
+          margin-left: 16px;
+          &.ark {
+            background: url("@/assets/images/dashboard/icon/equipment1.png") no-repeat center center;
+            background-size: 100% 100%;
+          }
+          &.namo {
+            background: url("@/assets/images/dashboard/icon/equipment2.png") no-repeat center center;
+            background-size: 100% 100%;
+          }
+        }
+        div {
+          font-size: 14px;
+          color: #bebebe;
+          font-weight: bold;
+          letter-spacing: 2px;
+        }
+      }
+    }
+    .contentBody {
+      position: relative;
+      .backImgs {
+        position: absolute;
+        top: -15px;
+        left: 85px;
+        div {
+          background: url("@/assets/images/dashboard/icon/djImg.png") no-repeat center center;
+          background-size: 100% 100%;
+          width: 133px;
+          height: 230px;
+          margin-right: 19px;
+          display: inline-block;
+        }
+      }
+      .contentItem {
+        padding-left: 40px;
+        padding-top: 20px;
+        position: relative;
+        margin-bottom: 1px;
+        label {
+          font-size: 14px;
+          color: #bebebe;
+          font-weight: bold;
+          letter-spacing: 2px;
+          padding-right: 37px;
+        }
+        div {
+          font-weight: bold;
+          color: #FFFFFF;
+          font-size: 25px;
+          display: inline-block;
+          margin-right: 77px;
+          width: 80px;
+          text-align: center;
+        }
+      }
+    }
   }
 }
 
 .equipmentSearch {
   .contentBar {
     padding-left: 8px;
+    margin-top: -5px;
     .searchBox {
       display: flex;
       ::v-deep(.ant-input) {
-        width: 290px;
+        width: 320px;
         height: 32px;
         background-color: rgba(16, 48, 94, 0.45);
         border-radius: 2px;
         border: solid 1px #3669ac;
         box-shadow: none !important;
+        color: #ffffff;
       }
       .searchBtn {
         background: url("@/assets/images/dashboard/icon/queryEquipmentBtn.png") no-repeat center center;
@@ -121,8 +189,115 @@
     }
     .smallTable {
       margin-top: 10px;
-      height: calc(100vh - 810px);
+      height: calc(100vh - 842px);
       overflow-y: auto;
+      ::v-deep(.ant-table) {
+        background: none !important;
+        .ant-table-tbody {
+          tr {
+            background: none;
+            border: none;
+            td {
+              background: none;
+              border: none;
+              padding: 0;
+              .customRow {
+                display: flex;
+                .icon {
+                  width: 5px;
+                  height: 42px;
+                  background: red;
+                  margin-right: 5px;
+                }
+                .rowBody {
+                  background: linear-gradient(90deg, #214199c2 0%, rgba(30,84,156,0.1) 100%);
+                  border: 1px solid rgba(130,175,255,0.31);
+                  width: 100%;
+                  height: 42px;
+                  line-height: 42px;
+                  border-bottom: none;
+                  border-right: 1px solid rgb(176 192 220 / 17%);
+                  display: flex;
+                  .eqIcon {
+                    height: 100%;
+                    border-right: 1px solid rgba(130,175,255,0.31);
+                    padding-right: 2px;
+                    &::before {
+                      content: "";
+                      background: url("@/assets/images/dashboard/icon/eqIcon.png") no-repeat center center;
+                      background-size: 100% 100%;
+                      width: 52px;
+                      height: 32px;
+                      display: inline-block;
+                      position: relative;
+                      top: 5px;
+                    }
+                  }
+                  .name {
+                    width: 310px;
+                    padding-left: 15px;
+                    color: #FFFFFF;
+                    font-size: 14px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                  }
+                  .status {
+                    padding-left: 10px;
+                    color: #199CFF;
+                    font-size: 14px;
+                    letter-spacing: 2px;
+                  }
+                }
+                &.customRow-0 {
+                  .icon {
+                    background: #5A5A5A;
+                  }
+                  .status {
+                    color: #55595C;
+                  }
+                }
+                &.customRow-1 {
+                  .icon {
+                    background: #3E9CFF;
+                  }
+                  .status {
+                    color: #199CFF;
+                  }
+                }
+                &.customRow-2 {
+                  .icon {
+                    background: #FF3E3E;
+                  }
+                  .status {
+                    color: #FF1919;
+                  }
+                }
+              }
+            }
+            &:nth-child(even){
+              td {
+                .customRow {
+                  .rowBody {
+                    background: linear-gradient(90deg, #262F46 0%, rgba(5,38,82,0.1) 100%);
+                    border-right: 1px solid rgba(130,175,255,0.31);
+                    border-left: 1px solid rgba(130,175,255,0.31);
+                  }
+                }
+              }
+            }
+            &:last-child {
+              td {
+                .customRow {
+                  .rowBody {
+                    border-bottom: 1px solid rgba(130,175,255,0.31);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       .statusTag {
         border-radius: 2px;
         font-size: 12px;

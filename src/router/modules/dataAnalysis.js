@@ -12,7 +12,7 @@ const route = {
   path: "dataAnalysis",
   name: "DataAnalysis",
   redirect: "/app/dataAnalysis/temperatureEquipmentValue",
-  meta: { title: "数据分析", icon: "ProjectOutlined", index: 4 },
+  meta: { title: "数据分析", index: 4 },
   children: [
     {
       path: "temperatureEquipmentValue",

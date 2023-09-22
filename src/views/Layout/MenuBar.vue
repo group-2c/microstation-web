@@ -19,7 +19,6 @@
           :key="route.name"
           class="menuItem"
         >
-          <dynamic-icon :name="route.meta.icon" />
           <span>{{ route.meta.title }}</span>
         </a-menu-item>
 
@@ -29,9 +28,6 @@
           class="menuItem"
           popupClassName="subMenu"
         >
-          <template #icon v-if="route.meta.icon">
-            <dynamic-icon :name="route.meta.icon" />
-          </template>
           <template #title>
             <span>{{ route.meta.title }} </span>
           </template>
@@ -46,7 +42,6 @@
 
 <script setup>
   import { onMounted, computed, ref, inject } from "vue"
-  import DynamicIcon from "./DynamicIcon.vue"
   import { getStorageItem, setStorageItem } from "_utils/storage"
   import { MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
   import { onBeforeRouteUpdate } from "vue-router"

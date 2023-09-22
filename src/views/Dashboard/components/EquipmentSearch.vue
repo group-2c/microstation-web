@@ -27,17 +27,16 @@
         :showHeader="false"
         :pagination="false"
       >
-        <a-table-column title="" data-index="name" align="left" width="300px" :ellipsis="true">
+        <a-table-column title="" data-index="name" align="left">
           <template v-slot="obj">
-            <div class="decoration">
+            <div :class="`customRow customRow-${obj.record.status}`">
               <div class="icon" />
-              {{ obj.record.name }}
+              <div class="rowBody">
+                <div class="eqIcon" />
+                <div class="name">{{ obj.record.name }}</div>
+                <div class="status">{{ obj.record.status_name }}</div>
+              </div>
             </div>
-          </template>
-        </a-table-column>
-        <a-table-column title="" data-index="status" align="left">
-          <template v-slot="obj">
-            <a-tag class="statusTag" :data-name="`status-${obj.record.status}`">{{ obj.record.status_name }}</a-tag>
           </template>
         </a-table-column>
       </a-table>

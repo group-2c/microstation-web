@@ -15,7 +15,7 @@
     <div id="map" />
     <div class="mapContainers">
       <div class="mapContainerLeft">
-        <equipment-status :data="deviceStatus"/>
+        <equipment-status :data="deviceStatus" />
         <dynamo />
         <equipment-search />
       </div>
@@ -45,6 +45,7 @@
 
   let map = null
   let markerFeatures = []
+  let labelFeatures = []
   let markerInfoWindow = null
 
   const equipmentList = ref([])
@@ -61,6 +62,8 @@
   const _drawEquipmentMarker = (target = undefined, callback = undefined) => {
     markerFeatures.forEach(feature => map.removeOverLay(feature))
     markerFeatures = []
+    labelFeatures.forEach(feature => map.removeOverLay(feature))
+    labelFeatures = []
 
     let feature = null, featureIndex = 0
     
@@ -78,6 +81,14 @@
         feature = marker
         featureIndex = index
       }
+
+      const label = new T.Label({
+        text: item.name,
+        position: new T.LngLat(item.longitude, item.latitude),
+        offset: new T.Point(-9, 0)
+      })
+      labelFeatures.push(label)
+      map.addOverLay(label)
 
       marker.addEventListener("click", e => {
         _markerClick(e.target)
@@ -97,8 +108,8 @@
       const marker = newMarker({
         iconUrl: new URL("@/assets/images/dashboard/map/equipmentMarkerSelect.png", import.meta.url).href,
         data: feature.data,
-        iconSize: [388, 321],
-        iconAnchor: [185, 250],
+        iconSize: [380, 156],
+        iconAnchor: [182, 86],
       })
       markerFeatures.push(marker)
       map.addOverLay(marker)
@@ -110,13 +121,15 @@
     const data = marker.data
     markerInfoWindow = new T.InfoWindow()
     const content = `
-      <div class="tunnelMarkerInfoWindow"> 
-        <div>隧道名称：${data.name}</div>
-        <div>隧道编号：${data.code}</div>
-        <div>隧道长度：${data.length}KM</div>
-        <div>通车日期：${data.open_traffic}</div>
+      <div class="wMarkerTop">
+        <div class="wMarkerTitle">${data.name}</div>
+        <div class="mpWControllBtn">查看</div>
       </div>
-      <div class="mpWControllBtn">查看隧道</div>
+      <div class="wMarkerInfoWindow"> 
+        <div>微站编号：${data.code}</div>
+        <div>微站IP：${data.ip}</div>
+        <div>安装日期：${data.installation_date}</div>
+      </div>
     `
     markerInfoWindow.setContent(content)
     marker.openInfoWindow(markerInfoWindow, { 

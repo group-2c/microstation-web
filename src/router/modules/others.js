@@ -15,25 +15,25 @@ const route = [
     path: "unmanned", 
     name: "Unmanned",
     component: Unmanned,
-    meta: { title: "无人微站", icon: "GlobalOutlined", index: 1 },
+    meta: { title: "无人微站", index: 1 },
   },
   { 
     path: "distributionMonitoring", 
     name: "DistributionMonitoring",
     component: DistributionMonitoring,
-    meta: { title: "配电监控", icon: "NodeCollapseOutlined", index: 2 },
+    meta: { title: "配电监控", index: 2 },
   },
   { 
     path: "realTimeVideo", 
     name: "RealTimeVideo",
     component: RealTimeVideo,
-    meta: { title: "实时视频", icon: "VideoCameraOutlined", index: 3 },
+    meta: { title: "实时视频", index: 3 },
   },
   { 
     path: "alarmManagement", 
     name: "AlarmManagement",
     component: AlarmManagement,
-    meta: { title: "报警管理", icon: "AlertOutlined", index: 5 },
+    meta: { title: "报警管理", index: 5 },
   },
 ]
 

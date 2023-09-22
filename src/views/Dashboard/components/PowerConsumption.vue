@@ -13,7 +13,7 @@
   <div class="powerConsumption">
     <div class="highLevelTitleBar">
       <i class="powerIcon" />
-      <span class="chTitle">告警统计</span>
+      <span class="chTitle">耗电量</span>
     </div>
     <div class="contentBar">
 

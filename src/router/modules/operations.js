@@ -20,7 +20,7 @@ const route = {
   path: "operations",
   name: "Operations",
   redirect: "/app/operations/user",
-  meta: { title: "基础数据", icon: "AppstoreOutlined", index: 6 },
+  meta: { title: "基础数据", index: 6 },
   children: [
     {
       path: "user",

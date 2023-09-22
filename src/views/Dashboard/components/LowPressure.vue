@@ -13,7 +13,7 @@
   <div class="lowPressure">
     <div class="highLevelTitleBar">
       <i class="lowIcon" />
-      <span class="chTitle">事件信息</span>
+      <span class="chTitle">低压电线柜电流曲线</span>
     </div>
     <div class="contentBar">
 
