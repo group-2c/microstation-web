@@ -12,6 +12,7 @@
       display: flex;
       position: relative;
       top: -52px;
+      pointer-events: none;
       .left {
         background: url("@/assets/images/top/1.png") center center no-repeat;
         background-size: 100% 100%;
@@ -19,6 +20,7 @@
         height: 181px;
       }
       .centerAuto {
+        height: 100%;
         &::after {
           content: "";
           background: url("@/assets/images/top/2.png");
@@ -46,7 +48,7 @@
       justify-content: space-between;
       align-items: center;
       .title {
-        padding: 22px 0 0 40px;
+        padding: 22px 0 0 20px;
         font-size: 28px;
         color: #F1FDFF;
         font-weight: bold;

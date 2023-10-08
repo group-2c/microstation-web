@@ -55,8 +55,10 @@
                       <div class="content">
                         <a-button size="small" @click="handleSnapshot">抓图</a-button>
                         <a-button size="small" @click="handleFullScreen">全屏</a-button>
+                        <a-button size="small" @click="handleTalk">{{ isTalk ? "停止" : "开始"}}对讲</a-button>
                         <a-button size="small" @click="handleRecording">{{ isRecording ? "停止" : "开始"}}录像</a-button>
                         <span v-show="isRecording">录制中...</span>
+                        <span v-show="isTalk">对讲中...</span>
                       </div>
                     </div>
                   </a-col>
@@ -108,6 +110,7 @@
   const currentVideoKey = ref(null)
   const stepNum = ref(1)
   const isRecording = ref(false)
+  const isTalk = ref(false)
   const isFullScreen = ref(document.fullScreen)
 
   const canvasRefs = ref([])
@@ -127,7 +130,8 @@
       rtspURL: `rtsp://${camera.ip}:${camera.port}/cam/realmonitor?channel=1&subtype=0&proto=Private3`,
       username: camera.user,
       password: camera.passcode,
-      lessRateCanvas: true
+      lessRateCanvas: true,
+      isTalkService: true
     }
   }
 
@@ -151,6 +155,19 @@
         arg3: 0 
       })
     }  
+  }
+
+  const handleTalk = () => {
+    const camera = currentCamera.value
+    const videoEl = videoElList.value.find(x => x.key === camera.key)
+
+    if(!isTalk.value) {
+      isTalk.value = true
+      playerInstance[videoEl.key].talk("on")
+    } else {
+      isTalk.value = false
+      playerInstance[videoEl.key].talk("off")
+    }
   }
 
   const cameraListItemClick = camera => {
