@@ -25,6 +25,13 @@
         <event-information />
       </div>
     </div>
+    <a-layout-footer class="layoutFooter">
+      <div class="left" :style="`width: ${footerWidth}px`" />
+      <div class="center">
+        <div class="copyright">版权信息: {{ constant.VUE_APP_COPYRIGHT }}</div>
+      </div>
+      <div class="right" :style="`width: ${footerWidth}px`" />
+    </a-layout-footer>
   </div>
 </template>
 
@@ -33,6 +40,7 @@
   import { onMounted, ref, inject } from "vue"
   import { message } from "ant-design-vue"
   import { newMarker } from "./map"
+  import constant from "_constant"
   import controllerApi from "_api/controller"
   import EquipmentStatus from "./components/EquipmentStatus.vue"
   import Dynamo from "./components/Dynamo.vue"
@@ -48,6 +56,7 @@
   let labelFeatures = []
   let markerInfoWindow = null
 
+  const footerWidth = ref(0)
   const equipmentList = ref([])
   const deviceStatus = ref({})
 
@@ -163,7 +172,17 @@
     }
   }
 
+  const _computeEdgeScale = () => {
+    const centerWidth = document.body.clientWidth - 660
+    footerWidth.value = centerWidth / 2
+  }
+
   onMounted(() => {
+    _computeEdgeScale()
+    window.addEventListener("resize", () => {
+      _computeEdgeScale()
+    })
+
     _initMap()
     _getEquipmentlList()
     _getDeviceStatus()

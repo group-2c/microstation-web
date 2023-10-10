@@ -29,7 +29,7 @@ export const routes = [
         path: "dashboard",
         name: "Dashboard",
         component: Dashboard,
-        meta: { title: "首页", index: 0 },
+        meta: { title: "首页", index: 0, disableBreadcrumb: true },
       },
       ...others,
       dataAnalysis,

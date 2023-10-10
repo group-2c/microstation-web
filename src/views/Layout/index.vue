@@ -32,30 +32,44 @@
       </div>
     </a-layout-header>
     <a-layout-content class="layoutContent">
-      <router-view />
-    </a-layout-content>
-    <a-layout-footer class="layoutFooter">
-      <div class="left" :style="`width: ${footerWidth}px`" />
-      <div class="center">
-        <div class="copyright">版权信息: {{ constant.VUE_APP_COPYRIGHT }}</div>
+      <div class="layoutContentContainer">
+        <a-breadcrumb v-if="!route.meta.disableBreadcrumb" class="breadcrumb" :routes="matchedRoutes">
+          <template #itemRender="{ route, routes }">
+            <span v-if="routes.indexOf(route) === routes.length - 1">{{ route.meta.title }}</span>
+            <router-link v-else :to="{ name: route.name }">{{ route.meta.title }}</router-link>
+          </template>
+        </a-breadcrumb>
+        <div class="layoutContentBody">
+          <router-view />
+        </div>
       </div>
-      <div class="right" :style="`width: ${footerWidth}px`" />
-    </a-layout-footer>
+    </a-layout-content>
   </a-layout>
 </template> 
 
 <script setup>
-  import { onMounted, ref } from "vue"
+  import { onMounted, ref, computed } from "vue"
   import { useStore } from "vuex"
-  import MenuBar from "./MenuBar.vue"
+  import { useRoute } from "vue-router"
   import { UserOutlined, DownOutlined } from "@ant-design/icons-vue"
+  import { getThreeNameParents } from "@/function/formatting"
+  import Lodash from "lodash"
+  import MenuBar from "./MenuBar.vue"
   import constant from "_constant"
 
+  const route = useRoute()
   const store = useStore()
   const userInfo = store.state.auth.userInfo
 
   const topCenterAutoWidth = ref(0)
   const footerWidth = ref(0)
+
+  const matchedRoutes = computed(() => {
+    const array = route.path.split("/").pop()
+    const name = Lodash.upperFirst(array)
+    const list = route.matched.find(x => x.name === "App").children
+    return getThreeNameParents(list, name)
+  })
 
   const handleLogout = () => {
     store.dispatch("auth/logout")

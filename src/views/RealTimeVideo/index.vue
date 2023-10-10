@@ -77,7 +77,7 @@
               </div>
             </a-col>
             <a-col :span="16">
-              <div :class="['bearBox', `bearNum-${videoNumber}`, isFullScreen ? 'fullscreen' : '']" style="height: calc(100vh - 160px);">
+              <div :class="['bearBox', `bearNum-${videoNumber}`, isFullScreen ? 'fullscreen' : '']" style="height: calc(100vh - 260px);">
                 <div :class="['videoElItem', item.key === currentVideoKey ? 'active' : '']" v-for="item in videoElList" :key="item.key" @click.stop="videoElWrapperClick(item)">
                   <div v-if="item.loading" class="runningState">加载中...</div>
                   <canvas :ref="x => (canvasRefs[item.key] = x)" class="canvas1" v-show="!item.videoVisible" />

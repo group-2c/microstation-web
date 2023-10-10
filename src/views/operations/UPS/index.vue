@@ -33,6 +33,7 @@
               class="searchBox"
               placeholder="模糊搜索"
               enter-button
+              size="large"
               @search="handleSearch"
             />
           </a-col>
@@ -45,6 +46,7 @@
           :data-source="dataCenter.tableList" 
           :pagination="dataCenter.pagination"
           :row-selection="rowSelection"
+          :scroll="{ y: 'calc(100vh - 410px)', x: 1800 }"
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
