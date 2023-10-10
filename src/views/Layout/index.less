@@ -114,9 +114,7 @@
   .layoutContent {
     overflow: hidden;
     .layoutContentContainer {
-      background: #081A2A;
       height: 100%;
-      padding: 20px;
       .breadcrumb {
         margin: 13px 0;
         ::v-deep(.ant-breadcrumb-link) {
@@ -124,9 +122,18 @@
           cursor: pointer;
         }
       }
-      .layoutContentBody {
+    }
+  }
+
+  &.allAround {
+    .layoutContent {
+      .layoutContentContainer {
         background: #081A2A;
-        height: calc(100vh - 150px);
+        padding: 20px;
+        .layoutContentBody {
+          background: #081A2A;
+          height: calc(100vh - 150px);
+        }
       }
     }
   }

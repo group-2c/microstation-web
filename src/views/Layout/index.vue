@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  <a-layout class="layoutCustomTrigger">
+  <a-layout :class="['layoutCustomTrigger', `${!route.meta.disableBreadcrumb ? 'allAround' : ''}`]">
     <a-layout-header class="layoutHeader">
       <div class="adaptiveBackground">
         <div class="left" />
