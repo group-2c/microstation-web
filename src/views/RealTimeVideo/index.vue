@@ -189,14 +189,13 @@
     setIP(`${camera.ip}:${camera.port}`)
     _setSession(sessions[camera.key])
 
-    onLogout(() => {
-      sessions.forEach((_, i) => sessions[i] = 0)
-      onRealPreview()
-      onLogin()
-    })
+    onLogout()
+    sessions.forEach((_, i) => sessions[i] = 0)
+    onRealPreview()
+    onLogin()
   }
 
-  const onLogout = callBack => {
+  const onLogout = () => {
     const cameraKey = currentCamera.value.key
     const videoEl = videoElList.value.find(x => x.key === cameraKey)
 
@@ -209,7 +208,6 @@
     RPC.Global.logout().then(() => {
       videoEl.loading = true
       pubsub.publish("_clearTime_", cameraKey)
-      callBack()
     })
   }
 
