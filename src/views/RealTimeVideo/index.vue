@@ -100,6 +100,7 @@
   const sessions = []
   const playerInstance = []
   const recordInstance = []
+  const talkInstance = []
   const ivsInstance = []
 
   const loading = ref(false)
@@ -124,10 +125,10 @@
     })
   })
 
-  const cameraOptions = camera => {
+  const cameraOptions = (camera, subtype = 0) => {
     return {
       wsURL: `ws://${camera.ip}:${camera.port}/rtspoverwebsocket`,
-      rtspURL: `rtsp://${camera.ip}:${camera.port}/cam/realmonitor?channel=1&subtype=0&proto=Private3`,
+      rtspURL: `rtsp://${camera.ip}:${camera.port}/cam/realmonitor?channel=1&subtype=${subtype}&proto=Private3`,
       username: camera.user,
       password: camera.passcode,
       lessRateCanvas: true,
@@ -163,10 +164,16 @@
 
     if(!isTalk.value) {
       isTalk.value = true
-      playerInstance[videoEl.key].talk("on")
+      const options = cameraOptions(camera, 5)
+      const talkPlayer = new PlayerControl(options)
+      talkPlayer.talk("on")
+      talkInstance[videoEl.key] = talkPlayer
     } else {
       isTalk.value = false
-      playerInstance[videoEl.key].talk("off")
+      if(talkInstance[videoEl.key]) {
+        talkInstance[videoEl.key].talk("off")
+        talkInstance[videoEl.key] = null
+      }
     }
   }
 
@@ -222,6 +229,10 @@
       videoEl.loading = false
     })
 
+    player.on("MSEResolutionChanged", e => {
+      console.log(e)
+    })
+
     player.on("DecodeStart", e => {
       videoEl.videoVisible = e.decodeMode === "video" ? true : false
 
@@ -233,6 +244,19 @@
       canvasSon.addChangeShapeEvent()
       playerInstance[videoEl.key] = player
       ivsInstance[videoEl.key] = canvasSon
+    })
+
+    player.on("GetFrameRate", e => {
+      console.log("GetFrameRate: " + e)
+    })
+    player.on("FrameTypeChange", e => {
+      console.log("FrameTypeChange: " + e)
+    })
+    player.on("Error", e => {
+      console.log("Error: " + JSON.stringify(e))
+    })
+    player.on("WorkerReady", () => {
+      player.connect()
     })
 
     player.init(canvasRefs.value[videoEl.key], videoRefs.value[videoEl.key])
@@ -303,7 +327,7 @@
 
       const options = cameraOptions(camera)
       const player = new PlayerControl(options)
-      player.startRecord(true)
+      player.startRecod(true)
 
       recordInstance[videoEl.key] = player
     } else {
@@ -354,6 +378,14 @@
         port: 80,
         user: "admin",
         passcode: "abc123456",
+      },
+      {
+        key: 2,
+        name: "设备107",
+        ip: "192.168.31.107",
+        port: 80,
+        user: "admin",
+        passcode: "admin123",
       },
     ]
   }
