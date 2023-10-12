@@ -15,6 +15,7 @@ import DryTemperatureController from "@/views/operations/DryTemperatureControlle
 import DoublePowerController from "@/views/operations/DoublePowerController/index.vue"
 import Ups from "@/views/operations/UPS/index.vue"
 import Eps from "@/views/operations/EPS/index.vue"
+import ElectricityMeter from "@/views/operations/ElectricityMeter/index.vue"
 
 const route = {
   path: "operations",
@@ -81,6 +82,12 @@ const route = {
       name: "Eps",
       component: Eps,
       meta: { title: "EPS电源" }
+    },
+    {
+      path: "electricityMeter",
+      name: "ElectricityMeter",
+      component: ElectricityMeter,
+      meta: { title: "多功能电表" }
     }
   ]
 }
