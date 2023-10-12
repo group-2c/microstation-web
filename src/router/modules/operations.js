@@ -16,6 +16,15 @@ import DoublePowerController from "@/views/operations/DoublePowerController/inde
 import Ups from "@/views/operations/UPS/index.vue"
 import Eps from "@/views/operations/EPS/index.vue"
 import ElectricityMeter from "@/views/operations/ElectricityMeter/index.vue"
+import AccessControlController from "@/views/operations/AccessControlController/index.vue"
+import AirConditioning from "@/views/operations/AirConditioning/index.vue"
+import Camera from "@/views/operations/Camera/index.vue"
+import DieselEngine from "@/views/operations/DieselEngine/index.vue"
+import FourInOneDevice from "@/views/operations/FourInOneDevice/index.vue"
+import LineProtectiveDevice from "@/views/operations/LineProtectiveDevice/index.vue"
+import ReactivePowerCompensator from "@/views/operations/ReactivePowerCompensator/index.vue"
+import TelemetryUnit from "@/views/operations/TelemetryUnit/index.vue"
+import TransformerProtectionDevice from "@/views/operations/TransformerProtectionDevice/index.vue"
 
 const route = {
   path: "operations",
@@ -88,6 +97,60 @@ const route = {
       name: "ElectricityMeter",
       component: ElectricityMeter,
       meta: { title: "多功能电表" }
+    },
+    {
+      path: "telemetryUnit",
+      name: "TelemetryUnit",
+      component: TelemetryUnit,
+      meta: { title: "遥信遥测单元" }
+    },
+    {
+      path: "transformerProtectionDevice",
+      name: "TransformerProtectionDevice",
+      component: TransformerProtectionDevice,
+      meta: { title: "变压器保护装置" }
+    },
+    {
+      path: "lineProtectiveDevice",
+      name: "LineProtectiveDevice",
+      component: LineProtectiveDevice,
+      meta: { title: "线路保护装置" }
+    },
+    {
+      path: "fourInOneDevice",
+      name: "FourInOneDevice",
+      component: FourInOneDevice,
+      meta: { title: "RVB-8003型四合一装置" }
+    },
+    {
+      path: "dieselEngine",
+      name: "DieselEngine",
+      component: DieselEngine,
+      meta: { title: "柴油发动机" }
+    },
+    {
+      path: "reactivePowerCompensator",
+      name: "ReactivePowerCompensator",
+      component: ReactivePowerCompensator,
+      meta: { title: "无功补偿器" }
+    },
+    {
+      path: "camera",
+      name: "Camera",
+      component: Camera,
+      meta: { title: "摄像机" }
+    },
+    {
+      path: "accessControlController",
+      name: "AccessControlController",
+      component: AccessControlController,
+      meta: { title: "门禁控制器" }
+    },
+    {
+      path: "airConditioning",
+      name: "AirConditioning",
+      component: AirConditioning,
+      meta: { title: "空调" }
     }
   ]
 }
