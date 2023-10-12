@@ -81,7 +81,7 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_manufacturers } from "_utils/dictionary"
+  import { dict_manufacturers, dict_controller_equipment_model } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import controllerApi from "_api/controller"
@@ -92,6 +92,7 @@
     { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
     { title: "设备编号", dataIndex: "code", align: "left", width: 200, ellipsis: true },
     { title: "设备IP地址", dataIndex: "ip", align: "left", width: 200 },
+    { title: "设备型号", dataIndex: "model_name", align: "left", width: 200 },
     { title: "经度", dataIndex: "longitude", align: "left", width: 200 },
     { title: "纬度", dataIndex: "latitude", align: "left", width: 200 },
     { title: "安装位置", dataIndex: "location", align: "left", width: 200, ellipsis: true },
@@ -142,6 +143,7 @@
       dataCenter.value.tableList = res.data.content.map(item => {
         item.coordinates = `${item.longitude},${item.latitude}`
         item.manufacturer_name = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
+        item.model_name = dict_controller_equipment_model.find(x => x.key === item.model)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
@@ -236,9 +238,12 @@
       ip: "设备IP",
       longitude: "经度",
       latitude: "纬度",
+      model: "设备型号",
       location: "安装位置",
       manufacturer: "制造商",
       installation_date: "安装日期",
+      repairer: "维修人员",
+      telephone: "联系电话",
       createAt: "创建时间",
     }]
 

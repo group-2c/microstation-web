@@ -12,6 +12,7 @@ const toSubmitFields = values => {
   return Lodash.pick(values, [
     "id",
     "realname",
+    "role",
     "password",
     "telephone",
     "username",

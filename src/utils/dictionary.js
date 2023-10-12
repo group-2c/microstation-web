@@ -23,3 +23,8 @@ export const dict_deviceStatus = [
   {key: 1, value: "在线"},
   {key: 2, value: "故障"}
 ]
+
+export const dict_controller_equipment_model = [
+  {key: "1", value: "V1.0"},
+  {key: "2", value: "V2.0"},
+]

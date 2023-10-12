@@ -1,49 +1,51 @@
 <template>
   <a-drawer
     :title="dataCenter.record.id ? '编辑' : '新增'"
-    :width="1000"
+    :width="500"
     :open="dataCenter.visible"
     :closable="false"
     class="editDrawer"
   > 
     <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 6 }">
       <a-row :gutter="30"> 
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="用户名" name="username">
             <a-input v-model:value="dataCenter.record.username" placeholder="请输入用户名" />
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="真实姓名" name="realname">
             <a-input v-model:value="dataCenter.record.realname" placeholder="请输入真实姓名" />
           </a-form-item>
         </a-col>
-        <div v-if="dataCenter.record.id" style="width: 100%;">
-          <a-col :span="12">
-            <a-form-item label="修改密码" name="isEditPassword">
-              <a-switch v-model:checked="dataCenter.isEditPassword" @change="changeEditPassword"/>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12" />
-        </div>
-        <a-col v-if="dataCenter.isEditPassword || !dataCenter.record.id" :span="12">
+        <a-col :span="24">
+          <a-form-item label="角色" name="role">
+            <a-input v-model:value="dataCenter.record.role" placeholder="请输入角色" />
+          </a-form-item>
+        </a-col>
+        <a-col v-if="dataCenter.record.id" :span="24">
+          <a-form-item label="修改密码" name="isEditPassword">
+            <a-switch v-model:checked="dataCenter.isEditPassword" @change="changeEditPassword"/>
+          </a-form-item>
+        </a-col>
+        <a-col v-if="dataCenter.isEditPassword || !dataCenter.record.id" :span="24">
           <a-form-item label="密码" name="password">
-            <a-input v-model:value="dataCenter.record.password" type="password" placeholder="请输入密码" />
+            <a-input class="passwordInput" v-model:value="dataCenter.record.password" autocomplete="off" placeholder="请输入密码" />
           </a-form-item>
         </a-col>
-        <a-col v-if="dataCenter.isEditPassword || !dataCenter.record.id" :span="12">
+        <a-col v-if="dataCenter.isEditPassword || !dataCenter.record.id" :span="24">
           <a-form-item label="重复密码" name="rPassword">
-            <a-input v-model:value="dataCenter.record.rPassword" type="password" placeholder="请再次输入密码" />
+            <a-input class="passwordInput" v-model:value="dataCenter.record.rPassword" autocomplete="off" placeholder="请再次输入密码" />
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="所属部门" name="department">
             <a-select v-model:value="dataCenter.record.department" popupClassName="modalSelect" placeholder="请选择所属部门">
               <a-select-option v-for="item in dict_departments" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="联系电话" name="telephone">
             <a-input-number v-model:value="dataCenter.record.telephone" :maxlength="11"/>
           </a-form-item>
@@ -51,7 +53,7 @@
       </a-row>
     </a-form>
     <template #footer>
-      <a-button style="margin-right: 8px" @click="handleCancel">取消</a-button>
+      <a-button  @click="handleCancel">取消</a-button>
       <a-button type="primary" @click="handleOk">确定</a-button>
     </template>
   </a-drawer>

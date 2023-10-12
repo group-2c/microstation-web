@@ -1,54 +1,71 @@
 <template>
   <a-drawer
     :title="dataCenter.record.id ? '编辑' : '新增'"
-    :width="1000"
+    :width="600"
     :open="dataCenter.visible"
     :closable="false"
     class="editDrawer"
   > 
-    <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 8 }">
+    <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 5 }">
       <a-row :gutter="30"> 
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="设备名称" name="name">
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入设备名称" />
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="设备编号" name="code">
             <a-input v-model:value="dataCenter.record.code" placeholder="请输入设备编号" />
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="设备IP地址" name="ip">
             <a-input v-model:value="dataCenter.record.ip" placeholder="请输入设备IP地址" />
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
+          <a-form-item label="设备型号" name="model">
+            <a-select v-model:value="dataCenter.record.model" popupClassName="modalSelect" placeholder="请选择设备型号">
+              <a-select-option v-for="item in dict_controller_equipment_model" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <a-form-item label="坐标位置" name="coordinates">
             <a-input class="coordinates" v-model:value="dataCenter.record.coordinates" placeholder="点击选择" readonly @click="selectionCoordinate"/>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="安装位置" name="location">
             <a-input v-model:value="dataCenter.record.location" placeholder="请输入安装位置" />
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="制造商" name="manufacturer">
             <a-select v-model:value="dataCenter.record.manufacturer" popupClassName="modalSelect" placeholder="请选择制造商">
               <a-select-option v-for="item in dict_manufacturers" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="24">
           <a-form-item label="安装日期" name="installation_date">
             <a-date-picker v-model:value="dataCenter.record.installation_date" placeholder="请选择安装日期" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="维修人员" name="repairer">
+            <a-input v-model:value="dataCenter.record.repairer" placeholder="请输入维修人员" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="联系电话" name="telephone">
+            <a-input v-model:value="dataCenter.record.telephone" placeholder="请输入联系电话" />
           </a-form-item>
         </a-col>
       </a-row>
     </a-form>
     <template #footer>
-      <a-button style="margin-right: 8px" @click="handleCancel">取消</a-button>
+      <a-button  @click="handleCancel">取消</a-button>
       <a-button type="primary" @click="handleOk">确定</a-button>
     </template>
   </a-drawer>
@@ -58,7 +75,7 @@
 <script setup>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
-import { dict_manufacturers } from "_utils/dictionary"
+import { dict_manufacturers, dict_controller_equipment_model } from "_utils/dictionary"
 import controllerApi from "_api/controller"
 import Lodash from "lodash"
 import dayjs from "dayjs"
@@ -69,6 +86,7 @@ const formRules = {
   code: [{ required: true, message: "请输入设备编号" }],
   ip: [{ required: true, message: "请输入设备IP地址" }],
   coordinates: [{ required: true, message: "请选择坐标位置" }],
+  model: [{ required: true, message: "请选择设备型号" }],
   location: [{ required: true, message: "请输入安装位置" }],
   manufacturer: [{ required: true, message: "请选择制造商" }],
   installation_date: [{ required: true, message: "请选择安装日期" }],

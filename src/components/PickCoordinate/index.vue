@@ -51,6 +51,7 @@
         dataCenter.value.record.longitude = e.lnglat.lng
       }
     })
+    map.setStyle("indigo")
   }
 
   const _drawMarker = (longitude, latitude) => {

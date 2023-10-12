@@ -86,6 +86,7 @@
     { title: "所属部门", dataIndex: "department_name", align: "left" },    
     { title: "联系电话", dataIndex: "telephone", align: "left" },
     { title: "真实姓名", dataIndex: "realname", align: "left" },
+    { title: "角色", dataIndex: "role", align: "left" },
     { title: "创建时间", dataIndex: "createAt", align: "left" },
     { title: "更新时间", dataIndex: "createAt", align: "left" },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200 }
@@ -221,6 +222,7 @@
       realname: "真实姓名",
       telephone: "联系电话",
       username: "用户名",
+      role: "角色",
       department_name: "部门名称",
       createAt: "创建时间"
     }]

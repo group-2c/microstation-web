@@ -14,11 +14,14 @@ const toSubmitFields = values => {
     "name",
     "code",
     "ip",
+    "model",
     "longitude",
     "latitude",
     "location",
     "manufacturer",
-    "installation_date"
+    "installation_date",
+    "repairer",
+    "telephone"
   ])
 }
 

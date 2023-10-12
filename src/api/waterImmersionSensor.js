@@ -17,7 +17,7 @@ const toSubmitFields = values => {
     "data_bit",
     "stop_bit",
     "parity",
-    "controller_code",
+    "controller_id",
     "manufacturer"
   ])
 }
