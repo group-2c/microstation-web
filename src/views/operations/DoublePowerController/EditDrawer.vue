@@ -41,7 +41,7 @@
         <a-col :span="24">
           <a-form-item label="所属微站" name="controllerId">
             <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站">
-              <a-select-option v-for="item in dataCenter.controllerList" :key="item.code" :value="item.code">{{item.name}}</a-select-option>
+              <a-select-option v-for="item in dataCenter.controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
