@@ -83,7 +83,7 @@
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
     { title: "用户名", dataIndex: "username", align: "left" },    
-    { title: "所属部门", dataIndex: "department_name", align: "left" },    
+    { title: "所属部门", dataIndex: "departmentName", align: "left" },    
     { title: "联系电话", dataIndex: "telephone", align: "left" },
     { title: "真实姓名", dataIndex: "realname", align: "left" },
     { title: "角色", dataIndex: "role", align: "left" },
@@ -130,7 +130,7 @@
     try {
       const res = await userApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.department_name = dict_departments.find(x => x.key === item.department)?.value
+        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
@@ -223,7 +223,7 @@
       telephone: "联系电话",
       username: "用户名",
       role: "角色",
-      department_name: "部门名称",
+      departmentName: "部门名称",
       createAt: "创建时间"
     }]
 

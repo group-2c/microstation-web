@@ -14,33 +14,33 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="设备地址" name="slave_id">
-            <a-input-number v-model:value="dataCenter.record.slave_id" placeholder="请输入设备地址" />
+          <a-form-item label="设备地址" name="slaveId">
+            <a-input-number v-model:value="dataCenter.record.slaveId" placeholder="请输入设备地址" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="波特率" name="baud_rate">
-            <a-input-number v-model:value="dataCenter.record.baud_rate" placeholder="请输入波特率" />
+          <a-form-item label="波特率" name="baudRate">
+            <a-input-number v-model:value="dataCenter.record.baudRate" placeholder="请输入波特率" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="数据位" name="data_bit">
-            <a-input-number v-model:value="dataCenter.record.data_bit" placeholder="请输入数据位" />
+          <a-form-item label="数据位" name="dataBit">
+            <a-input-number v-model:value="dataCenter.record.dataBit" placeholder="请输入数据位" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="停止位" name="stop_bit">
-            <a-input-number v-model:value="dataCenter.record.stop_bit" placeholder="请输入停止位" />
+          <a-form-item label="停止位" name="stopBit">
+            <a-input-number v-model:value="dataCenter.record.stopBit" placeholder="请输入停止位" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
           <a-form-item label="校验位" name="parity">
-            <a-input-number v-model:value="dataCenter.record.parity" placeholder="请输入校验位" />
+            <a-input v-model:value="dataCenter.record.parity" placeholder="请输入校验位" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="所属微站" name="controller_id">
-            <a-select v-model:value="dataCenter.record.controller_id" popupClassName="modalSelect" placeholder="请选择微站">
+          <a-form-item label="所属微站" name="controllerId">
+            <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站">
               <a-select-option v-for="item in dataCenter.controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
             </a-select>
           </a-form-item>
@@ -71,12 +71,12 @@ import Lodash from "lodash"
 
 const formRules = {
   name: [{ required: true, message: "请输入设备名称" }],
-  slave_id: [{ required: true, message: "请输入设备地址" }],
-  baud_rate: [{ required: true, message: "请输入波特率" }],
-  data_bit: [{ required: true, message: "请输入数据位" }],
-  stop_bit: [{ required: true, message: "请输入停止位" }],
+  slaveId: [{ required: true, message: "请输入设备地址" }],
+  baudRate: [{ required: true, message: "请输入波特率" }],
+  dataBit: [{ required: true, message: "请输入数据位" }],
+  stopBit: [{ required: true, message: "请输入停止位" }],
   parity: [{ required: true, message: "请输入校验位" }],
-  controller_id: [{ required: true, message: "请选择所属微站" }],
+  controllerId: [{ required: true, message: "请选择所属微站" }],
   manufacturer: [{ required: true, message: "请选择制造商" }],
 }
 

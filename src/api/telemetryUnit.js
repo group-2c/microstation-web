@@ -12,12 +12,12 @@ const toSubmitFields = values => {
   return Lodash.pick(values, [
     "id",
     "name",
-    "slave_id",
-    "baud_rate",
-    "data_bit",
-    "stop_bit",
+    "slaveId",
+    "baudRate",
+    "dataBit",
+    "stopBit",
     "parity",
-    "controller_id",
+    "controllerId",
     "manufacturer"
   ])
 }
@@ -26,7 +26,7 @@ class telemetryUnitApi extends CommonRestfulModel {
 
   constructor() {
     super({
-      sourceURL: "/telemetryUnit",
+      sourceURL: "/telemetryUnits",
       toSubmitFields
     })
   }

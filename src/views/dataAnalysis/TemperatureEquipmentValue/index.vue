@@ -52,8 +52,8 @@
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
     { title: "温度测量值", dataIndex: "temperature", align: "left" },    
     { title: "湿度测量值", dataIndex: "humidity", align: "left" },
-    { title: "数显温湿度设备ID", dataIndex: "temperature_humidity_equipment_id", align: "left" },
-    { title: "数显温湿度设备名称", dataIndex: "temperature_humidity_equipment_name", align: "left" },
+    { title: "数显温湿度设备ID", dataIndex: "temperatureHumidityEquipmentId", align: "left" },
+    { title: "数显温湿度设备名称", dataIndex: "temperatureHumidityEquipmentName", align: "left" },
     { title: "创建时间", dataIndex: "createAt", align: "left" },
     { title: "更新时间", dataIndex: "updateAt", align: "left" }
   ]
@@ -107,8 +107,8 @@
       id: `${pageName}id`,
       temperature: "温度测量值",
       humidity: "湿度测量值",
-      temperature_humidity_equipment_id: "数显温湿度设备id",
-      temperature_humidity_equipment_name: "数显温湿度设备名称",
+      temperatureHumidityEquipmentId: "数显温湿度设备id",
+      temperatureHumidityEquipmentName: "数显温湿度设备名称",
       createAt: "创建时间",
     }]
 

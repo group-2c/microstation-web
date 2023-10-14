@@ -19,7 +19,7 @@ const toSubmitFields = values => {
     "latitude",
     "location",
     "manufacturer",
-    "installation_date",
+    "installationDate",
     "repairer",
     "telephone"
   ])

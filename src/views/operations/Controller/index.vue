@@ -92,12 +92,12 @@
     { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
     { title: "设备编号", dataIndex: "code", align: "left", width: 200, ellipsis: true },
     { title: "设备IP地址", dataIndex: "ip", align: "left", width: 200 },
-    { title: "设备型号", dataIndex: "model_name", align: "left", width: 200 },
+    { title: "设备型号", dataIndex: "modelName", align: "left", width: 200 },
     { title: "经度", dataIndex: "longitude", align: "left", width: 200 },
     { title: "纬度", dataIndex: "latitude", align: "left", width: 200 },
     { title: "安装位置", dataIndex: "location", align: "left", width: 200, ellipsis: true },
-    { title: "制造商", dataIndex: "manufacturer_name", align: "left", width: 200, ellipsis: true },
-    { title: "安装日期", dataIndex: "installation_date", align: "left", width: 200 },
+    { title: "制造商", dataIndex: "manufacturerName", align: "left", width: 200, ellipsis: true },
+    { title: "安装日期", dataIndex: "installationDate", align: "left", width: 200 },
     { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
     { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
@@ -142,8 +142,8 @@
       const res = await controllerApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
         item.coordinates = `${item.longitude},${item.latitude}`
-        item.manufacturer_name = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
-        item.model_name = dict_controller_equipment_model.find(x => x.key === item.model)?.value
+        item.manufacturerName = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
+        item.modelName = dict_controller_equipment_model.find(x => x.key === item.model)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
@@ -241,7 +241,7 @@
       model: "设备型号",
       location: "安装位置",
       manufacturer: "制造商",
-      installation_date: "安装日期",
+      installationDate: "安装日期",
       repairer: "维修人员",
       telephone: "联系电话",
       createAt: "创建时间",

@@ -13,7 +13,7 @@ const toSubmitFields = values => {
     "id",
     "name",
     "ip",
-    "controller_id",
+    "controllerId",
     "type",
     "manufacturer"
   ])
@@ -23,7 +23,7 @@ class cameraApi extends CommonRestfulModel {
 
   constructor() {
     super({
-      sourceURL: "/camera",
+      sourceURL: "/cameras",
       toSubmitFields
     })
   }

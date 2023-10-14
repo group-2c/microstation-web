@@ -30,7 +30,7 @@
               <div class="rowBody">
                 <div class="title">{{ obj.record.description }}</div>
                 <div class="lineFeed">
-                  <div class="name">{{ obj.record.device_name }}</div>
+                  <div class="name">{{ obj.record.deviceName }}</div>
                   <div class="time">{{ obj.record.time }}</div>
                 </div>
               </div>
@@ -53,14 +53,14 @@
       {
         id: 1,
         description: "事件1",
-        device_name: "微站1",
+        deviceName: "微站1",
         status: 1,
         time: "2023-09-08 13:02:01"
       },
       {
         id: 2,
         description: "事件2",
-        device_name: "微站2",
+        deviceName: "微站2",
         status: 2,
         time: "2023-09-08 13:02:01"
       }

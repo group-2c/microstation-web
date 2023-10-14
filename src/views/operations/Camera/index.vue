@@ -91,9 +91,9 @@
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
     { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
     { title: "IP地址", dataIndex: "ip", align: "left", width: 250, ellipsis: true },
-    { title: "类 型", dataIndex: "type_name", align: "left", width: 250, ellipsis: true },
-    { title: "所属微站", dataIndex: "controller_name", align: "left", width: 250, ellipsis: true },
-    { title: "制造商", dataIndex: "manufacturer_name", align: "left", width: 250, ellipsis: true },
+    { title: "类 型", dataIndex: "typeName", align: "left", width: 250, ellipsis: true },
+    { title: "所属微站", dataIndex: "controllerName", align: "left", width: 250, ellipsis: true },
+    { title: "制造商", dataIndex: "manufacturerName", align: "left", width: 250, ellipsis: true },
     { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
     { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
@@ -137,8 +137,8 @@
     try {
       const res = await cameraApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.department_name = dict_departments.find(x => x.key === item.department)?.value
-        item.type_name = dict_camera_types.find(x => x.key === item.type)?.value
+        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
+        item.typeName = dict_camera_types.find(x => x.key === item.type)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
@@ -229,9 +229,9 @@
       id: `${pageName}id`,
       name: "设备名称",
       ip: "IP地址",
-      type_name: "类型",
-      controller_name: "所属微站",
-      manufacturer_name: "制造商",
+      typeName: "类型",
+      controllerName: "所属微站",
+      manufacturerName: "制造商",
       createAt: "创建时间",
     }]
 

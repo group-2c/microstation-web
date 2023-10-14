@@ -34,7 +34,7 @@
               <div class="rowBody">
                 <div class="eqIcon" />
                 <div class="name">{{ obj.record.name }}</div>
-                <div class="status">{{ obj.record.status_name }}</div>
+                <div class="status">{{ obj.record.statusName }}</div>
               </div>
             </div>
           </template>
@@ -59,17 +59,17 @@
       {
         name: "设备1",
         status: 1,
-        status_name: "在线"
+        statusName: "在线"
       },
       {
         name: "设备2",
         status: 0,
-        status_name: "离线"
+        statusName: "离线"
       },
       {
         name: "设备3",
         status: 2,
-        status_name: "故障"
+        statusName: "故障"
       }
     ]
     tableList.value = Lodash.cloneDeep(deviceList.value)

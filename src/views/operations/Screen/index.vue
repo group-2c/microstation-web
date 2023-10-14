@@ -90,13 +90,13 @@
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
     { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
-    { title: "设备地址", dataIndex: "slave_id", align: "left", width: 250, ellipsis: true },
-    { title: "波特率", dataIndex: "baud_rate", align: "left", width: 180 },
-    { title: "数据位", dataIndex: "data_bit", align: "left", width: 180 },
-    { title: "停止位", dataIndex: "stop_bit", align: "left", width: 180 },
+    { title: "设备地址", dataIndex: "slaveId", align: "left", width: 250, ellipsis: true },
+    { title: "波特率", dataIndex: "baudRate", align: "left", width: 180 },
+    { title: "数据位", dataIndex: "dataBit", align: "left", width: 180 },
+    { title: "停止位", dataIndex: "stopBit", align: "left", width: 180 },
     { title: "校验位", dataIndex: "parity", align: "left", width: 180 },
-    { title: "所属微站", dataIndex: "controller_name", align: "left", width: 250, ellipsis: true },
-    { title: "制造商", dataIndex: "manufacturer_name", align: "left", width: 250, ellipsis: true },
+    { title: "所属微站", dataIndex: "controllerName", align: "left", width: 250, ellipsis: true },
+    { title: "制造商", dataIndex: "manufacturerName", align: "left", width: 250, ellipsis: true },
     { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
     { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
@@ -140,7 +140,7 @@
     try {
       const res = await screenApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.department_name = dict_departments.find(x => x.key === item.department)?.value
+        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
@@ -230,13 +230,13 @@
     const dataArray = [{
       id: `${pageName}id`,
       name: "设备名称",
-      slave_id: "设备地址",
-      baud_rate: "波特率",
-      data_bit: "数据位",
-      stop_bit: "停止位",
+      slaveId: "设备地址",
+      baudRate: "波特率",
+      dataBit: "数据位",
+      stopBit: "停止位",
       parity: "校验位",
-      controller_name: "所属微站",
-      manufacturer_name: "制造商",
+      controllerName: "所属微站",
+      manufacturerName: "制造商",
       createAt: "创建时间",
     }]
 

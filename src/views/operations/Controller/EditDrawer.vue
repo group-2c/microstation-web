@@ -48,8 +48,8 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="安装日期" name="installation_date">
-            <a-date-picker v-model:value="dataCenter.record.installation_date" placeholder="请选择安装日期" />
+          <a-form-item label="安装日期" name="installationDate">
+            <a-date-picker v-model:value="dataCenter.record.installationDate" placeholder="请选择安装日期" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -89,7 +89,7 @@ const formRules = {
   model: [{ required: true, message: "请选择设备型号" }],
   location: [{ required: true, message: "请输入安装位置" }],
   manufacturer: [{ required: true, message: "请选择制造商" }],
-  installation_date: [{ required: true, message: "请选择安装日期" }],
+  installationDate: [{ required: true, message: "请选择安装日期" }],
 }
 
 const props = defineProps({
@@ -110,7 +110,7 @@ const handleShow = (item = {}) => {
   dataCenter.value.visible = true
   dataCenter.value.record = {
     ...Lodash.cloneDeep(item),
-    installation_date: item.installation_date ? dayjs(item.installation_date) : ""
+    installationDate: item.installationDate ? dayjs(item.installationDate) : ""
   }
 }
 
@@ -131,7 +131,7 @@ const pickCoordinateCallback = data => {
 const handleOk = async () => {
   _validateForm(async () => {
     const values = Lodash.cloneDeep(dataCenter.value.record)
-    values.installation_date = dayjs(values.installation_date).format("YYYY-MM-DD HH:mm:ss")
+    values.installationDate = dayjs(values.installationDate).format("YYYY-MM-DD HH:mm:ss")
     try {
       dataCenter.value.loading = true
  

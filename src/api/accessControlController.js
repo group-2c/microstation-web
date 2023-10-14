@@ -13,7 +13,7 @@ const toSubmitFields = values => {
     "id",
     "name",
     "ip",
-    "controller_id",
+    "controllerId",
     "manufacturer"
   ])
 }
@@ -22,7 +22,7 @@ class accessControlControllerApi extends CommonRestfulModel {
 
   constructor() {
     super({
-      sourceURL: "/accessControlController",
+      sourceURL: "/accessControlControllers",
       toSubmitFields
     })
   }

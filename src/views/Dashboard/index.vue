@@ -137,7 +137,7 @@
       <div class="wMarkerInfoWindow"> 
         <div>微站编号：${data.code}</div>
         <div>微站IP：${data.ip}</div>
-        <div>安装日期：${data.installation_date}</div>
+        <div>安装日期：${data.installationDate}</div>
       </div>
     `
     markerInfoWindow.setContent(content)
