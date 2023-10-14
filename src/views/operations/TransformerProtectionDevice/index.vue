@@ -81,7 +81,7 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_departments } from "_utils/dictionary"
+  import { dict_manufacturers } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import transformerProtectionDeviceApi from "_api/transformerProtectionDevice"
@@ -140,7 +140,7 @@
     try {
       const res = await transformerProtectionDeviceApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
+        item.manufacturerName = dict_manufacturers.find(x => x.key === item. manufacturer)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements

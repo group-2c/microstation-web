@@ -81,7 +81,7 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_departments, dict_camera_types } from "_utils/dictionary"
+  import { dict_manufacturers, dict_camera_types } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import cameraApi from "_api/camera"
@@ -137,7 +137,7 @@
     try {
       const res = await cameraApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
+        item.manufacturerName = dict_manufacturers.find(x => x.key === item. manufacturer)?.value
         item.typeName = dict_camera_types.find(x => x.key === item.type)?.value
         return item
       })
