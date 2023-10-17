@@ -26,6 +26,7 @@
   import L from "leaflet"
   import "leaflet/dist/leaflet.css"
   import Lodash from "lodash"
+  import markerIcon from "@/assets/images/map/marker-icon.png"
 
   const props = defineProps({
     onOk: Function
@@ -59,7 +60,12 @@
 
   const _drawMarker = (longitude, latitude) => {
     marker = new L.marker([latitude, longitude], {
-      draggable: true
+      draggable: true,
+      icon: L.icon({
+        iconUrl: markerIcon,
+        iconSize: [25, 41],
+        iconAnchor: [15, 50]
+      })
     })
     marker.addEventListener("dragend", () => {
       const coordinates = marker.getLatLng()
