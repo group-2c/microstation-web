@@ -11,7 +11,7 @@
         <div class="right" />
       </div>
       <div class="containerBody">
-        <div class="title">{{ constant.VUE_APP_NAME }}</div>
+        <div class="title">{{ Constant.appName }}</div>
         <menu-bar />
         <div class="userInfo">
           <UserOutlined class="userIcon" />
@@ -55,7 +55,7 @@
   import { getThreeNameParents } from "@/function/formatting"
   import Lodash from "lodash"
   import MenuBar from "./MenuBar.vue"
-  import constant from "_constant"
+  import Constant from "_constant"
 
   const route = useRoute()
   const store = useStore()

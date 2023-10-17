@@ -12,7 +12,7 @@
 <template>
   <div class="dashboardBox"> 
     <div class="globalMasking"></div>
-    <div id="map" />
+    <div id="map" ref="mapRef" />
     <div class="mapContainers">
       <div class="mapContainerLeft">
         <equipment-status :data="deviceStatus" />
@@ -28,7 +28,7 @@
     <a-layout-footer class="layoutFooter">
       <div class="left" :style="`width: ${footerWidth}px`" />
       <div class="center">
-        <div class="copyright">版权信息: {{ constant.VUE_APP_COPYRIGHT }}</div>
+        <div class="copyright">版权信息: {{ Constant.appCopyright }}</div>
       </div>
       <div class="right" :style="`width: ${footerWidth}px`" />
     </a-layout-footer>
@@ -39,8 +39,9 @@
 <script setup>
   import { onMounted, ref, inject } from "vue"
   import { message } from "ant-design-vue"
-  import { newMarker } from "./map"
-  import constant from "_constant"
+  import L from "leaflet"
+  import "leaflet/dist/leaflet.css"
+  import Constant from "_constant"
   import controllerApi from "_api/controller"
   import EquipmentStatus from "./components/EquipmentStatus.vue"
   import Dynamo from "./components/Dynamo.vue"
@@ -50,106 +51,83 @@
   import EventInformation from "./components/EventInformation.vue"
   
   const routeJump = inject("$routeJump")
-
-  let map = null
-  let markerFeatures = []
-  let labelFeatures = []
-  let markerInfoWindow = null
+  let map = null, markerFeatures = []
 
   const footerWidth = ref(0)
   const equipmentList = ref([])
   const deviceStatus = ref({})
+  const openPopupId = ref(undefined)
+
+  const mapRef = ref()
 
   const _initMap = () => {
-    map = new T.Map("map", {
-      projection: "EPSG:4326",
-    })
-    map.centerAndZoom(new T.LngLat(118.46489, 39.49825), 13)
-    map.setStyle("indigo")
+    const { mapOptions, mapCenter, mapZoom , mapURL, mapKey } = Constant
+    map = L.map(mapRef.value, mapOptions).setView(mapCenter, mapZoom)
+      .addLayer(L.tileLayer(`${mapURL}?T=vec_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
+      .addLayer(L.tileLayer(`${mapURL}?T=cva_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
   }
 
-  const _drawEquipmentMarker = (target = undefined, callback = undefined) => {
-    markerFeatures.forEach(feature => map.removeOverLay(feature))
+  const _drawEquipmentMarker = () => {
+    markerFeatures.forEach(marker => marker.remove())
     markerFeatures = []
-    labelFeatures.forEach(feature => map.removeOverLay(feature))
-    labelFeatures = []
 
-    let feature = null, featureIndex = 0
-    
-    equipmentList.value.forEach((item, index) => {
-      const marker = newMarker({
-        iconUrl: new URL("@/assets/images/dashboard/map/equipmentMarker.png", import.meta.url).href,
-        data: item,
-        iconSize: [125, 74],
-        iconAnchor: [55, 70],
+    equipmentList.value.forEach(item => {
+      const coordinates = [item.latitude, item.longitude]
+      const marker = L.marker(coordinates, { 
+        icon: L.divIcon({
+          html: `<div class="equipmentIcon">
+            <div class="eqLabel">${item.name}</div>
+          </div>`,
+          iconAnchor: [55, 70]
+        }) 
       })
-      markerFeatures.push(marker)
-      map.addOverLay(marker)
+      marker.data = item
 
-      if(target && target.data.id === item.id) {
-        feature = marker
-        featureIndex = index
+      marker.bindPopup(`
+        <div class="wMarkerTop">
+          <div class="wMarkerTitle">${item.name}</div>
+          <div class="mpWControllBtn">查看</div>
+        </div>
+        <div class="wMarkerInfoWindow"> 
+          <div>微站编号：${item.code}</div>
+          <div>微站IP：${item.ip}</div>
+          <div>安装日期：${item.installationDate}</div>
+        </div>
+      `, { closeButton: false, closeOnClick: false, offset: [8, -40] })
+
+      marker.on("click", () => _markerClick(item.id))
+      marker.addTo(map)
+      markerFeatures.push(marker)
+      if(openPopupId.value === item.id) _markerClick(item.id)
+    })
+  }
+
+  const _markerClick = id => {
+    const marker = markerFeatures.find(x => Number(x.data.id) === Number(id))
+    openPopupId.value = id
+
+    markerFeatures.forEach(feature => feature.setIcon(
+      L.divIcon({
+        html: `<div class="equipmentIcon">
+          <div class="eqLabel">${feature.data.name}</div>
+        </div>`,
+        iconAnchor: [55, 70]
+      }) 
+    ))
+
+    marker.setIcon(
+      L.divIcon({ 
+        html: `<div class="equipmentIconActive">
+          <div class="eqLabel">${marker.data.name}</div>
+        </div>`, 
+        iconAnchor: [182, 86] 
       }
-
-      const label = new T.Label({
-        text: item.name,
-        position: new T.LngLat(item.longitude, item.latitude),
-        offset: new T.Point(-9, 0)
-      })
-      labelFeatures.push(label)
-      map.addOverLay(label)
-
-      marker.addEventListener("click", e => {
-        _markerClick(e.target)
-      })
-    })
-
-    if(feature && callback) {
-      callback(feature, featureIndex)
-    }
-  }
-
-  const _markerClick = feature => {
-    _drawEquipmentMarker(feature, (oldFeature, oldIndex) => {
-      map.removeOverLay(oldFeature)
-      markerFeatures.splice(oldIndex, 1)
-
-      const marker = newMarker({
-        iconUrl: new URL("@/assets/images/dashboard/map/equipmentMarkerSelect.png", import.meta.url).href,
-        data: feature.data,
-        iconSize: [380, 156],
-        iconAnchor: [182, 86],
-      })
-      markerFeatures.push(marker)
-      map.addOverLay(marker)
-      _openMarkerWindow(marker)
-    })
-  }
-
-  const _openMarkerWindow = marker => {
-    const data = marker.data
-    markerInfoWindow = new T.InfoWindow()
-    const content = `
-      <div class="wMarkerTop">
-        <div class="wMarkerTitle">${data.name}</div>
-        <div class="mpWControllBtn">查看</div>
-      </div>
-      <div class="wMarkerInfoWindow"> 
-        <div>微站编号：${data.code}</div>
-        <div>微站IP：${data.ip}</div>
-        <div>安装日期：${data.installationDate}</div>
-      </div>
-    `
-    markerInfoWindow.setContent(content)
-    marker.openInfoWindow(markerInfoWindow, { 
-      offset: new T.Point(0, 25),
-      minWidth: 260,
-      closeButton: false
-    })
-
+    ))
+    marker.openPopup()
+    
     setTimeout(() => {
       document.querySelector(".mpWControllBtn").addEventListener("click", () => {
-        routeJump({ name: "LargeTunnel", query: { id: data.id } })
+        // routeJump({ name: "LargeTunnel", query: { id } })
       })
     }, 500)
   }

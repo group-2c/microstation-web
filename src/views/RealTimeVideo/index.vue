@@ -96,6 +96,7 @@
 <script setup>
   import { ref, onMounted, watch, nextTick } from "vue"
   import { UpCircleFilled, LeftCircleFilled, DownCircleFilled, RightCircleFilled } from "@ant-design/icons-vue"
+  import Lodash from "lodash"
 
   const sessions = []
   const playerInstance = []
@@ -118,12 +119,12 @@
   const videoRefs = ref([])
   const canvasIvsRefs = ref([])
 
-  watch(() => videoNumber.value, () => {
-    nextTick(() => {
-      ivsInstanceResize()
-      videoElWrapperClick(cameraList.value[0])
-    })
-  })
+  // watch(() => videoNumber.value, () => {
+  //   nextTick(() => {
+  //     ivsInstanceResize()
+  //     videoElWrapperClick(cameraList.value[0])
+  //   })
+  // })
 
   const cameraOptions = (camera, subtype = 0) => {
     return {
@@ -293,13 +294,23 @@
   }
 
   const generateVideoElItem = () => {
-    videoElList.value = Array(videoNumber.value).fill(0).map((_, i) => ({
-      key: i,
-      cameraKey: null,
-      loading: false,
-      recording: false,
-      videoVisible: false
-    }))
+    ivsInstanceResize()
+    
+    const array = Lodash.cloneDeep(videoElList.value.filter(x => x.videoVisible))
+    
+    videoElList.value = Array(videoNumber.value).fill(0).map((_, i) => {
+      const item = array[i]
+      return {
+        key: item?.key || i,
+        cameraKey: item?.cameraKey || null,
+        loading: item?.loading || false,
+        recording: item?.recording ||false,
+        videoVisible: item?.videoVisible ||false
+      }
+    })
+
+    currentCamera.value = cameraList.value?.[0] || {}
+    currentVideoKey.value = currentCamera.value?.key
   }
 
   const handleSnapshot = () => {

@@ -54,22 +54,26 @@
     height: 100vh;
     position: relative;
     z-index: 1;
-    ::v-deep(.tdt-infowindow-content-wrapper) {
+    ::v-deep(.leaflet-popup) {
       box-shadow: none !important;
-      color: #ffffff !important;
+      color: #53B7F1 !important;
       background: url("@/assets/images/dashboard/map/InfoWindow.png") no-repeat center center;
       background-size: 100% 100%;
       width: 388px;
       height: 205px;
       display: inline-block;
-    }
-    ::v-deep(.tdt-infowindow-content) {
-      margin: 37px 45px !important;
-    }
-    ::v-deep(.tdt-infowindow-tip-container) {
-      display: none !important;
-    }
-    ::v-deep(.wMarkerTop) {
+      transition: none !important;
+      .leaflet-popup-content {
+        margin: 38px 24px 13px 44px;
+      }
+      .leaflet-popup-content-wrapper {
+        background: none !important;
+        color: #53B7F1 !important;
+        box-shadow: none !important
+      }
+      .leaflet-popup-tip-container {
+        display: none;
+      }
       .wMarkerTitle {
         font-size: 16px;
         color: #53B7F1;
@@ -101,37 +105,51 @@
           opacity: .8;
         }
       }
-    }
-    ::v-deep(.wMarkerInfoWindow) {
-      padding: 16px 0 15px 15px;
-      div {
-        font-size: 14px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 280px;
-        color: #53B7F1;
-        margin-bottom: 5px;
+      .wMarkerInfoWindow {
+        padding: 16px 0 15px 15px;
+        div {
+          font-size: 14px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 280px;
+          color: #53B7F1;
+          margin-bottom: 5px;
+        }
       }
     }
-    ::v-deep(.tdt-overlay-pane) {
-      z-index: 9999;
-    }
-    ::v-deep(.tdt-label) {
-      background: none;
+    ::v-deep(.eqLabel) {
       color: #D1F1FE;
       font-size: 12px;
-      width: 96px;
+      width: 74px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       box-shadow: none;
       border: none;
       position: absolute;
-      top: -50px;
-      left: -43px;
       text-align: center;
       pointer-events: none;
+    }
+    ::v-deep(.equipmentIcon) {
+      background: url("@/assets/images/dashboard/map/equipmentMarker.png") no-repeat center center;
+      background-size: 100% 100%;
+      width: 125px;
+      height: 74px;
+      .eqLabel {
+        top: 10px;
+        left: 24px;
+      }
+    }
+    ::v-deep(.equipmentIconActive) {
+      background: url("@/assets/images/dashboard/map/equipmentMarkerSelect.png") no-repeat center center;
+      background-size: 100% 100%;
+      width: 380px;
+      height: 156px;
+      .eqLabel {
+        top: 26px;
+        left: 151px;
+      }
     }
   }
   

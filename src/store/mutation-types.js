@@ -1,5 +1,5 @@
-import constant from "_constant"
-const identif = constant.VUE_APP_GLOBAL_VAR
+import Constant from "_constant"
+const identif = Constant.appGlobalVar
 
 // Auth
 export const AUTH_TOKEN = `${identif}_AUTH_TOKEN`

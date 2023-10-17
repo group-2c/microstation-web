@@ -6,7 +6,7 @@
   <div class="loginBox">
     <div class="container">
       <div>
-        <div class="title">{{ constant.VUE_APP_NAME }}</div>
+        <div class="title">{{ Constant.appName }}</div>
         <div class="outBodyBox">
           <div class="loginTips">欢迎登录</div>
           <div class="centerContainer">
@@ -21,7 +21,7 @@
             </a-form>
           </div>
         </div>
-        <div class="copyright">版权所有：{{ constant.VUE_APP_COPYRIGHT }} @ {{ year }}</div>
+        <div class="copyright">版权所有：{{ Constant.appCopyright }} @ {{ year }}</div>
       </div>
     </div>
   </div>
@@ -31,7 +31,7 @@
 import { ref, onMounted, inject } from "vue"
 import { useStore } from "vuex"
 import { message } from "ant-design-vue"
-import constant from "_constant"
+import Constant from "_constant"
 import dayjs from "dayjs"
 import AuthApi from "_api/auth"
 

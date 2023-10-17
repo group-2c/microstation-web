@@ -29,9 +29,6 @@
   display: none;
 }
 
-.tdt-control-copyright {
-  display: none !important;
-}
 .ant-table-wrapper .ant-table-tbody >tr >td {
   padding: 12px;
 }
@@ -485,6 +482,29 @@
   .ant-empty-description {
     color: #6581c5;
   }
+}
+
+#map {
+  background-color: rgb(70, 99, 153);
+  outline: none;
+}
+.leaflet-container {
+  .leaflet-tile-container {
+    .leaflet-tile {
+      -webkit-filter: grayscale(100%) invert(100%);
+      -moz-filter: grayscale(100%) invert(100%);
+      -ms-filter: grayscale(100%) invert(100%);
+      -o-filter: grayscale(100%) invert(100%);
+      filter: url(./grayscale.svg#grayscale) gray grayscale(100%) invert(100%);
+      opacity: .5 !important;
+      visibility: inherit;
+      will-change: opacity;
+    }
+  }
+}
+.leaflet-div-icon {
+  background: none !important;
+  border: none !important;
 }
 
 &::-webkit-scrollbar {

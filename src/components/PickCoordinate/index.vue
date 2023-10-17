@@ -16,12 +16,15 @@
     @ok="handleOk"
     @cancel="handleCancel"
   > 
-    <div v-if="dataCenter.visible" id="map" />
+    <div v-if="dataCenter.visible" id="map" ref="mapRef" />
   </a-modal>
 </template>
 
 <script setup>
   import { nextTick, ref } from "vue"
+  import Constant from "_constant"
+  import L from "leaflet"
+  import "leaflet/dist/leaflet.css"
   import Lodash from "lodash"
 
   const props = defineProps({
@@ -34,34 +37,36 @@
   }
 
   const dataCenter = ref(Lodash.cloneDeep(dataDefault))
-  let map = null, 
-  marker = null
+  let map = null, marker = null
+  const mapRef = ref()
 
   const _initMap = () => {
     const { latitude, longitude } = dataCenter.value.record
-    map = new T.Map("map", {
-      projection: "EPSG:4326",
-    })
-    map.centerAndZoom(new T.LngLat(longitude || 118.46489, latitude || 39.49825), 13)
+    const { mapOptions, mapCenter, mapZoom , mapURL, mapKey } = Constant
 
-    map.addEventListener("click", e => {
+    map = L.map(mapRef.value, mapOptions).setView([latitude || mapCenter[0], longitude || mapCenter[1]], mapZoom)
+      .addLayer(L.tileLayer(`${mapURL}?T=vec_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
+      .addLayer(L.tileLayer(`${mapURL}?T=cva_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
+
+    map.on("click", e => {
       if(!marker) {
-        _drawMarker(e.lnglat.lng, e.lnglat.lat)
-        dataCenter.value.record.latitude = e.lnglat.lat
-        dataCenter.value.record.longitude = e.lnglat.lng
+        _drawMarker(e.latlng.lng, e.latlng.lat)
+        dataCenter.value.record.latitude = e.latlng.lat.toFixed(5)
+        dataCenter.value.record.longitude = e.latlng.lng.toFixed(5)
       }
     })
-    map.setStyle("indigo")
   }
 
   const _drawMarker = (longitude, latitude) => {
-    marker = new T.Marker(new T.LngLat(longitude, latitude))
-    marker.addEventListener("dragend", e => {
-      dataCenter.value.record.latitude = e.lnglat.lat
-      dataCenter.value.record.longitude = e.lnglat.lng
+    marker = new L.marker([latitude, longitude], {
+      draggable: true
     })
-    map.addOverLay(marker)
-    marker.enableDragging()
+    marker.addEventListener("dragend", () => {
+      const coordinates = marker.getLatLng()
+      dataCenter.value.record.latitude = coordinates.lat.toFixed(5)
+      dataCenter.value.record.longitude = coordinates.lng.toFixed(5)
+    })
+    marker.addTo(map)
   }
 
   const _initCoordinate = () => {
