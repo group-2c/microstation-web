@@ -49,10 +49,22 @@
   }
 }
 
+.liInlineBlock {
+  ul {
+    width: 420px;
+  }
+  .ant-menu-item {
+    display: inline-block !important;
+    width: 200px !important;
+  }
+}
+
 .ant-dropdown {
   .ant-dropdown-menu {
     background: #001529;
     border: 1px solid #bbbbbb48;
+    max-height: 450px;
+    overflow-y: auto;
     .ant-dropdown-menu-item {
       padding: 8px 12px !important;
       &:hover {

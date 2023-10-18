@@ -26,7 +26,7 @@
           v-else
           :key="route.name"
           class="menuItem"
-          popupClassName="subMenu"
+          :popupClassName="['subMenu', route.children.length > 10 ? 'liInlineBlock' : '']"
         >
           <template #title>
             <span>{{ route.meta.title }} </span>
