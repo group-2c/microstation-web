@@ -12,90 +12,96 @@
 
 <template>
   <div class="parcel">
-    <a-spin :spinning="loading" >
-      <a-page-header class="pageHeader" title="实时视频" />
-      <div class="contentContainer">
-        <div class="videoContainer">
-          <a-row :gutter="20">
-            <a-col :span="8">
-              <a-list :data-source="cameraList" :bordered="true">
-                <template #renderItem="{ item }">
-                  <a-list-item @click="cameraListItemClick(item)" :class="currentCamera?.key === item.key ? 'active' : ''">{{ item.name }}</a-list-item>
-                </template>
-              </a-list>
-              <div class="videoControls">
-                <div class="title">视频区域控制</div>
-                <a-row>
-                  <a-col :span="12">
-                    <div class="controlItem">
-                      <label>窗口数量:</label>
-                      <div class="content">
-                        <a-select v-model:value="videoNumber" @change="generateVideoElItem">
-                          <a-select-option :value="1">1个</a-select-option>
-                          <a-select-option :value="4">4个</a-select-option>
-                          <a-select-option :value="9">9个</a-select-option>
-                          <a-select-option :value="16">16个</a-select-option>
-                        </a-select>
-                      </div>
-                    </div>
-                  </a-col>
-                  <a-col v-if="currentCamera.ip" :span="12">
-                    <div class="controlItem">
-                      <label>步长:</label>
-                      <div class="content">
-                        <a-input-number v-model:value="stepNum" :min="1" :max="8" />
-                      </div>
-                    </div>
-                  </a-col>
-                </a-row>
-                <a-row v-if="currentCamera.ip">
-                  <a-col>
-                    <div class="controlItem">
-                      <label>视频控制:</label>
-                      <div class="content">
-                        <a-button size="small" @click="handleSnapshot">抓图</a-button>
-                        <a-button size="small" @click="handleFullScreen">全屏</a-button>
-                        <a-button size="small" @click="handleTalk">{{ isTalk ? "停止" : "开始"}}对讲</a-button>
-                        <a-button size="small" @click="handleRecording">{{ isRecording ? "停止" : "开始"}}录像</a-button>
-                        <span v-show="isRecording">录制中...</span>
-                        <span v-show="isTalk">对讲中...</span>
-                      </div>
-                    </div>
-                  </a-col>
-                </a-row>
-                <a-row v-if="currentCamera.ip">
-                  <div class="controlItem">
-                    <label>云台控制:</label>
-                  </div>
-                  <div class="holder"> 
-                    <UpCircleFilled :onmousedown="() => onHandlePTZ('Up', false)" :onmouseup="() => onHandlePTZ('Up', true)" />
-                    <LeftCircleFilled :onmousedown="() => onHandlePTZ('Left', false)" :onmouseup="() => onHandlePTZ('Left', true)" />
-                    <DownCircleFilled :onmousedown="() => onHandlePTZ('Down', false)" :onmouseup="() => onHandlePTZ('Down', true)" />
-                    <RightCircleFilled :onmousedown="() => onHandlePTZ('Right', false)" :onmouseup="() => onHandlePTZ('Right', true)" />
-                  </div>
-                </a-row>
+    <a-page-header class="pageHeader" title="实时视频" />
+    <div class="contentContainer">
+      <div class="videoContainer">
+        <div class="leftArea">
+          <a-list :data-source="cameraList" :bordered="true">
+            <template #header>
+              <div>视频列表</div>
+              <div class="rightBox">
+                <label>窗口数量:</label>
+                <a-select v-model:value="videoNumber" @change="generateVideoElItem">
+                  <a-select-option :value="1">1个</a-select-option>
+                  <a-select-option :value="4">4个</a-select-option>
+                  <a-select-option :value="9">9个</a-select-option>
+                  <a-select-option :value="16">16个</a-select-option>
+                </a-select>
               </div>
-            </a-col>
-            <a-col :span="16">
-              <div :class="['bearBox', `bearNum-${videoNumber}`, isFullScreen ? 'fullscreen' : '']" style="height: calc(100vh - 260px);">
-                <div :class="['videoElItem', item.key === currentVideoKey ? 'active' : '']" v-for="item in videoElList" :key="item.key" @click.stop="videoElWrapperClick(item)">
-                  <div v-if="item.loading" class="runningState">加载中...</div>
-                  <canvas :ref="x => (canvasRefs[item.key] = x)" class="canvas1" v-show="!item.videoVisible" />
-                  <video :ref="x => (videoRefs[item.key] = x)" v-show="item.videoVisible" />
-                  <canvas :ref="x => (canvasIvsRefs[item.key] = x)" class="canvas2" width="500" height="300" />
+            </template>
+            <template #renderItem="{ item }">
+              <a-list-item 
+                :class="currentCamera?.key === item.key ? 'active' : ''"
+                @click="cameraListItemClick(item)" 
+              >
+              <div class="cameraName">
+                <span class="icon" />
+                <span> {{ item.name }} </span>
+              </div>
+              <div :class="['status', `status-${item.status}`]">
+                <span class="icon" />
+                <span>{{ item.status === 0 ? "不可控" : "可控" }}</span>
+              </div>
+              </a-list-item>
+            </template>
+          </a-list>
+          <div class="videoControls">
+            <div class="title">视频区域控制</div>
+            <div class="controlsBody">
+              <div class="turntable">
+                <div class="holder"> 
+                  <UpCircleFilled :onmousedown="() => onHandlePTZ('Up', false)" :onmouseup="() => onHandlePTZ('Up', true)" />
+                  <LeftCircleFilled :onmousedown="() => onHandlePTZ('Left', false)" :onmouseup="() => onHandlePTZ('Left', true)" />
+                  <DownCircleFilled :onmousedown="() => onHandlePTZ('Down', false)" :onmouseup="() => onHandlePTZ('Down', true)" />
+                  <RightCircleFilled :onmousedown="() => onHandlePTZ('Right', false)" :onmouseup="() => onHandlePTZ('Right', true)" />
                 </div>
               </div>
-            </a-col>
-          </a-row>
+              <div class="rightControl">
+                <div class="buttons">
+                  <div class="col">
+                    <a-button :icon="h(GroupOutlined)" @click="handleSnapshot" :disabled="videoLoadingNComplete">抓图</a-button>
+                    <a-button :icon="h(FullscreenOutlined)" @click="handleFullScreen">全屏</a-button>
+                  </div>
+                  <div class="col">
+                    <a-button :icon="h(AudioOutlined)" @click="handleTalk" :disabled="videoLoadingNComplete">{{ isTalk ? "停止" : "开始"}}对讲</a-button>
+                    <a-button :icon="h(VideoCameraOutlined)" @click="handleRecording" :disabled="videoLoadingNComplete">{{ isRecording ? "停止" : "开始"}}录像</a-button>
+                  </div>
+                </div>
+                <div class="slidingBlock">
+                  <label>步长控制</label>
+                  <a-slider v-model:value="stepNum" :min="1" :max="10" :disabled="videoLoadingNComplete" />
+                  <div class="number">{{ stepNum }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div 
+          :class="['bearBox', `bearNum-${videoNumber}`, isFullScreen ? 'fullscreen' : '']" 
+          style="height: calc(100vh - 244px);"
+        >
+          <div 
+            :class="['videoElItem', item.key === currentVideoKey ? 'active' : '']" 
+            v-for="item in videoElList" 
+            :key="item.key" 
+            @click.stop="videoElWrapperClick(item)"
+          >
+            <div v-if="!item.loading && item.videoVisible" class="cameraDataTop">{{ cameraList.find(x => x.key === item.cameraKey)?.name }}</div>
+            <div v-if="item.loading" class="runningState">加载中...</div>
+            <canvas :ref="x => (canvasRefs[item.key] = x)" class="canvas1" v-show="!item.videoVisible" />
+            <video :ref="x => (videoRefs[item.key] = x)" v-show="item.videoVisible" />
+            <canvas :ref="x => (canvasIvsRefs[item.key] = x)" class="canvas2" width="500" height="300" />
+            <div v-if="!item.videoVisible" class="empty">暂无视频</div>
+          </div>
         </div>
       </div>
-    </a-spin>
+    </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, onMounted, watch, nextTick } from "vue"
-  import { UpCircleFilled, LeftCircleFilled, DownCircleFilled, RightCircleFilled } from "@ant-design/icons-vue"
+  import { ref, h, onMounted, nextTick, computed } from "vue"
+  import { GroupOutlined, AudioOutlined, VideoCameraOutlined, FullscreenOutlined } from "@ant-design/icons-vue"
   import Lodash from "lodash"
 
   const sessions = []
@@ -104,7 +110,6 @@
   const talkInstance = []
   const ivsInstance = []
 
-  const loading = ref(false)
   const cameraList = ref([])
   const videoNumber = ref(4)
   const videoElList = ref([])
@@ -118,13 +123,6 @@
   const canvasRefs = ref([])
   const videoRefs = ref([])
   const canvasIvsRefs = ref([])
-
-  // watch(() => videoNumber.value, () => {
-  //   nextTick(() => {
-  //     ivsInstanceResize()
-  //     videoElWrapperClick(cameraList.value[0])
-  //   })
-  // })
 
   const cameraOptions = (camera, subtype = 0) => {
     return {
@@ -159,9 +157,14 @@
     }  
   }
 
+  const videoLoadingNComplete = computed(() => {
+    const videoEl = videoElList.value.find(x => x.key === currentVideoKey.value)
+    return (!videoEl?.videoVisible) || videoEl?.loading
+  })
+
   const handleTalk = () => {
     const camera = currentCamera.value
-    const videoEl = videoElList.value.find(x => x.key === camera.key)
+    const videoEl = videoElList.value.find(x => x.key === currentVideoKey.value)
 
     if(!isTalk.value) {
       isTalk.value = true
@@ -179,20 +182,18 @@
   }
 
   const cameraListItemClick = camera => {
-    const videoEl = videoElList.value.find(x => x.key === camera.key)
-
     currentCamera.value = camera
 
-    if(videoEl) {
-      currentVideoKey.value = camera.key
-      videoEl.cameraKey = camera.key
-      videoEl.videoVisible = true
+    let videoEl = null
+    if(currentVideoKey.value || currentVideoKey.value === 0) {
+      videoEl = videoElList.value.find(x => x.key === currentVideoKey.value)
     } else {
-      const lastVideoEl =  videoElList.value[videoElList.value.length - 1]
-      lastVideoEl.cameraKey = camera.key
-      lastVideoEl.videoVisible = true
-      currentVideoKey.value = lastVideoEl.key
+      currentVideoKey.value = 0
+      videoEl = videoElList.value[0]
     }
+
+    videoEl.cameraKey = camera.key
+    videoEl.videoVisible = true
 
     setIP(`${camera.ip}:${camera.port}`)
     _setSession(sessions[camera.key])
@@ -203,25 +204,29 @@
     onLogin()
   }
 
-  const onLogout = () => {
-    const cameraKey = currentCamera.value.key
-    const videoEl = videoElList.value.find(x => x.key === cameraKey)
+  const videoElWrapperClick = item => {
+    currentVideoKey.value = item.key
+  }
 
-    if (playerInstance[cameraKey]) {
-      playerInstance[cameraKey].stop()
-      playerInstance[cameraKey].close()
-      playerInstance[cameraKey] = null
+  const onLogout = () => {
+    const videoKey = currentVideoKey.value
+    const videoEl = videoElList.value.find(x => x.key === videoKey)
+
+    if (playerInstance[videoKey]) {
+      playerInstance[videoKey].stop()
+      playerInstance[videoKey].close()
+      playerInstance[videoKey] = null
     }
 
     RPC.Global.logout().then(() => {
       videoEl.loading = true
-      pubsub.publish("_clearTime_", cameraKey)
+      pubsub.publish("_clearTime_", videoKey)
     })
   }
 
   const onRealPreview = () => {
     const camera = currentCamera.value
-    const videoEl = videoElList.value.find(x => x.key === camera.key)
+    const videoEl = videoElList.value.find(x => x.key === currentVideoKey.value)
 
     const options = cameraOptions(camera)
     const player = new PlayerControl(options)
@@ -277,20 +282,6 @@
     }).catch((err) => {
       console.error("RPC.login error: ", err)
     })
-  }
-
-  const videoElWrapperClick = item => {
-    currentVideoKey.value = item.key
-
-    const videoEl = videoElList.value.find(x => x.key === item.key)
-    if (!videoEl?.cameraKey && videoEl.cameraKey !== 0) {
-      return
-    }
-
-    const camera = cameraList.value.find(x => x.key === videoEl.cameraKey)
-    currentCamera.value = camera
-
-    setIP(`${camera.ip}:${camera.port}`)
   }
 
   const generateVideoElItem = () => {
@@ -381,6 +372,7 @@
         port: 80,
         user: "admin",
         passcode: "abc123456",
+        status: 0
       },
       {
         key: 1,
@@ -389,6 +381,7 @@
         port: 80,
         user: "admin",
         passcode: "abc123456",
+        status: 1
       },
       {
         key: 2,
@@ -397,6 +390,7 @@
         port: 80,
         user: "admin",
         passcode: "admin123",
+        status: 0
       },
     ]
   }

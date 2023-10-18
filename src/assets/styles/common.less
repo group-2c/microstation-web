@@ -75,6 +75,14 @@
   }
 }
 
+.ant-select-dropdown {
+  background: #001529;
+  .ant-select-item-option-selected {
+    background: #0c4f8f !important;
+    font-weight: bold;
+  }
+}
+
 .parcel {
   height: 100%;
   border: 1px solid #44668A;
@@ -517,6 +525,51 @@
 .leaflet-div-icon {
   background: none !important;
   border: none !important;
+}
+
+.ant-list {
+  border-radius: 0;
+  border: 1px solid #44668A;
+  .ant-list-header {
+    height: 50px;
+    background: linear-gradient(180deg, #0552B6 0%, #01294C 100%) !important;
+    background: none;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom-color: #44668A;
+    .rightBox {
+      float: right;
+      margin-top: -28px;
+      label {
+        font-size: 14px;
+        font-weight: 400;
+        margin-right: 8px;
+      }
+      .ant-select {
+        .ant-select-selector {
+          background: rgba(7,14,26,0.3);
+          border: 1px solid #5d5d5f;
+        }
+      }
+    }
+  }
+  .ant-spin-container {
+    ul {
+      .ant-list-item {
+        background: #012244 !important;
+        border-bottom: 1px solid #44668A !important;
+        &:nth-child(odd){
+          background: #081A38 !important;
+        }
+        &.active {
+          background: #144c8b !important;
+          color: #fff;
+          font-weight: bold;
+        }
+      }
+    }
+  }
 }
 
 &::-webkit-scrollbar {
