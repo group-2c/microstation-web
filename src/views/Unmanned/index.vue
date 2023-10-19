@@ -21,31 +21,16 @@
       </div>
     </div>
   </div>
-  <a-layout-footer>
-    <div class="left" :style="`width: ${footerWidth}px`" />
-    <div class="center">
-      <div class="copyright">版权信息: {{ Constant.appCopyright }}</div>
-    </div>
-    <div class="right" :style="`width: ${footerWidth}px`" />
-  </a-layout-footer>
+  <layout-footer />
 </template>
 
 <script setup>
-  import { onMounted, ref, inject } from "vue"
-  import Constant from "_constant"
+  import { onMounted, ref } from "vue"
+  import LayoutFooter from "_components/LayoutFooter/index.vue"
 
-  const footerWidth = ref(0)
-
-  const _computeEdgeScale = () => {
-    const centerWidth = document.body.clientWidth - 660
-    footerWidth.value = centerWidth / 2
-  }
 
   onMounted(() => {
-    _computeEdgeScale()
-    window.addEventListener("resize", () => {
-      _computeEdgeScale()
-    })
+
   })
 
 </script>

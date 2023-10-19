@@ -25,13 +25,7 @@
         <event-information />
       </div>
     </div>
-    <a-layout-footer>
-      <div class="left" :style="`width: ${footerWidth}px`" />
-      <div class="center">
-        <div class="copyright">版权信息: {{ Constant.appCopyright }}</div>
-      </div>
-      <div class="right" :style="`width: ${footerWidth}px`" />
-    </a-layout-footer>
+    <layout-footer />
   </div>
 </template>
 
@@ -43,6 +37,7 @@
   import "leaflet/dist/leaflet.css"
   import Constant from "_constant"
   import controllerApi from "_api/controller"
+  import LayoutFooter from "_components/LayoutFooter/index.vue"
   import EquipmentStatus from "./components/EquipmentStatus.vue"
   import Dynamo from "./components/Dynamo.vue"
   import EquipmentSearch from "./components/EquipmentSearch.vue"
@@ -53,7 +48,6 @@
   const routeJump = inject("$routeJump")
   let map = null, markerFeatures = []
 
-  const footerWidth = ref(0)
   const equipmentList = ref([])
   const deviceStatus = ref({})
   const openPopupId = ref(undefined)
@@ -150,17 +144,7 @@
     }
   }
 
-  const _computeEdgeScale = () => {
-    const centerWidth = document.body.clientWidth - 660
-    footerWidth.value = centerWidth / 2
-  }
-
   onMounted(() => {
-    _computeEdgeScale()
-    window.addEventListener("resize", () => {
-      _computeEdgeScale()
-    })
-
     _initMap()
     _getEquipmentlList()
     _getDeviceStatus()

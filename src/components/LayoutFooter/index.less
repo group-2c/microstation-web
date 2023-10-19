@@ -1,0 +1,61 @@
+/*
+ * @author: zzp
+ * @date: 2023-10-19 14:21:22
+ * @fileName: index.less
+ * @filePath: src/components/LayoutFooter/index.less
+ * @description:  
+ */
+.ant-layout-footer {
+  padding: 0 !important;
+  background: none !important;
+  width: 100%;
+  position: fixed;
+  bottom: 0 !important;
+  left: 0 !important;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  line-height: 0;
+  pointer-events: none;
+  .left {
+    width: 668px;
+    height: 5px;
+    background: #346CC3;
+    position: relative;
+    top: 13px;
+  }
+  .center {
+    flex-grow: 1;
+    background: url("@/assets/images/copyrightImg.png") center center no-repeat;
+    background-size: 100% 100%;
+    width: 660px;
+    height: 31px;
+    position: relative;
+    left: -5px;
+    z-index: 2;
+    .copyright {
+      text-align: center;
+      color: #bebebe;
+      position: relative;
+      top: 16px;
+      font-size: 14px;
+    }
+  }
+  .right {
+    width: 668px;
+    height: 5px;
+    background: #346CC3;
+    position: relative;
+    top: 13px;
+    left: -11px;
+    &::after {
+      content: "";
+      width: 11px;
+      background: #346CC3;
+      height: 5px;
+      position: absolute;
+      right: -11px;
+    }
+  }
+}
