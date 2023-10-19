@@ -15,7 +15,7 @@ const route = [
     path: "unmanned", 
     name: "Unmanned",
     component: Unmanned,
-    meta: { title: "无人微站", index: 1 },
+    meta: { title: "无人微站", index: 1, disableBreadcrumb: true },
   },
   { 
     path: "distributionMonitoring", 

@@ -25,7 +25,7 @@
         <event-information />
       </div>
     </div>
-    <a-layout-footer class="layoutFooter">
+    <a-layout-footer>
       <div class="left" :style="`width: ${footerWidth}px`" />
       <div class="center">
         <div class="copyright">版权信息: {{ Constant.appCopyright }}</div>
@@ -127,7 +127,7 @@
     
     setTimeout(() => {
       document.querySelector(".mpWControllBtn").addEventListener("click", () => {
-        // routeJump({ name: "LargeTunnel", query: { id } })
+        routeJump({ name: "Unmanned", query: { id } })
       })
     }, 500)
   }

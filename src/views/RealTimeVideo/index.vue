@@ -292,7 +292,7 @@
     videoElList.value = Array(videoNumber.value).fill(0).map((_, i) => {
       const item = array[i]
       return {
-        key: item?.key || i,
+        key: i,
         cameraKey: item?.cameraKey || null,
         loading: item?.loading || false,
         recording: item?.recording ||false,
