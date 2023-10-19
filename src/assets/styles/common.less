@@ -32,7 +32,8 @@
 .ant-table-wrapper .ant-table-tbody >tr >td {
   padding: 12px;
 }
-.ant-menu-submenu {
+.ant-menu-submenu-popup {
+  border: 1px solid #153657;
   .ant-menu-title-content {
     color: #fff;
   }
@@ -50,12 +51,23 @@
 }
 
 .liInlineBlock {
+  border: 1px solid #153657;
   ul {
     width: 420px;
   }
   .ant-menu-item {
     display: inline-block !important;
     width: 200px !important;
+  }
+  &::after {
+    content: "";
+    width: 1px;
+    height: 100%;
+    display: inline-block;
+    background: #153657;
+    position: absolute;
+    top: 0;
+    left: calc(50% - 2px);
   }
 }
 

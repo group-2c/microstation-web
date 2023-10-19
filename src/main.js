@@ -16,6 +16,8 @@ import { pageReload, routeJump } from "@/router"
 L.Marker.prototype.options.icon = L.icon({
   iconUrl: icon,
   shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [15, 50]
 })
 
 const app = createApp(App)
