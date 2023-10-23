@@ -12,17 +12,17 @@
   display: flex;
   padding: 20px 15px 10px 15px;
   position: relative;
-  // &::after {
-  //   content: "";
-  //   background: url("@/assets/images/unmanned/background.png");
-  //   background-size: 100% 100%;
-  //   width: 100%;
-  //   height: 100%;
-  //   position: absolute;
-  //   left: 0;
-  //   top: 0;
-  //   z-index: 1;
-  // }
+  &::after {
+    content: "";
+    background: url("@/assets/images/unmanned/bg.png");
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+  }
   .left {
     width: 340px;
     margin-top: 20px;
@@ -35,12 +35,12 @@
       display: flex;
       align-content: flex-end;
       flex-wrap: wrap;
-      z-index: 1;
+      z-index: 2;
       .back1 {
         background: url("@/assets/images/unmanned/left/1.png") center center no-repeat;
         background-size: 100% 100%;
         width: 350px;
-        height: 690px;
+        height: 530px;
       }
       .back2 {
         height: 0px;
@@ -68,6 +68,7 @@
       z-index: 2;
       width: calc(100% - 24px);
       height: calc(100% - 108px);
+      // background: #0B1C33;
       .unmannedSelect {
         padding: 5px 12px;
         label {
@@ -108,14 +109,25 @@
       .chart {
         width: 100%;
         height: 240px;
-        margin-top: -20px;
-        
+        margin-top: -5px;
+        position: relative;
+        z-index: 2;
+      }
+      .chartImg {
+        background: url("@/assets/images/unmanned/left/pieChart.png") center center no-repeat;
+        background-size: 100% 100%;
+        width: 240px;
+        height: 240px;
+        position: absolute;
+        left: 37px;
+        top: 115px;
+        z-index: 1;
       }
       .equipmentStatistics {
         width: 100%;
-        height: calc(100% - 340px);
+        height: calc(100% - 350px);
         overflow-y: auto;
-        padding: 0 10px 0 25px;
+        padding: 10px 10px 0 25px;
         .equipmentItem {
           width: 50%;
           height: 55px;
@@ -240,6 +252,7 @@
       position: relative;
       top: -7px;
       height: 60px;
+      z-index: 2;
       .topControls {
         text-align: center;
         .tLeft {
@@ -481,7 +494,7 @@
               height: calc(100vh - 338px);
               border: 1px #44668A solid;
               border-radius: 0 !important;
-              background: none !important;
+              background: #0b1c33 !important;
               .ant-table-tbody {
                 tr {
                   cursor: pointer;

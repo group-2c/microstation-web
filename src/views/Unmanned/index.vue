@@ -26,6 +26,7 @@
         </div>
         <div class="unTitle">微站设备占比</div>
         <div class="chart" ref="chartRef" />
+        <div class="chartImg" />
         <div class="equipmentStatistics">
           <div v-for="item, index in deviceList" :key="index" 
             :class="[
