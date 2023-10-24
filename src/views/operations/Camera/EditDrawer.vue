@@ -19,6 +19,21 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
+          <a-form-item label="端 口" name="port">
+            <a-input-number v-model:value="dataCenter.record.port" placeholder="请输入端口" :min="1" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="用户名" name="username">
+            <a-input v-model:value="dataCenter.record.username" autocomplete="off" placeholder="请输入用户名" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="密 码" name="password">
+            <a-input v-model:value="dataCenter.record.password" autocomplete="off" placeholder="请输入密码" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <a-form-item label="所属微站" name="controllerId">
             <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站">
               <a-select-option v-for="item in dataCenter.controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
@@ -59,6 +74,9 @@ import Lodash from "lodash"
 const formRules = {
   name: [{ required: true, message: "请输入设备名称" }],
   ip: [{ required: true, message: "请输入IP地址" }],
+  port: [{ required: true, message: "请输入端口" }],
+  username: [{ required: true, message: "请输入用户名" }],
+  password: [{ required: true, message: "请输入密码" }],
   type: [{ required: true, message: "请选择类型" }],
   controllerId: [{ required: true, message: "请选择所属微站" }],
   manufacturer: [{ required: true, message: "请选择制造商" }],

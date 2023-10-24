@@ -13,6 +13,9 @@ const toSubmitFields = values => {
     "id",
     "name",
     "ip",
+    "port",
+    "username",
+    "password",
     "controllerId",
     "type",
     "manufacturer"

@@ -38,9 +38,9 @@
                 <span class="icon" />
                 <span> {{ item.name }} </span>
               </div>
-              <div :class="['status', `status-${item.status}`]">
+              <div :class="['status', `status-${item.type === 3 ? 1 : 0}`]">
                 <span class="icon" />
-                <span>{{ item.status === 0 ? "不可控" : "可控" }}</span>
+                <span>{{ item.type === 3 ? "可控" : "不可控" }}</span>
               </div>
               </a-list-item>
             </template>
@@ -49,7 +49,7 @@
             <div class="title">视频区域控制</div>
             <div class="controlsBody">
               <div class="turntable">
-                <svg v-if="currentCamera.status === 1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="144" height="144" viewBox="0 0 144 144">
+                <svg v-if="currentCamera.type === 3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="144" height="144" viewBox="0 0 144 144">
                   <defs>
                     <clipPath id="clip-path">
                       <path id="减去_101" data-name="减去 101" d="M72,144A72.018,72.018,0,0,1,43.977,5.658a72.019,72.019,0,0,1,56.052,132.684A71.557,71.557,0,0,1,72,144ZM72,42.843A29.158,29.158,0,1,0,101.157,72,29.192,29.192,0,0,0,72,42.843Z" transform="translate(-0.4 -0.4)" fill="#28467b" stroke="#388cff" stroke-width="1"/>
@@ -103,7 +103,7 @@
                     <a-button :icon="h(FullscreenOutlined)" @click="handleFullScreen">全屏</a-button>
                   </div>
                   <div class="col">
-                    <a-button :icon="h(AudioOutlined)" @click="handleTalk" :disabled="videoLoadingNComplete">{{ isTalk ? "停止" : "开始"}}对讲</a-button>
+                    <a-button :icon="h(AudioOutlined)" @click="handleTalk" :disabled="currentCamera.type === 2 && videoLoadingNComplete">{{ isTalk ? "停止" : "开始"}}对讲</a-button>
                     <a-button :icon="h(VideoCameraOutlined)" @click="handleRecording" :disabled="videoLoadingNComplete">{{ isRecording ? "停止" : "开始"}}录像</a-button>
                   </div>
                 </div>
@@ -143,6 +143,7 @@
   import { ref, h, onMounted, nextTick, computed } from "vue"
   import { GroupOutlined, AudioOutlined, VideoCameraOutlined, FullscreenOutlined } from "@ant-design/icons-vue"
   import Lodash from "lodash"
+  import cameraApi from "_api/camera"
 
   const sessions = []
   const playerInstance = []
@@ -168,8 +169,8 @@
     return {
       wsURL: `ws://${camera.ip}:${camera.port}/rtspoverwebsocket`,
       rtspURL: `rtsp://${camera.ip}:${camera.port}/cam/realmonitor?channel=1&subtype=${subtype}&proto=Private3`,
-      username: camera.user,
-      password: camera.passcode,
+      username: camera.username,
+      password: camera.password,
       lessRateCanvas: true,
       isTalkService: true
     }
@@ -254,7 +255,7 @@
   const onLogout = () => {
     const videoKey = currentVideoKey.value
     const videoEl = videoElList.value.find(x => x.key === videoKey)
-
+    
     if (playerInstance[videoKey]) {
       playerInstance[videoKey].stop()
       playerInstance[videoKey].close()
@@ -283,7 +284,8 @@
     })
 
     player.on("DecodeStart", e => {
-      videoEl.videoVisible = e.decodeMode === "video" ? true : false
+      // videoEl.videoVisible = e.decodeMode === "video" ? true : false
+      videoEl.videoVisible = true
 
       const canvasSon = new PluginCanvasES6()
 
@@ -315,7 +317,7 @@
   const onLogin = () => {
     const camera = currentCamera.value
 
-    RPC.login(camera.user, camera.passcode, false).then(() => {
+    RPC.login(camera.username, camera.password, false).then(() => {
       setCookie("DWebClientSessionID", "", -1)
       setCookie("DhWebClientSessionID", "", -1)
 
@@ -338,8 +340,8 @@
         key: i,
         cameraKey: item?.cameraKey || null,
         loading: item?.loading || false,
-        recording: item?.recording ||false,
-        videoVisible: item?.videoVisible ||false
+        recording: item?.recording || false,
+        videoVisible: item?.videoVisible || false
       }
     })
 
@@ -407,35 +409,15 @@
   }
 
   const getCameraList = async () => {
-    cameraList.value = [
-      {
-        key: 0,
-        name: "设备108",
-        ip: "192.168.31.108",
-        port: 80,
-        user: "admin",
-        passcode: "abc123456",
-        status: 0
-      },
-      {
-        key: 1,
-        name: "设备109",
-        ip: "192.168.31.109",
-        port: 80,
-        user: "admin",
-        passcode: "abc123456",
-        status: 1
-      },
-      {
-        key: 2,
-        name: "设备107",
-        ip: "192.168.31.107",
-        port: 80,
-        user: "admin",
-        passcode: "admin123",
-        status: 0
-      },
-    ]
+    try {
+      const res = await cameraApi.getAll()
+      cameraList.value = res.data.map((item, index) => {
+        item.key = index
+        return item
+      })
+    } catch(err) {
+      message.error("获取摄像机列表失败: " + err)
+    }
   }
 
   const initData = () => {
