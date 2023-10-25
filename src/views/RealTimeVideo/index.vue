@@ -34,14 +34,14 @@
                 :class="currentCamera?.key === item.key ? 'active' : ''"
                 @click="cameraListItemClick(item)" 
               >
-              <div class="cameraName">
-                <span class="icon" />
-                <span> {{ item.name }} </span>
-              </div>
-              <div :class="['status', `status-${item.type === 3 ? 1 : 0}`]">
-                <span class="icon" />
-                <span>{{ item.type === 3 ? "可控" : "不可控" }}</span>
-              </div>
+                <div class="cameraName">
+                  <span class="icon" />
+                  <span> {{ item.name }} </span>
+                </div>
+                <div :class="['status', `status-${item.type === 3 ? 1 : 0}`]">
+                  <span class="icon" />
+                  <span>{{ item.type === 3 ? "可控" : "不可控" }}</span>
+                </div>
               </a-list-item>
             </template>
           </a-list>
@@ -55,19 +55,38 @@
                       <path id="减去_101" data-name="减去 101" d="M72,144A72.018,72.018,0,0,1,43.977,5.658a72.019,72.019,0,0,1,56.052,132.684A71.557,71.557,0,0,1,72,144ZM72,42.843A29.158,29.158,0,1,0,101.157,72,29.192,29.192,0,0,0,72,42.843Z" transform="translate(-0.4 -0.4)" fill="#28467b" stroke="#388cff" stroke-width="1"/>
                     </clipPath>
                   </defs>
-                  <g id="组_6506" data-name="组 6506" transform="translate(-421.601 -820.6)">
-                    <path id="减去_100" data-name="减去 100" d="M72,144A72.018,72.018,0,0,1,43.977,5.658a72.019,72.019,0,0,1,56.052,132.684A71.557,71.557,0,0,1,72,144ZM72,42.843A29.158,29.158,0,1,0,101.157,72,29.192,29.192,0,0,0,72,42.843Z" transform="translate(421.6 820.6)" fill="#28467b"/>
-                    <path id="减去_100_-_轮廓" data-name="减去 100 - 轮廓" d="M72,143A71.019,71.019,0,0,0,99.639,6.579,71.019,71.019,0,0,0,44.366,137.421,70.562,70.562,0,0,0,72,143M72,41.843A30.158,30.158,0,1,1,41.844,72,30.19,30.19,0,0,1,72,41.843M72,144A72.018,72.018,0,0,1,43.977,5.658a72.019,72.019,0,0,1,56.052,132.684A71.557,71.557,0,0,1,72,144ZM72,42.843A29.158,29.158,0,1,0,101.157,72,29.192,29.192,0,0,0,72,42.843Z" transform="translate(421.6 820.6)" fill="#388cff"/>
-                    <g id="蒙版组_7" data-name="蒙版组 7" transform="translate(422 821)" clip-path="url(#clip-path)">
-                      <path id="直线_745" data-name="直线 745" d="M111.67,112.377-.354.354.354-.354,112.377,111.67Z" transform="translate(16.089 16.089)" fill="#388cff"/>
-                      <path id="直线_746" data-name="直线 746" d="M.354,113.569l-.707-.707L112.862-.354l.707.707Z" transform="translate(16.089 14.897)" fill="#388cff"/>
+                  <g id="按钮" transform="translate(-421.601 -820.6)">
+                    <g id="背景">
+                      <path id="减去_100" data-name="减去 100" d="M72,144A72.018,72.018,0,0,1,43.977,5.658a72.019,72.019,0,0,1,56.052,132.684A71.557,71.557,0,0,1,72,144ZM72,42.843A29.158,29.158,0,1,0,101.157,72,29.192,29.192,0,0,0,72,42.843Z" transform="translate(421.601 820.6)" fill="#28467b"/>
+                      <path id="减去_100_-_轮廓" data-name="减去 100 - 轮廓" d="M72,143A71.019,71.019,0,0,0,99.639,6.579,71.019,71.019,0,0,0,44.366,137.421,70.562,70.562,0,0,0,72,143M72,41.843A30.158,30.158,0,1,1,41.844,72,30.19,30.19,0,0,1,72,41.843M72,144A72.018,72.018,0,0,1,43.977,5.658a72.019,72.019,0,0,1,56.052,132.684A71.557,71.557,0,0,1,72,144ZM72,42.843A29.158,29.158,0,1,0,101.157,72,29.192,29.192,0,0,0,72,42.843Z" transform="translate(421.601 820.6)" fill="#388cff"/>
+                      <g id="蒙版组_7" data-name="蒙版组 7" transform="translate(422 821)" clip-path="url(#clip-path)">
+                        <path id="直线_745" data-name="直线 745" d="M111.67,112.377-.354.354.354-.354,112.377,111.67Z" transform="translate(16.089 16.089)" fill="#388cff"/>
+                        <path id="直线_746" data-name="直线 746" d="M.354,113.569l-.707-.707L112.862-.354l.707.707Z" transform="translate(16.089 14.897)" fill="#388cff"/>
+                      </g>
+                      <circle id="椭圆_293" data-name="椭圆 293" cx="31" cy="31" r="31" transform="translate(462.601 861.6)" fill="#263c66"/>
+                      <path id="椭圆_293_-_轮廓" data-name="椭圆 293 - 轮廓" d="M31,1A30.008,30.008,0,0,0,19.323,58.643,30.008,30.008,0,0,0,42.677,3.357,29.811,29.811,0,0,0,31,1m0-1A31,31,0,1,1,0,31,31,31,0,0,1,31,0Z" transform="translate(462.601 861.6)" fill="#388cff"/>
+                      <path id="多边形_54" data-name="多边形 54" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(485.601 835.6)" fill="#fff"/>
+                      <path id="多边形_55" data-name="多边形 55" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(501.601 949.6) rotate(180)" fill="#fff"/>
+                      <path id="路径_22472" data-name="路径 22472" d="M184.356,184.184a1.437,1.437,0,0,0-1.438,1.438,8.147,8.147,0,1,1-8.147-8.147h0v2.4l5.751-3.834-5.751-3.834v2.4h0a11.022,11.022,0,1,0,11.022,11.022,1.437,1.437,0,0,0-1.438-1.438" transform="translate(319.489 709.153)" fill="#fff"/>
+                      <path id="多边形_59" data-name="多边形 59" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(436.875 900.85) rotate(-90)" fill="#fff"/>
+                      <path id="多边形_60" data-name="多边形 60" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(550.85 884.85) rotate(90)" fill="#fff"/>
                     </g>
-                    <circle id="椭圆_293" data-name="椭圆 293" cx="31" cy="31" r="31" transform="translate(462.6 861.6)" fill="#263c66"/>
-                    <path id="椭圆_293_-_轮廓" data-name="椭圆 293 - 轮廓" d="M31,1A30.008,30.008,0,0,0,19.323,58.643,30.008,30.008,0,0,0,42.677,3.357,29.811,29.811,0,0,0,31,1m0-1A31,31,0,1,1,0,31,31,31,0,0,1,31,0Z" transform="translate(462.6 861.6)" fill="#388cff"/>
-                    <path id="多边形_54" data-name="多边形 54" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(485.601 835.601)" fill="#fff" class="runningStateFill" :onmousedown="() => onHandlePTZ('Up', false)" :onmouseup="() => onHandlePTZ('Up', true)" />
-                    <path id="多边形_55" data-name="多边形 55" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(501.6 948.6) rotate(180)" fill="#fff" class="runningStateFill" :onmousedown="() => onHandlePTZ('Down', false)" :onmouseup="() => onHandlePTZ('Down', true)" />
-                    <path id="多边形_56" data-name="多边形 56" d="M7.5,1.326a1,1,0,0,1,1.687,0l6.521,10.247a1,1,0,0,1-.844,1.537H1.822a1,1,0,0,1-.844-1.537Z" transform="translate(437.493 901.442) rotate(-90)" fill="#fff" class="runningStateFill" :onmousedown="() => onHandlePTZ('Left', false)" :onmouseup="() => onHandlePTZ('Left', true)" />
-                    <path id="多边形_57" data-name="多边形 57" d="M7.5,1.326a1,1,0,0,1,1.687,0l6.521,10.247a1,1,0,0,1-.844,1.537H1.822a1,1,0,0,1-.844-1.537Z" transform="translate(549.517 884.758) rotate(90)" fill="#fff" class="runningStateFill" :onmousedown="() => onHandlePTZ('Right', false)" :onmouseup="() => onHandlePTZ('Right', true)" />
+                    <g class="videoContolItem" id="上" :onmousedown="() => onHandlePTZ('Up', false)" :onmouseup="() => onHandlePTZ('Up', true)">
+                      <path id="路径_22473" data-name="路径 22473" d="M440.284,842.041l28.31,28.25a30.418,30.418,0,0,1,21.792-8.64,31.06,31.06,0,0,1,21.893,9.03l28.244-28.172s-18.287-20.633-50.137-20.908S440.284,842.041,440.284,842.041Z" transform="translate(3.459 0.053)" fill="rgb(40, 70, 123)" opacity="0.3"/>
+                      <path id="多边形_58" data-name="多边形 58" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(485.601 835.6)" fill="#388cff"/>
+                    </g>
+                    <g class="videoContolItem" id="下" transform="translate(443.743 914.443)" :onmousedown="() => onHandlePTZ('Down', false)" :onmouseup="() => onHandlePTZ('Down', true)">
+                      <path id="路径_22473-2" data-name="路径 22473" d="M440.284,850.237l28.31-28.25a30.418,30.418,0,0,0,21.792,8.64,31.06,31.06,0,0,0,21.893-9.03l28.244,28.172s-18.287,20.633-50.137,20.908S440.284,850.237,440.284,850.237Z" transform="translate(-440.284 -821.598)" fill="rgb(40, 70, 123)" opacity="0.3"/>
+                      <path id="多边形_58-2" data-name="多边形 58" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(57.857 35.133) rotate(180)" fill="#388cff"/>
+                    </g>
+                    <g class="videoContolItem" id="左" transform="translate(-398.726 1386.45) rotate(-90)" :onmousedown="() => onHandlePTZ('Left', false)" :onmouseup="() => onHandlePTZ('Left', true)">
+                      <path id="路径_22473-3" data-name="路径 22473" d="M440.284,842.041l28.31,28.25a30.418,30.418,0,0,1,21.792-8.64,31.06,31.06,0,0,1,21.893,9.03l28.244-28.172s-18.287-20.633-50.137-20.908S440.284,842.041,440.284,842.041Z" transform="translate(3.459 0.053)" fill="rgb(40, 70, 123)" opacity="0.3"/>
+                      <path id="多边形_58-3" data-name="多边形 58" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(485.601 835.6)" fill="#388cff"/>
+                    </g>
+                    <g class="videoContolItem" id="右" transform="translate(515.717 942.707) rotate(-90)" :onmousedown="() => onHandlePTZ('Right', false)" :onmouseup="() => onHandlePTZ('Right', true)">
+                      <path id="路径_22473-4" data-name="路径 22473" d="M440.284,850.237l28.31-28.25a30.418,30.418,0,0,0,21.792,8.64,31.06,31.06,0,0,0,21.893-9.03l28.244,28.172s-18.287,20.633-50.137,20.908S440.284,850.237,440.284,850.237Z" transform="translate(-440.284 -821.598)" fill="rgb(40, 70, 123)" opacity="0.3"/>
+                      <path id="多边形_58-4" data-name="多边形 58" d="M7.148,1.384a1,1,0,0,1,1.7,0l6.21,10.092A1,1,0,0,1,14.21,13H1.79a1,1,0,0,1-.852-1.524Z" transform="translate(57.857 35.133) rotate(180)" fill="#388cff"/>
+                    </g>
                   </g>
                 </svg>
                 <svg v-else xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="144" height="144" viewBox="0 0 144 144">
@@ -103,7 +122,7 @@
                     <a-button :icon="h(FullscreenOutlined)" @click="handleFullScreen">全屏</a-button>
                   </div>
                   <div class="col">
-                    <a-button :icon="h(AudioOutlined)" @click="handleTalk" :disabled="currentCamera.type === 2 && videoLoadingNComplete">{{ isTalk ? "停止" : "开始"}}对讲</a-button>
+                    <a-button :icon="h(AudioOutlined)" @click="handleTalk" :disabled="videoLoadingNComplete || currentCamera.type === 2">{{ isTalk ? "停止" : "开始"}}对讲</a-button>
                     <a-button :icon="h(VideoCameraOutlined)" @click="handleRecording" :disabled="videoLoadingNComplete">{{ isRecording ? "停止" : "开始"}}录像</a-button>
                   </div>
                 </div>
