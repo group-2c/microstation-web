@@ -23,6 +23,41 @@ class UnmannedApi {
         })
     })
   }
+
+  /**
+   * 获取设备实时数据 右侧列表
+   * @param {*} id 
+   * @returns 
+   */
+  getDeviceStatusByDeviceType(data) {
+    return new Promise((resolve, reject) => {
+      request.post(`/controllers/getDeviceStatusByDeviceType`, data)
+        .then(res => {
+          resolve(res.data)
+        }, err => {
+          reject(err)
+        })
+    })
+  }
+
+  /**
+   * 获取设备详细数据 历史
+   * @param {*} id 
+   * @returns 
+   */
+  getDeviceRealtimeData(data) {
+    return new Promise((resolve, reject) => {
+      request.post(`/controllers/getDeviceRealtimeData`, data)
+        .then(res => {
+          resolve(res.data)
+        }, err => {
+          reject(err)
+        })
+    })
+  }
+
+  
+
 }
 
 export default new UnmannedApi()

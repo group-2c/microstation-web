@@ -34,3 +34,24 @@ export const dict_camera_types = [
   { key: 2, value: "通话" },
   { key: 3, value: "云台" }
 ]
+
+export const dict_equipment_names = {
+  access_control: "门禁控制器",
+  air_conditioning: "空调",
+  camera: "摄像机",
+  dc_screen: "直流屏",
+  diesel_engine: "柴油发动机",
+  double_power_controller: "双电源控制器",
+  dry_temperature_controller: "干变温控器",
+  electricity_meter: "多功能电表",
+  eps: "EPS电源",
+  ups: "UPS电源",
+  inverter: "逆变器",
+  line_protective_device: "线路保护装置",
+  reactive_power_compensator: "无功补偿器",
+  rvb: "RVB-8003",
+  telemetry_unit: "遥信遥测单元",
+  temperature_humidity_equipment: "数显温湿度器",
+  transformer_protection_device: "变压器保护装置",
+  water_immersion_sensor: "水浸传感器"
+}

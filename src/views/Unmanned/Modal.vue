@@ -25,8 +25,15 @@
 
 <script setup>
   import { ref } from "vue"
+  import { message } from "ant-design-vue"
   import * as mqtt from "mqtt/dist/mqtt"
+  import unmannedApi from "_api/unmanned"
   import Constant from "_constant"
+
+  const props = defineProps({
+    controllerId: String,
+    currentDevice: Object,
+  })
 
   let mqttClient = null
 
@@ -62,12 +69,17 @@
   }
 
   const _getHistory = async () => {
-    // try {
-    //   const res = await controllerApi.getAll()
-    //   record.value = res.data
-    // } catch(err) {
-    //   message.error(`获取微站列表失败: ${err}`)
-    // }
+    const data = {
+      controllerID: props.controllerId,
+      deviceType: props.currentDevice.type,
+      deviceID: deviceItem.value.id
+    }
+    try {
+      const res = await unmannedApi.getDeviceRealtimeData(data)
+      record.value = res || {}
+    } catch(err) {
+      message.error(`获取详细数据失败: ${err}`)
+    }
   }
 
   const handleShow = (item = {}) => {

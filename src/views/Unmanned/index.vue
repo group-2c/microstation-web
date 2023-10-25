@@ -31,7 +31,7 @@
           <div v-for="item, index in deviceList" :key="index" 
             :class="[
               'equipmentItem',
-              item.id === currentDevice?.id ? 'active' : '',
+              item.type === currentDevice?.type ? 'active' : '',
               item.offline !== 0 ? 'offline' : ''
             ]"
             @click.stop="equipmentItemClick(item)"
@@ -111,20 +111,22 @@
       </div>
     </div>
   </div>
-  <modal ref="modalRef" />
+  <modal ref="modalRef" :controllerId="controllerId" :currentDevice="currentDevice" />
   <layout-footer />
 </template>
 
 <script setup>
   import { onMounted, ref, inject } from "vue"
   import { useRoute } from "vue-router"
+  import { message } from "ant-design-vue"
+  import { dict_equipment_names, dict_camera_types } from "_utils/dictionary"
   import * as echarts from "echarts"
   import controllerApi from "_api/controller"
   import LayoutFooter from "_components/LayoutFooter/index.vue"
   import dataynamicColumns from "./columns"
   import Modal from "./Modal.vue"
   import Lodash from "lodash"
-  // import unmannedApi from "_api/unmanned"
+  import unmannedApi from "_api/unmanned"
 
   let pieChart = null
 
@@ -168,39 +170,30 @@
   }
 
   const _getControllerDevices = async () => {
-    deviceList.value = [
-      { id: 1, name: "线路保护装置", online: 10, offline: 1, count: 120, type: "null" },
-      { id: 2, name: "双电源控制器", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 3, name: "变压器保护装置", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 4, name: "温湿度控制器", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 5, name: "局放在线监测装置", online: 10, offline: 1, count: 98, type: "null" },
-      { id: 6, name: "多功能数显表", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 7, name: "门禁", online: 10, offline: 1, count: 98, type: "accessControlController" },
-      { id: 8, name: "摄像机", online: 10, offline: 0, count: 98, type: "camera" },
-      { id: 9, name: "水浸控制器", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 10, name: "空调", online: 10, offline: 1, count: 98, type: "null" },
-      { id: 11, name: "直流屏", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 12, name: "遥信遥控单元", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 13, name: "逆变器", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 14, name: "补偿控制器", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 15, name: "UPS电源", online: 10, offline: 0, count: 98, type: "null" },
-      { id: 16, name: "EPS电源", online: 10, offline: 0, count: 98, type: "null" },
-    ]
-    deviceCount.value = Lodash.sumBy(deviceList.value, x => x.count)
-    currentDevice.value = deviceList.value[0]
-    columns.value = dataynamicColumns.common
-    handleSearch()
-    setChartData(deviceList.value)
-    // try {
-    //   const res = await unmannedApi.queryEquipmentStatistics(controllerId.value)
-    //   deviceList.value = res.data
-    //   currentDevice.value = deviceList.value[0]
-    //   columns.value = dataynamicColumns.common
-    //   handleSearch()
-    //   setChartData(deviceList.value)
-    // } catch(err) {
-    //   message.error(`获取设备统计数据失败: ${err}`)
-    // }
+    try {
+      const res = await unmannedApi.queryEquipmentStatistics(controllerId.value)
+      const array = []
+      Object.keys(res).forEach(key => {
+        const count = res[key]?.total
+        const offline = res[key]?.fault
+        const online = count - offline
+        array.push({
+          name: dict_equipment_names[key],
+          type: key,
+          count,
+          online,
+          offline
+        })
+      })
+      deviceList.value = array
+      currentDevice.value = deviceList.value[0]
+      columns.value = dataynamicColumns.common
+      deviceCount.value = Lodash.sumBy(deviceList.value, x => x.count)
+      handleSearch()
+      setChartData(deviceList.value)
+    } catch(err) {
+      message.error(`获取设备统计数据失败: ${err}`)
+    }
   }
 
   const customRow = record => {
@@ -215,7 +208,7 @@
   const equipmentItemClick = item => {
     currentDevice.value = item
     switch(item.type) {
-      case "accessControlController":
+      case "access_control":
         columns.value = dataynamicColumns.accessControlController
         break
       case "camera":
@@ -225,52 +218,40 @@
         columns.value = dataynamicColumns.common
         break      
     }
+    pagination.value.total = 0
+    pagination.value.current = 1
+    tableList.value = []
     handleSearch()
   }
 
   const _getTableList = async () => {
-    tableList.value = [
-      {
-        id: 1,
-        name: "11111",
-        slaveId: 1,
-        baudRate: "232323"
-      },
-      {
-        id: 2,
-        name: "11111",
-        slaveId: 1,
-        baudRate: "232323"
-      },
-      {
-        id: 3,
-        name: "11111",
-        slaveId: 1,
-        baudRate: "232323"
-      }
-      ,
-      {
-        id: 4,
-        name: "11111",
-        slaveId: 1,
-        baudRate: "232323"
-      }
-    ]
-    // loading.value = true
+    loading.value = true
     
-    // const { current, pageSize } = pagination.value
-    // const data = { keyword: keyword.value, page: current, size: pageSize }
+    const { current, pageSize } = pagination.value
+    const data = {
+      controllerID: controllerId.value,
+      deviceType: currentDevice.value.type,
+      name: keyword.value, 
+      page: current, 
+      size: pageSize,
+      sort: "asc"
+    }
 
-    // try {
-    //   const res = await upsApi.getByPage(data)
-    //   tableList.value = res.data.content
-    //   pagination.value.total = res.data.totalElements
-    //   pagination.value.current = res.data.number
-    // } catch(err) {
-    //   message.error("获取列表失败: " + err)
-    // } finally {
-    //   loading.value = false
-    // }
+    try {
+      const res = await unmannedApi.getDeviceStatusByDeviceType(data)
+      tableList.value = res.content.map(item => {
+        if(currentDevice.value.type === "camera") {
+          item.typeName = dict_camera_types.find(x => x.key === item.type)?.value
+        }
+        return item
+      })
+      pagination.value.total = res.totalElements
+      pagination.value.current = res.pageNumber
+    } catch(err) {
+      message.error("获取列表失败: " + err)
+    } finally {
+      loading.value = false
+    }
   }
 
   const handleTableChange = pagination => {
