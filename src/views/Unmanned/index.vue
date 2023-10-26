@@ -111,7 +111,7 @@
       </div>
     </div>
   </div>
-  <modal ref="modalRef" :controllerId="controllerId" :currentDevice="currentDevice" />
+  <realTimeData ref="drawerRef" :controllerId="controllerId" :currentDevice="currentDevice" />
   <layout-footer />
 </template>
 
@@ -119,12 +119,12 @@
   import { onMounted, ref, inject } from "vue"
   import { useRoute } from "vue-router"
   import { message } from "ant-design-vue"
-  import { dict_equipment_names, dict_camera_types } from "_utils/dictionary"
+  import { dict_unmanned_equipment, dict_camera_types } from "_utils/dictionary"
   import * as echarts from "echarts"
   import controllerApi from "_api/controller"
   import LayoutFooter from "_components/LayoutFooter/index.vue"
   import dataynamicColumns from "./columns"
-  import Modal from "./Modal.vue"
+  import RealTimeData from "./RealTimeData.vue"
   import Lodash from "lodash"
   import unmannedApi from "_api/unmanned"
 
@@ -139,7 +139,7 @@
   const scAutoHeight = ref(0)
   const controllerId = ref(undefined)
   const controllerList = ref([])
-  const currentDevice = ref(undefined)
+  const currentDevice = ref({})
   const deviceList = ref([])
   const keyword = ref("")
   const columns = ref([])
@@ -153,7 +153,7 @@
   const tableActiveItem = ref({})
   const deviceCount = ref(0)
   const chartRef = ref()
-  const modalRef = ref()
+  const drawerRef = ref()
 
   const backHomePage = () => {
     routeJump({ name: "Dashboard" })
@@ -177,8 +177,11 @@
         const count = res[key]?.total
         const offline = res[key]?.fault
         const online = count - offline
+        const dictItem = dict_unmanned_equipment[key]
         array.push({
-          name: dict_equipment_names[key],
+          name: dictItem.name,
+          topic: dictItem.topic,
+          definition: dictItem.definition,
           type: key,
           count,
           online,
@@ -200,7 +203,7 @@
     return {
       onclick: () => {
         tableActiveItem.value = record
-        modalRef.value.handleShow(record)
+        drawerRef.value.handleShow(record)
       }
     }
   }

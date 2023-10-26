@@ -35,23 +35,95 @@ export const dict_camera_types = [
   { key: 3, value: "云台" }
 ]
 
-export const dict_equipment_names = {
-  access_control: "门禁控制器",
-  air_conditioning: "空调",
-  camera: "摄像机",
-  dc_screen: "直流屏",
-  diesel_engine: "柴油发动机",
-  double_power_controller: "双电源控制器",
-  dry_temperature_controller: "干变温控器",
-  electricity_meter: "多功能电表",
-  eps: "EPS电源",
-  ups: "UPS电源",
-  inverter: "逆变器",
-  line_protective_device: "线路保护装置",
-  reactive_power_compensator: "无功补偿器",
-  rvb: "RVB-8003",
-  telemetry_unit: "遥信遥测单元",
-  temperature_humidity_equipment: "数显温湿度器",
-  transformer_protection_device: "变压器保护装置",
-  water_immersion_sensor: "水浸传感器"
+export const dict_unmanned_equipment = {
+  access_control_controller: {
+    name: "门禁控制器",
+    definition: true,
+    topic: "microstation:$microstation_id:accesscontrol:$equipment_id:status"
+  },
+  air_conditioning: {
+    name: "空调",
+    definition: false,
+    topic: "microstation:$microstation_id:airconditioning:$equipment_id:status"
+  },
+  camera: {
+    name: "摄像机",
+    definition: false,
+    topic: "microstation:$microstation_id:camera:$equipment_id:online"
+  },
+  dc_screen: {
+    name: "直流屏",
+    definition: true,
+    topic: "microstation:$microstation_id:dcsreen:$equipment_id:status"
+  },
+  diesel_engine: {
+    name: "柴油发动机",
+    definition: false,
+    topic: "microstation:$microstation_id:dieselEngine:$equipment_id:status"
+  },
+  double_power_controller: {
+    name: "双电源控制器",
+    definition: false,
+    topic: "microstation:$microstation_id:doublepowercontroller:$equipment_id:status"
+  },
+  dry_temperature_controller: {
+    name: "干变温控器",
+    definition: true,
+    topic: "microstation:$microstation_id:drytemperaturecontroller:$equipment_id:status"
+  },
+  electricity_meter: {
+    name: "多功能电表",
+    definition: false,
+    topic: "microstation:$microstation_id:electricitymeter:$equipment_id:status"
+  },
+  eps: {
+    name: "EPS电源",
+    definition: false,
+    topic: "microstation:$microstation_id:eps:$equipment_id:status"
+  },
+  ups: {
+    name: "UPS电源",
+    definition: false,
+    topic: "microstation:$microstation_id:ups:$equipment_id:status"
+  },
+  inverter: {
+    name: "逆变器",
+    definition: false,
+    topic: "microstation:$microstation_id:inverter:$equipment_id:status"
+  },
+  line_protective_device: {
+    name: "线路保护装置",
+    definition: false,
+    topic: "microstation:$microstation_id:linepotectivedevice:$equipment_id:status"
+  },
+  reactive_power_compensator: {
+    name: "无功补偿器",
+    definition: false,
+    topic: "microstation:$microstation_id:reactivepowercompensator:$equipment_id:status"
+  },
+  rvb: {
+    name: "RVB-8003",
+    definition: false,
+    topic: "microstation:$microstation_id:rvb:$equipment_id:status"
+  },
+  telemetry_unit: {
+    name: "遥信遥测单元",
+    definition: true,
+    topic: "microstation:$microstation_id:telemetryunit:$equipment_id:status"
+  },
+  temperature_humidity_equipment: {
+    name: "数显温湿度器",
+    definition: false,
+    topic: "microstation:$microstation_id:temperaturehumidityequipment:$equipment_id:status"
+  },
+  transformer_protection_device: {
+    name: "变压器保护装置",
+    definition: false,
+    topic: "microstation:$microstation_id:transformerprotectiondevice:$equipment_id:status"
+  },
+  water_immersion_sensor: {
+    name: "水浸传感器",
+    definition: true,
+    topic: "microstation:$microstation_id:waterimmersionsensor:$equipment_id:status"
+  }
 }
