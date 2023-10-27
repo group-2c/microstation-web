@@ -120,7 +120,7 @@ const route = {
       path: "fourInOneDevice",
       name: "FourInOneDevice",
       component: FourInOneDevice,
-      meta: { title: "RVB-8003型四合一装置" }
+      meta: { title: "局方监测装置" }
     },
     {
       path: "dieselEngine",

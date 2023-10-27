@@ -6,7 +6,7 @@ import store  from "./store"
 import App from "./App.vue"
 import icon from "leaflet/dist/images/marker-icon.png"
 import iconShadow from "leaflet/dist/images/marker-shadow.png"
-
+import XDescriptions from "@/components/Descriptions/index.vue"
 import "ant-design-vue/dist/reset.css"
 import "@/assets/styles/common.less"
 import "leaflet/dist/leaflet.css"
@@ -27,6 +27,7 @@ const app = createApp(App)
 
 app.config.globalProperties.$routeJump = routeJump
 app.provide("$routeJump", routeJump)
+app.component("XDescriptions", XDescriptions)
 
 pageReload()
 

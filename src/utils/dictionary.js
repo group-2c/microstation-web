@@ -38,92 +38,84 @@ export const dict_camera_types = [
 export const dict_unmanned_equipment = {
   access_control_controller: {
     name: "门禁控制器",
-    definition: true,
-    topic: "microstation:$microstation_id:accesscontrol:$equipment_id:status"
+    drawerWidth: 950,
+    subKey: "microstation:$microstation_id:accesscontrol:$equipment_id:status"
   },
   air_conditioning: {
     name: "空调",
-    definition: false,
-    topic: "microstation:$microstation_id:airconditioning:$equipment_id:status"
+    subKey: "microstation:$microstation_id:airconditioning:$equipment_id:status"
   },
   camera: {
     name: "摄像机",
-    definition: false,
-    topic: "microstation:$microstation_id:camera:$equipment_id:online"
+    drawerWidth: 550,
+    subKey: "microstation:$microstation_id:camera:$equipment_id:online"
   },
   dc_screen: {
     name: "直流屏",
-    definition: true,
-    topic: "microstation:$microstation_id:dcsreen:$equipment_id:status"
+    drawerWidth: 550,
+    subKey: "microstation:$microstation_id:dcsreen:$equipment_id:status"
   },
   diesel_engine: {
     name: "柴油发动机",
-    definition: false,
-    topic: "microstation:$microstation_id:dieselEngine:$equipment_id:status"
+    drawerWidth: 1200,
+    subKey: "microstation:$microstation_id:dieselEngine:$equipment_id:status"
   },
   double_power_controller: {
     name: "双电源控制器",
-    definition: false,
-    topic: "microstation:$microstation_id:doublepowercontroller:$equipment_id:status"
+    subKey: "microstation:$microstation_id:doublepowercontroller:$equipment_id:status"
   },
   dry_temperature_controller: {
     name: "干变温控器",
-    definition: true,
-    topic: "microstation:$microstation_id:drytemperaturecontroller:$equipment_id:status"
+    drawerWidth: 450,
+    subKey: "microstation:$microstation_id:drytemperaturecontroller:$equipment_id:status"
   },
   electricity_meter: {
     name: "多功能电表",
-    definition: false,
-    topic: "microstation:$microstation_id:electricitymeter:$equipment_id:status"
+    subKey: "microstation:$microstation_id:electricitymeter:$equipment_id:status"
   },
   eps: {
     name: "EPS电源",
-    definition: false,
-    topic: "microstation:$microstation_id:eps:$equipment_id:status"
+    subKey: "microstation:$microstation_id:eps:$equipment_id:status"
   },
   ups: {
     name: "UPS电源",
-    definition: false,
-    topic: "microstation:$microstation_id:ups:$equipment_id:status"
+    subKey: "microstation:$microstation_id:ups:$equipment_id:status"
   },
   inverter: {
     name: "逆变器",
-    definition: false,
-    topic: "microstation:$microstation_id:inverter:$equipment_id:status"
+    subKey: "microstation:$microstation_id:inverter:$equipment_id:status"
   },
   line_protective_device: {
     name: "线路保护装置",
-    definition: false,
-    topic: "microstation:$microstation_id:linepotectivedevice:$equipment_id:status"
+    subKey: "microstation:$microstation_id:linepotectivedevice:$equipment_id:status"
   },
   reactive_power_compensator: {
     name: "无功补偿器",
-    definition: false,
-    topic: "microstation:$microstation_id:reactivepowercompensator:$equipment_id:status"
+    subKey: "microstation:$microstation_id:reactivepowercompensator:$equipment_id:status"
   },
   rvb: {
-    name: "RVB-8003",
-    definition: false,
-    topic: "microstation:$microstation_id:rvb:$equipment_id:status"
+    name: "局方监测装置",
+    subKey: "microstation:$microstation_id:rvb:$equipment_id:status"
   },
   telemetry_unit: {
     name: "遥信遥测单元",
-    definition: true,
-    topic: "microstation:$microstation_id:telemetryunit:$equipment_id:status"
+    subKey: "microstation:$microstation_id:telemetryunit:$equipment_id:status"
   },
   temperature_humidity_equipment: {
     name: "数显温湿度器",
-    definition: false,
-    topic: "microstation:$microstation_id:temperaturehumidityequipment:$equipment_id:status"
+    subKey: "microstation:$microstation_id:temperaturehumidityequipment:$equipment_id:status"
   },
   transformer_protection_device: {
     name: "变压器保护装置",
-    definition: false,
-    topic: "microstation:$microstation_id:transformerprotectiondevice:$equipment_id:status"
+    subKey: "microstation:$microstation_id:transformerprotectiondevice:$equipment_id:status"
   },
   water_immersion_sensor: {
     name: "水浸传感器",
-    definition: true,
-    topic: "microstation:$microstation_id:waterimmersionsensor:$equipment_id:status"
+    drawerWidth: 510,
+    subKey: "microstation:$microstation_id:waterimmersionsensor:$equipment_id:status"
   }
 }
+
+export const mistakesColors = ["有故障", "故障", "失败", "负载", "异常", "停机失败"]
+export const offlineColors = ["常闭", "关", "关机"]
+export const warnColors = ["警告", "报警", "停机"]

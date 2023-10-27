@@ -111,7 +111,7 @@
       </div>
     </div>
   </div>
-  <realTimeData ref="drawerRef" :controllerId="controllerId" :currentDevice="currentDevice" />
+  <realTime-data ref="drawerRef" :controllerId="controllerId" :deviceGroup="currentDevice" />
   <layout-footer />
 </template>
 
@@ -180,8 +180,8 @@
         const dictItem = dict_unmanned_equipment[key]
         array.push({
           name: dictItem.name,
-          topic: dictItem.topic,
-          definition: dictItem.definition,
+          subKey: dictItem.subKey,
+          drawerWidth: dictItem.drawerWidth,
           type: key,
           count,
           online,

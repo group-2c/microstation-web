@@ -7,6 +7,8 @@ const mqttHost = window.MQTT_HOST || env.VITE_MQTT_HOST
 const mqttPort = window.MQTT_PORT || env.VITE_MQTT_PORT
 const mqttEndPoint = window.MQTT_END_POINT || env.VITE_MQTT_END_POINT
 const mqttTopic = window.MQTT_TOPIC || env.VITE_MQTT_TOPIC
+const mqttUsername = window.MQTT_USER_NAME || env.VITE_MQTT_USER_NAME
+const mqttPassword = window.MQTT_PASSWORD || env.VITE_MQTT_PASSWORD
 const mapCenter = [
   window.MAP_CENTER_LAT || env.VITE_APP_MAP_CENTER_LAT,
   window.MAP_CENTER_LON || env.VITE_APP_MAP_CENTER_LON
@@ -29,8 +31,9 @@ const Constant = {
   mqttOptions: {
     host: mqttHost,
     port: mqttPort,
+    username: mqttUsername,
+    password: mqttPassword,
     endpoint: mqttEndPoint,
-    topic: mqttTopic,
     connectTimeout: 4000, 
     reconnectPeriod: 4000, 
   }

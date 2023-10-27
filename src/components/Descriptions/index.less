@@ -1,0 +1,48 @@
+/*
+ * @author: zzp
+ * @date: 2023-10-27 16:06:46
+ * @fileName: index.less
+ * @filePath: src/components/Descriptions/index.less
+ * @description:  
+ */
+ 
+.ant-descriptions {
+  ::v-deep(.ant-descriptions-item) {
+    .ant-descriptions-item-container {
+      .ant-descriptions-item-label {
+        justify-content: flex-end;
+        color: #bbb !important;
+        font-size: 14px;
+      }
+      .ant-descriptions-item-content {
+        color: #dff6ff;
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+        white-space: nowrap;
+        font-weight: bold;
+        span {
+          color: #bbb;
+          font-size: 12px;
+          padding-left: 5px;
+          font-weight: 400;
+        }
+      }
+    }
+
+    &.mistakes {
+      .ant-descriptions-item-content {
+        color: #D11919;
+      }
+    }
+    &.offline {
+      .ant-descriptions-item-content {
+        color: #bbb;
+      }
+    }
+    &.warn {
+      .ant-descriptions-item-content {
+        color: #f4c024;
+      }
+    }
+  }
+}

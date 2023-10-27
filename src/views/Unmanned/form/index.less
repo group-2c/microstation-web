@@ -1,0 +1,176 @@
+/*
+ * @author: zzp
+ * @date: 2023-10-27 09:53:06
+ * @fileName: index.less
+ * @filePath: src/views/Unmanned/form/index.less
+ * @description: 表单样式
+ */
+
+.contentContainer {
+  margin: 0;
+  ::v-deep(.ant-table-wrapper) {
+    .ant-table-header {
+      tr {
+        th {
+          padding: 9px 10px !important;
+        }
+      }
+    }
+    .ant-table-tbody {
+      tr {
+        &.ant-table-measure-row {
+          visibility: collapse !important;
+        }
+        td {
+          padding: 5px 10px !important;
+        }
+      }
+    }
+  }
+}
+
+
+.blockItem {
+  margin-bottom: 30px;
+  .conTitle {
+    font-size: 14px;
+    font-weight: bold;
+    color: #DFF6FE;
+    height: 40px;
+  }
+  .retract {
+    width: 92%;
+    margin: 0 auto;
+  }
+}
+
+.operationItem {
+  display: flex;
+  height: 33px;
+  label {
+    font-size: 14px;
+    color: #DFF6FE;
+    margin-right: 20px;
+    margin-top: 9px;
+  }
+  .content {
+    ::v-deep(.ant-select) {
+      box-shadow: none !important;
+      border: none !important;
+      .ant-select-selector {
+        background: #0E2342;
+        border-radius: 1px;
+        border: 1px solid #197CD1 !important;
+        padding: 0 16px !important;
+        box-shadow: none !important;
+        height: 33px;
+      }
+    }
+  }
+}
+
+.controlsBtns {
+  ::v-deep(.ant-btn) {
+    background: #197CD1;
+    border-radius: 2px;
+    border: none;
+    font-size: 14px;
+    color: #DFF6FF;
+    margin: 0 10px;
+    height: 28px;
+    line-height: 1;
+    &:hover {
+      opacity: .8;
+    }
+  }
+}
+
+.recordItem {
+  display: flex;
+  font-size: 14px;
+  label {
+    color: #bbb;
+    margin-right: 10px;
+    flex: none;
+  }
+  .content {
+    color: #DFF6FE;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    font-weight: bold; 
+    span {
+      color: #bbb;
+      font-size: 12px;
+      padding-left: 5px;
+      font-weight: 400; 
+    }
+  }
+}
+
+.statusItem {
+  background: rgba(25,124,209,0.4);
+  border: 1px solid #197CD1;
+  border-radius: 2px;
+  font-size: 14px;
+  color: #DFF6FF;
+  margin: 0 10px 20px 10px;
+  padding: 5px 10px;
+  display: inline-block;
+  i {
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    background: #197CD1;
+    display: inline-block;
+    margin-right: 5px;
+    position: relative;
+    top: -2px;
+  }
+  &.fault {
+    background: rgba(209,25,25,0.4);
+    border: 1px solid #D11919;
+    i {
+      background: #D11919;
+    }
+  }
+}
+
+.accessControlController {
+  .doorItem {
+    width: 76px;
+    height: 24px;
+    line-height: 24px;
+    background: rgba(25,124,209,0.4);
+    border-radius: 2px;
+    border: 1px solid #197CD1;
+    display: flex;
+    font-size: 12px;
+    color: #FFFFFF;
+    .left {
+      letter-spacing: 2px;
+      ::v-deep(.anticon) {
+        margin-left: 8px;
+      }
+    }
+    .right {
+      margin-left: 5px;
+    }
+    &.close {
+      background: rgba(72,72,72,0.4);
+      border: 1px solid #808080;
+      color: #808080;
+    }
+  }
+  
+  .controlsBtns {
+    margin-left: 10px;
+    margin-top: 3px;
+  }
+}
+
+.dryTemperatureController {
+  .recordItem {
+    margin-bottom: 20px;
+  }
+}

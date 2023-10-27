@@ -6,9 +6,14 @@
  * @description: 实时数据
  */
 <template>
-  <a-drawer :title="`${props.currentDevice.name}实时数据`" :width="880" :open="visible" :closable="false" class="editDrawer"> 
+  <a-drawer :title="`${deviceGroup.name}实时数据`" :width="deviceGroup.drawerWidth || 1200" :open="visible" :closable="false" class="unmannedDrawer"> 
     <div class="containerBody">
-      <component :is="currentCompoent" :record="record" />
+      <component 
+        :is="currentCompoent"
+        :deviceItem="deviceItem"
+        :record="record" 
+        :publish="publishMqtt" 
+      />
     </div>
     <template #footer>
       <a-button @click="handleCancel">取消</a-button>
@@ -17,15 +22,16 @@
 </template>
 
 <script setup>
-import { ref, shallowRef, defineAsyncComponent } from "vue"
+import { ref, shallowRef, defineAsyncComponent, onMounted } from "vue"
 import { message } from "ant-design-vue"
 import * as mqtt from "mqtt/dist/mqtt"
 import Constant from "_constant"
 import Lodash from "lodash"
+import unmannedApi from "_api/unmanned"
 
 const props = defineProps({
   controllerId: [String, Number],
-  currentDevice: Object,
+  deviceGroup: Object,
   onCancel: Function
 })
 
@@ -33,30 +39,36 @@ let mqttClient = null
 
 const visible = ref(false)
 const deviceItem = ref({})
-const record = ref({})
-const topic = ref("")
+const record = ref({
+  mains_power_failure: 1,
+  partial_discharge_noise: 20,
+  battery_voltage: 32.3
+})
+const subscribeKey = ref("")
 const currentCompoent = shallowRef()
 
 const _connectMqtt = () => {
   const { host, port, endpoint } = Constant.mqttOptions
   const connectUrl = `${host}:${port}${endpoint}`
+
   try {
     mqttClient = mqtt.connect(connectUrl, {...Constant.mqttOptions})
   } catch (error) {
     console.log("mqtt.connect error", error)
   }
+
   mqttClient.on("connect", () => {
-    mqttClient.subscribe(topic.value, { qos: 1 }, err => {
+    mqttClient.subscribe(subscribeKey.value, { qos: 1 }, err => {
       if (err) {
         console.log("消息订阅失败！")
       }
     })       
   })
-  mqttClient.on("error", () => {
-    console.log("Connection failed")
-  })
-  mqttClient.on("message", (_topic, message) => {
-    if(_topic === topic.value) {
+
+  mqttClient.on("error", () => console.log("Connection failed"))
+
+  mqttClient.on("message", (_key, message) => {
+    if(_key === subscribeKey.value) {
       const data  = JSON.parse(`${message}`)
       console.log(data)
       record.value = data
@@ -64,10 +76,27 @@ const _connectMqtt = () => {
   })   
 }
 
+const publishMqtt = data => {
+  const loading = message.loading("正在发送指令...", 0)
+  try {
+    mqttClient.publish(subscribeKey.value, JSON.stringify(data), err => {
+      if (err) {
+        message.error("指令发送失败: ", err)
+      } else {
+        message.success("指令发送成功！ ")
+      }
+      loading()
+    })  
+  } catch (error) {
+    loading()
+    console.log(`Publish failed: ${error}`)
+  }
+}
+
 const _getHistory = async () => {
   const data = {
     controllerID: props.controllerId,
-    deviceType: props.currentDevice.type,
+    deviceType: props.deviceGroup.type,
     deviceID: deviceItem.value.id
   }
   try {
@@ -79,15 +108,16 @@ const _getHistory = async () => {
 }
 
 const handleShow = (item = {}) => {
+  const { subKey, type } = props.deviceGroup
+
   visible.value = true
   deviceItem.value = item
-  const microstation = Lodash.replace(props.currentDevice.topic, "$microstation_id", props.controllerId)
-  topic.value = Lodash.replace(microstation, "$equipment_id", deviceItem.value.id)
 
-  if(props.currentDevice.definition) {
-    const componentName = Lodash.upperFirst(Lodash.camelCase(props.currentDevice.type))
-    currentCompoent.value = defineAsyncComponent(() => import(`@/views/Unmanned/form/${componentName}.vue`))
-  }
+  const microstation = Lodash.replace(subKey, "$microstation_id", props.controllerId)
+  subscribeKey.value = Lodash.replace(microstation, "$equipment_id", item.id)
+
+  const componentName = Lodash.upperFirst(Lodash.camelCase(type))
+  currentCompoent.value = defineAsyncComponent(() => import(`@/views/Unmanned/form/${componentName}.vue`))
 
   _getHistory()
   _connectMqtt()
@@ -97,6 +127,11 @@ const handleCancel = () => {
   mqttClient && mqttClient.end()
   visible.value = false
 }
+
+onMounted(() => {
+  visible.value = true
+  currentCompoent.value = defineAsyncComponent(() => import(`./form/DieselEngine.vue`))
+})
 
 defineExpose({ handleShow })
 </script>
