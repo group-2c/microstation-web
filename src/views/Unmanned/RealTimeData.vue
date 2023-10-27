@@ -136,7 +136,7 @@ const handleCancel = () => {
 
 onMounted(() => {
   visible.value = true
-  currentCompoent.value = defineAsyncComponent(() => import(`./form/DieselEngine.vue`))
+  currentCompoent.value = defineAsyncComponent(() => import(`./form/LineProtectiveDevice.vue`))
 })
 
 defineExpose({ handleShow })

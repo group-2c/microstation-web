@@ -96,6 +96,7 @@ export const dict_unmanned_equipment = {
   },
   inverter: {
     name: "逆变器",
+    drawerWidth: 600,
     subKey: "microstation:$microstation_id:inverter:$equipment_id:status",
     controlSubKeys: [
       "microstation:$microstation_id:inverter:$equipment_id:remotecontrol"
