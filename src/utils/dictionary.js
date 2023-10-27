@@ -39,11 +39,17 @@ export const dict_unmanned_equipment = {
   access_control_controller: {
     name: "门禁控制器",
     drawerWidth: 950,
-    subKey: "microstation:$microstation_id:accesscontrol:$equipment_id:status"
+    subKey: "microstation:$microstation_id:accesscontrol:$equipment_id:status",
+    controlSubKeys: [
+      "microstation:$microstation_id:accesscontrol:$accesscontrol_id:remotecontrol"
+    ]
   },
   air_conditioning: {
     name: "空调",
-    subKey: "microstation:$microstation_id:airconditioning:$equipment_id:status"
+    subKey: "microstation:$microstation_id:airconditioning:$equipment_id:status",
+    controlSubKeys: [
+      "microstation:$microstation_id:airconditioning:$equipment_id:remotecontrol"
+    ]
   },
   camera: {
     name: "摄像机",
@@ -58,10 +64,14 @@ export const dict_unmanned_equipment = {
   diesel_engine: {
     name: "柴油发动机",
     drawerWidth: 1200,
-    subKey: "microstation:$microstation_id:dieselEngine:$equipment_id:status"
+    subKey: "microstation:$microstation_id:dieselEngine:$equipment_id:status",
+    controlSubKeys: [
+      "microstation:$microstation_id:dieselEngine:$equipment_id:remotecontrol"
+    ]
   },
   double_power_controller: {
     name: "双电源控制器",
+    drawerWidth: 850,
     subKey: "microstation:$microstation_id:doublepowercontroller:$equipment_id:status"
   },
   dry_temperature_controller: {
@@ -71,7 +81,10 @@ export const dict_unmanned_equipment = {
   },
   electricity_meter: {
     name: "多功能电表",
-    subKey: "microstation:$microstation_id:electricitymeter:$equipment_id:status"
+    subKey: "microstation:$microstation_id:electricitymeter:$equipment_id:status",
+    controlSubKeys: [
+      "microstation:$microstation_id:electricitymeter:$equipment_id:remotecontrol"
+    ]
   },
   eps: {
     name: "EPS电源",
@@ -83,7 +96,10 @@ export const dict_unmanned_equipment = {
   },
   inverter: {
     name: "逆变器",
-    subKey: "microstation:$microstation_id:inverter:$equipment_id:status"
+    subKey: "microstation:$microstation_id:inverter:$equipment_id:status",
+    controlSubKeys: [
+      "microstation:$microstation_id:inverter:$equipment_id:remotecontrol"
+    ]
   },
   line_protective_device: {
     name: "线路保护装置",
@@ -117,5 +133,5 @@ export const dict_unmanned_equipment = {
 }
 
 export const mistakesColors = ["有故障", "故障", "失败", "负载", "异常", "停机失败"]
-export const offlineColors = ["常闭", "关", "关机"]
+export const offlineColors = ["常闭", "关", "关机", "关闭"]
 export const warnColors = ["警告", "报警", "停机"]

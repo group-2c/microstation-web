@@ -10,16 +10,56 @@
 </style> 
 
 <template>
-  <div class="blockItem">
-    <div class="conTitle">实时数据</div>
-    <div class="retract">
-      <x-descriptions :list="labelAndFields" :record="record" :minWidth="200" />
+  <div class="dieselEngine">
+    <div class="blockItem">
+      <div class="conTitle">远程控制</div>
+      <div class="retract">
+        <a-row>
+          <div class="operationItem">
+            <label>选择命令: </label>
+            <div class="content">
+              <a-select v-model:value="currentValue" popupClassName="modalSelect">
+                <a-select-option v-for="item, index in commandOptions" :key="index" :value="item.value">{{ item.label }}</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <div class="controlsBtns">
+            <a-button @click.stop="accessControl(0)">否</a-button>
+            <a-button @click.stop="accessControl(1)">是</a-button>
+          </div>
+        </a-row>
+      </div>
+    </div>
+    <div class="blockItem">
+      <div class="conTitle">实时数据</div>
+      <div class="retract">
+        <x-descriptions :list="labelAndFields" :record="record" :minWidth="200" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({ record: Object })
+import { ref } from "vue"
+
+const props = defineProps({ 
+  record: Object,
+  publish: Function
+})
+
+const currentValue = ref(1)
+
+const commandOptions = [
+  { label: "遥控油机处于开机状态", value: 1 },
+  { label: "遥控油机处于停机状态", value: 2 },
+  { label: "遥控油机处于试机状态", value: 3 },
+  { label: "遥控油机处于自动状态", value: 4 },
+  { label: "遥控油机处于手动状态", value: 5 },
+  { label: "遥控油机发电合/分闸", value: 6 },
+  { label: "遥控油机市电合/分闸", value: 7 },
+  { label: "遥控油机发电分闸", value: 8 },
+  { label: "遥控油机发电合闸", value: 9 }
+]
 
 const labelAndFields = [
   { label: "公共报警", field: "common_alarm", dictionary: ["否", "报警"] },
@@ -163,4 +203,11 @@ const labelAndFields = [
   { label: "控制器时间", field: "controllerTime" },
   { label: "发布日期", field: "releaseDate" }
 ]
+
+const accessControl = type => {
+  props.publish({
+    cmd: currentValue.value, 
+    cmd_type: type
+  }, 0)
+}
 </script>

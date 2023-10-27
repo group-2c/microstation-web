@@ -6,7 +6,7 @@
  * @description: 实时数据
  */
 <template>
-  <a-drawer :title="`${deviceGroup.name}实时数据`" :width="deviceGroup.drawerWidth || 1200" :open="visible" :closable="false" class="unmannedDrawer"> 
+  <a-drawer :title="`${deviceGroup.name}实时数据`" :width="deviceGroup.drawerWidth || 1000" :open="visible" :closable="false" class="unmannedDrawer"> 
     <div class="containerBody">
       <component 
         :is="currentCompoent"
@@ -40,9 +40,7 @@ let mqttClient = null
 const visible = ref(false)
 const deviceItem = ref({})
 const record = ref({
-  mains_power_failure: 1,
-  partial_discharge_noise: 20,
-  battery_voltage: 32.3
+
 })
 const subscribeKey = ref("")
 const currentCompoent = shallowRef()
@@ -76,10 +74,11 @@ const _connectMqtt = () => {
   })   
 }
 
-const publishMqtt = data => {
+const publishMqtt = (data, keyIndex) => {
+  const { controlSubKeys } = deviceItem.value
   const loading = message.loading("正在发送指令...", 0)
   try {
-    mqttClient.publish(subscribeKey.value, JSON.stringify(data), err => {
+    mqttClient.publish(controlSubKeys[keyIndex], JSON.stringify(data), err => {
       if (err) {
         message.error("指令发送失败: ", err)
       } else {
@@ -108,13 +107,20 @@ const _getHistory = async () => {
 }
 
 const handleShow = (item = {}) => {
-  const { subKey, type } = props.deviceGroup
+  const { subKey, controlSubKeys, type } = props.deviceGroup
 
   visible.value = true
   deviceItem.value = item
 
   const microstation = Lodash.replace(subKey, "$microstation_id", props.controllerId)
   subscribeKey.value = Lodash.replace(microstation, "$equipment_id", item.id)
+
+  if(controlSubKeys) {
+    deviceItem.value.controlSubKeys = controlSubKeys.map(key => {
+      const replace1 = Lodash.replace(key, "$microstation_id", props.controllerId)
+      return Lodash.replace(replace1, "$equipment_id", item.id)
+    })
+  }
 
   const componentName = Lodash.upperFirst(Lodash.camelCase(type))
   currentCompoent.value = defineAsyncComponent(() => import(`@/views/Unmanned/form/${componentName}.vue`))

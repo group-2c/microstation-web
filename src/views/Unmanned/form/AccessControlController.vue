@@ -124,6 +124,6 @@ const accessControl = type => {
   props.publish({
     cmd: type, 
     channel: doorIndex.value
-  })
+  }, 0)
 }
 </script>

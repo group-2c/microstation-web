@@ -10,16 +10,31 @@
 </style> 
 
 <template>
-  <div class="blockItem">
-    <div class="conTitle">实时数据</div>
-    <div class="retract">
-      <x-descriptions :list="labelAndFields" :record="record" />
+  <div>
+    <div class="blockItem">
+      <div class="conTitle">远程控制</div>
+      <div class="retract">
+        <a-row>
+          <div class="controlsBtns">
+            <a-button @click.stop="accessControl(0)">关机</a-button>
+          </div>
+        </a-row>
+      </div>
+    </div>
+    <div class="blockItem">
+      <div class="conTitle">实时数据</div>
+      <div class="retract">
+        <x-descriptions :list="labelAndFields" :record="record" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({ record: Object })
+const props = defineProps({ 
+  record: Object,
+  publish: Function
+})
 
 const labelAndFields = [
   { label: "柜内温湿度传感器故障", field: "cabinet_temperature_and_humidity_sensor_failure", dictionary: ["无故障", "有故障"] },
@@ -58,4 +73,8 @@ const labelAndFields = [
   { label: "恢复出厂设置", field: "restore_factory_settings", dictionary: ["", "恢复出厂设置"] },
   { label: "系统开关机状态", field: "system_on_off", dictionary: ["关机", "开机"] },
 ]
+
+const accessControl = type => {
+  props.publish({ cmd: type }, 0)
+}
 </script>

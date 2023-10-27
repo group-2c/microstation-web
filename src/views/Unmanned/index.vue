@@ -182,6 +182,7 @@
           name: dictItem.name,
           subKey: dictItem.subKey,
           drawerWidth: dictItem.drawerWidth,
+          controlSubKeys: dictItem.controlSubKeys,
           type: key,
           count,
           online,
