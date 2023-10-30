@@ -116,10 +116,12 @@ export const dict_unmanned_equipment = {
   },
   telemetry_unit: {
     name: "遥信遥测单元",
+    drawerWidth: 600,
     subKey: "microstation:$microstation_id:telemetryunit:$equipment_id:status"
   },
   temperature_humidity_equipment: {
     name: "数显温湿度器",
+    drawerWidth: 600,
     subKey: "microstation:$microstation_id:temperaturehumidityequipment:$equipment_id:status"
   },
   transformer_protection_device: {
@@ -128,7 +130,7 @@ export const dict_unmanned_equipment = {
   },
   water_immersion_sensor: {
     name: "水浸传感器",
-    drawerWidth: 510,
+    drawerWidth: 600,
     subKey: "microstation:$microstation_id:waterimmersionsensor:$equipment_id:status"
   }
 }

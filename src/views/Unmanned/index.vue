@@ -111,7 +111,7 @@
       </div>
     </div>
   </div>
-  <realTime-data ref="drawerRef" :controllerId="controllerId" :deviceGroup="currentDevice" />
+  <realTime-data ref="drawerRef" :controllerId="controllerId" :deviceGroup="currentDevice" :onCancel="realTimeCancel"/>
   <layout-footer />
 </template>
 
@@ -119,7 +119,7 @@
   import { onMounted, ref, inject } from "vue"
   import { useRoute } from "vue-router"
   import { message } from "ant-design-vue"
-  import { dict_unmanned_equipment, dict_camera_types } from "_utils/dictionary"
+  import { dict_unmanned_equipment, dict_camera_types, dict_deviceStatus } from "_utils/dictionary"
   import * as echarts from "echarts"
   import controllerApi from "_api/controller"
   import LayoutFooter from "_components/LayoutFooter/index.vue"
@@ -246,7 +246,8 @@
       tableList.value = res.content.map(item => {
         if(currentDevice.value.type === "camera") {
           item.typeName = dict_camera_types.find(x => x.key === item.type)?.value
-        }
+        } 
+        item.statusName = dict_deviceStatus.find(x => x.key === item.status)?.value
         return item
       })
       pagination.value.total = res.totalElements
@@ -384,6 +385,10 @@
 
   const _chartResize = () => {
     pieChart && pieChart.resize()
+  }
+
+  const realTimeCancel = () => {
+    tableActiveItem.value = {}
   }
 
   const _initData = () => {

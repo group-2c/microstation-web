@@ -18,19 +18,19 @@ export default {
     { title: "数据位", dataIndex: "dataBit", align: "left", width: 120 },
     { title: "停止位", dataIndex: "stopBit", align: "left", width: 120 },
     { title: "奇偶校验", dataIndex: "baudRate", align: "left", width: 120 },
-    { title: "设备状态", dataIndex: "status", align: "left", width: 120 },
+    { title: "设备状态", dataIndex: "statusName", align: "left", width: 120 },
   ],
   accessControlController: [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
     { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
     { title: "IP地址", dataIndex: "ip", align: "left", width: 250, ellipsis: true },
-    { title: "状态", dataIndex: "status", align: "left", width: 250, ellipsis: true },
+    { title: "状态", dataIndex: "statusName", align: "left", width: 250, ellipsis: true },
   ],
   camera: [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
     { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
     { title: "IP地址", dataIndex: "ip", align: "left", width: 250, ellipsis: true },
     { title: "类 型", dataIndex: "typeName", align: "left", width: 250, ellipsis: true },
-    { title: "状态", dataIndex: "status", align: "left", width: 250, ellipsis: true },
+    { title: "状态", dataIndex: "statusName", align: "left", width: 250, ellipsis: true },
   ]
 }

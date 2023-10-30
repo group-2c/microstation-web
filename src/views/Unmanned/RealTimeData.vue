@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, shallowRef, defineAsyncComponent, onMounted } from "vue"
+import { ref, shallowRef, defineAsyncComponent } from "vue"
 import { message } from "ant-design-vue"
 import * as mqtt from "mqtt/dist/mqtt"
 import Constant from "_constant"
@@ -39,9 +39,7 @@ let mqttClient = null
 
 const visible = ref(false)
 const deviceItem = ref({})
-const record = ref({
-
-})
+const record = ref({})
 const subscribeKey = ref("")
 const currentCompoent = shallowRef()
 
@@ -132,12 +130,8 @@ const handleShow = (item = {}) => {
 const handleCancel = () => {
   mqttClient && mqttClient.end()
   visible.value = false
+  props.onCancel()
 }
-
-onMounted(() => {
-  visible.value = true
-  currentCompoent.value = defineAsyncComponent(() => import(`./form/LineProtectiveDevice.vue`))
-})
 
 defineExpose({ handleShow })
 </script>
