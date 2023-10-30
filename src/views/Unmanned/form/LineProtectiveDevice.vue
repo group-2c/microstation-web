@@ -23,7 +23,7 @@
         <a-table 
           row-key="id" 
           :columns="columns" 
-          :data-source="record.incident_list" 
+          :data-source="record.soe_event" 
           :pagination="false"
           :scroll="{ y: 'calc(100vh - 670px)' }" 
         />
@@ -37,7 +37,7 @@ const props = defineProps({
   record: {
     type: Object,
     default: {
-      incident_list: []
+      soe_event: []
     }
   } 
 })
@@ -75,6 +75,6 @@ const labelAndFields = [
 const columns = [  
   { title: "事件含义", dataIndex: "event_meaning", align: "left", ellipsis: true },    
   { title: "事件相关值", dataIndex: "event_value", align: "left", width: 250, ellipsis: true },
-  { title: "时间", dataIndex: "time", align: "left", width: 250, ellipsis: true },
+  { title: "时 间", dataIndex: "time", align: "left", width: 250, ellipsis: true },
 ]
 </script>

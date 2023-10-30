@@ -20,7 +20,7 @@
     <div class="blockItem">
       <div class="conTitle">SOE事件</div>
       <div class="contentContainer">
-        <a-table row-key="id" :columns="columns" :data-source="record.incident_list" :pagination="false"
+        <a-table row-key="id" :columns="columns" :data-source="record.soe_event" :pagination="false"
           :scroll="{ y: 'calc(100vh - 680px)' }" />
       </div>
     </div>
@@ -32,7 +32,7 @@ const props = defineProps({
   record: {
     type: Object,
     default: {
-      incident_list: []
+      soe_event: []
     }
   }
 })

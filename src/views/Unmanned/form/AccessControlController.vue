@@ -71,7 +71,7 @@
         <a-table 
           row-key="id"
           :columns="columns"
-          :data-source="record.incident_list" 
+          :data-source="record.soe_event" 
           :pagination="false"
           :scroll="{ y: 'calc(100vh - 540px)' }"
         />
@@ -94,31 +94,23 @@ const props = defineProps({
     type: Object,
     default: {
       status_list: [],
-      incident_list: []
+      soe_event: []
     }
   },
   publish: Function
 })
 
 const columns = [  
-  { title: "时 间", dataIndex: "name", align: "left", width: 160, ellipsis: true },    
-  { title: "类 型", dataIndex: "name", align: "left", width: 100, ellipsis: true },
-  { title: "人员编号", dataIndex: "name", align: "left", width: 100, ellipsis: true },
-  { title: "卡号", dataIndex: "name", align: "left", width: 150, ellipsis: true },
-  { title: "门", dataIndex: "name", align: "left", width: 100, ellipsis: true },
-  { title: "验证方式", dataIndex: "name", align: "left", width: 120, ellipsis: true },
-  { title: "状态", dataIndex: "name", align: "left", width: 120, ellipsis: true }
+  { title: "时 间", dataIndex: "time", align: "left", width: 160, ellipsis: true },    
+  { title: "类 型", dataIndex: "type_name", align: "left", width: 100, ellipsis: true },
+  { title: "人员编号", dataIndex: "user_code", align: "left", width: 100, ellipsis: true },
+  { title: "卡 号", dataIndex: "card_number", align: "left", width: 150, ellipsis: true },
+  { title: "门", dataIndex: "door_name", align: "left", width: 100, ellipsis: true },
+  { title: "验证方式", dataIndex: "verification_mode", align: "left", width: 120, ellipsis: true },
+  { title: "状 态", dataIndex: "status_name", align: "left", width: 120, ellipsis: true }
 ]
 
 const doorIndex = ref(0)
-
-// const doorList = ref({ 
-//   status_list: [0, 1, 0, 1, 1, 1, 1, 1], 
-//   incident_list: [{
-//     status: "0",
-//     name: "aaa"
-//   }]
-// })
 
 const accessControl = type => {
   props.publish({

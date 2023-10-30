@@ -200,8 +200,8 @@ const labelAndFields = [
   { label: "累计燃油消耗", field: "accumulated_fuel_consumption" },
   { label: "单片机内部温度", field: "microcontroller_internal_temperature" },
   { label: "控制器型号", field: "controller_model" },
-  { label: "控制器时间", field: "controllerTime" },
-  { label: "发布日期", field: "releaseDate" }
+  { label: "控制器时间", field: "controller_time" },
+  { label: "发布日期", field: "release_date" }
 ]
 
 const accessControl = type => {

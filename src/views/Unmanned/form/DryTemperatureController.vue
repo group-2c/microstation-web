@@ -61,37 +61,4 @@ const props = defineProps({
     default: {}
   }
 })
-
-// const record = {
-//   status_words: [
-//     {
-//       name: "A相传感器",
-//       status: 1
-//     },
-//     {
-//       name: "B相传感器",
-//       status: 1
-//     },
-//     {
-//       name: "C相传感器",
-//       status: 1
-//     },
-//     {
-//       name: "风机",
-//       status: 1
-//     },
-//     {
-//       name: "超 温",
-//       status: 0
-//     },
-//     {
-//       name: "跳闸",
-//       status: 1
-//     }
-//   ],
-//   temperature_a: 10.2,
-//   temperature_b: 13.5,
-//   temperature_c: 20.2,
-//   timing: 1
-// }
 </script>
