@@ -41,7 +41,7 @@
           </a-col>
           <a-col :span="24">
             <div class="recordItem">
-              <label style="margin-left: -18px;">定时开风机: </label> <div class="content">{{ record.timing ? "是" : "否" }}</div>
+              <label style="margin-left: -18px;">定时开风机: </label> <div class="content">{{ record.timing }}</div>
             </div>
           </a-col>
         </a-row>

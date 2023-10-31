@@ -22,9 +22,12 @@ export default {
   ],
   accessControlController: [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
-    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
-    { title: "IP地址", dataIndex: "ip", align: "left", width: 250, ellipsis: true },
-    { title: "状态", dataIndex: "statusName", align: "left", width: 250, ellipsis: true },
+    { title: "微站控制器名称", dataIndex: "controllerName", align: "left", width: 120, ellipsis: true },    
+    { title: "微站控制器ID", dataIndex: "controllerId", align: "left", width: 120, ellipsis: true },
+    { title: "设备名称", dataIndex: "name", align: "left", width: 120 },
+    { title: "设备ID", dataIndex: "id", align: "left", width: 120 },
+    { title: "设备地址", dataIndex: "ip", align: "left", width: 120 },
+    { title: "设备状态", dataIndex: "statusName", align: "left", width: 120 },
   ],
   camera: [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    

@@ -507,3 +507,15 @@
     }
   }
 }
+
+
+::v-deep(.ant-spin-nested-loading) {
+  .ant-spin-blur {
+    opacity: 1 !important;
+  }
+  .ant-spin-container{
+    &::after {
+      height: 90% !important;
+    }
+  }
+} 

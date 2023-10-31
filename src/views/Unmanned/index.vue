@@ -192,10 +192,12 @@
       deviceList.value = array
       if(inception) {
         currentDevice.value = deviceList.value[0]
-        columns.value = dataynamicColumns.common
+        columns.value = dataynamicColumns.accessControlController
+        equipmentItemClick(currentDevice.value)
+      } else {
+        handleSearch()
       }
       deviceCount.value = Lodash.sumBy(deviceList.value, x => x.count)
-      handleSearch()
       setChartData(deviceList.value)
     } catch(err) {
       message.error(`获取设备统计数据失败: ${err}`)
@@ -214,7 +216,7 @@
   const equipmentItemClick = item => {
     currentDevice.value = item
     switch(item.type) {
-      case "access_control":
+      case "access_control_controller":
         columns.value = dataynamicColumns.accessControlController
         break
       case "camera":
