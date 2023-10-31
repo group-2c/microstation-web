@@ -49,7 +49,7 @@
             <div class="title">视频区域控制</div>
             <div class="controlsBody">
               <div class="turntable">
-                <svg v-if="currentCamera.type === 3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="144" height="144" viewBox="0 0 144 144">
+                <svg v-if="currentCamera.type === 3 && !videoLoadingNComplete" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="144" height="144" viewBox="0 0 144 144">
                   <defs>
                     <clipPath id="clip-path">
                       <path id="减去_101" data-name="减去 101" d="M72,144A72.018,72.018,0,0,1,43.977,5.658a72.019,72.019,0,0,1,56.052,132.684A71.557,71.557,0,0,1,72,144ZM72,42.843A29.158,29.158,0,1,0,101.157,72,29.192,29.192,0,0,0,72,42.843Z" transform="translate(-0.4 -0.4)" fill="#28467b" stroke="#388cff" stroke-width="1"/>
@@ -145,12 +145,12 @@
             :key="item.key" 
             @click.stop="videoElWrapperClick(item)"
           >
-            <div v-if="!item.loading && item.videoVisible" class="cameraDataTop">{{ cameraList.find(x => x.key === item.cameraKey)?.name }}</div>
+            <div v-if="item.playStatus" class="cameraDataTop">{{ cameraList.find(x => x.key === item.cameraKey)?.name }}</div>
             <div v-if="item.loading" class="runningState">加载中...</div>
             <canvas :ref="x => (canvasRefs[item.key] = x)" class="canvas1" v-show="!item.videoVisible" />
             <video :ref="x => (videoRefs[item.key] = x)" v-show="item.videoVisible" />
             <canvas :ref="x => (canvasIvsRefs[item.key] = x)" class="canvas2" width="500" height="300" />
-            <div v-if="!item.videoVisible" class="empty" />
+            <div v-if="!item.playStatus && !item.loading" class="empty" />
           </div>
         </div>
       </div>
@@ -219,7 +219,7 @@
 
   const videoLoadingNComplete = computed(() => {
     const videoEl = videoElList.value.find(x => x.key === currentVideoKey.value)
-    return (!videoEl?.videoVisible) || videoEl?.loading
+    return !videoEl?.playStatus
   })
 
   const handleTalk = () => {
@@ -303,8 +303,8 @@
     })
 
     player.on("DecodeStart", e => {
-      // videoEl.videoVisible = e.decodeMode === "video" ? true : false
-      videoEl.videoVisible = true
+      videoEl.videoVisible = e.decodeMode === "video" ? true : false
+      videoEl.playStatus = true
 
       const canvasSon = new PluginCanvasES6()
 
@@ -360,7 +360,8 @@
         cameraKey: item?.cameraKey || null,
         loading: item?.loading || false,
         recording: item?.recording || false,
-        videoVisible: item?.videoVisible || false
+        videoVisible: item?.videoVisible || false,
+        playStatus: item?.playStatus || false,
       }
     })
 
