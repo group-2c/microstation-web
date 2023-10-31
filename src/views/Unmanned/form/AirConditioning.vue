@@ -16,7 +16,7 @@
       <div class="retract">
         <a-row>
           <div class="controlsBtns">
-            <a-button @click.stop="accessControl(0)">关机</a-button>
+            <a-button @click.stop="accessControl">{{ record?.system_on_off == "0" ? "开机" : "关机" }}</a-button>
           </div>
         </a-row>
       </div>
@@ -74,7 +74,7 @@ const labelAndFields = [
   { label: "系统开关机状态", field: "system_on_off", dictionary: ["关机", "开机"] },
 ]
 
-const accessControl = type => {
-  props.publish({ cmd: type }, 0)
+const accessControl = () => {
+  props.publish({ cmd: record?.system_on_off == 0 ? 1 : 0 }, 0)
 }
 </script>

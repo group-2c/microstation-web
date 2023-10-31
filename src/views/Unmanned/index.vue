@@ -116,7 +116,7 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, inject } from "vue"
+  import { onMounted, onBeforeUnmount, ref, inject } from "vue"
   import { useRoute } from "vue-router"
   import { message } from "ant-design-vue"
   import { dict_unmanned_equipment, dict_camera_types, dict_deviceStatus } from "_utils/dictionary"
@@ -128,7 +128,7 @@
   import Lodash from "lodash"
   import unmannedApi from "_api/unmanned"
 
-  let pieChart = null
+  let pieChart = null, timer = null
 
   const routeJump = inject("$routeJump")
   const route = useRoute()
@@ -398,6 +398,18 @@
     })
   }
 
+  const _interfacePolling = () => {
+    _clearPollingTimer()
+    timer = setInterval(() => {
+      _getControllerDevices()
+    }, 10 * 1000)
+  }
+
+  const _clearPollingTimer = () => {
+    timer && clearInterval(timer)
+    timer = null
+  }
+
   onMounted(() => {
     _computeEdgeScale()
     window.addEventListener("resize", () => {
@@ -405,5 +417,10 @@
     })
     pieChart = echarts.init(chartRef.value)
     _initData()
+    _interfacePolling()
+  })
+
+  onBeforeUnmount(() => {
+    _clearPollingTimer()
   })
 </script>
