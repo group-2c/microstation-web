@@ -191,9 +191,7 @@
       })
       deviceList.value = array
       if(inception) {
-        currentDevice.value = deviceList.value[0]
-        columns.value = dataynamicColumns.accessControlController
-        equipmentItemClick(currentDevice.value)
+        equipmentItemClick(deviceList.value[0])
       } else {
         handleSearch()
       }
