@@ -75,6 +75,6 @@ const labelAndFields = [
 ]
 
 const accessControl = () => {
-  props.publish({ cmd: record?.system_on_off == 0 ? 1 : 0 }, 0)
+  props.publish({ cmd: props.record?.system_on_off == 0 ? 1 : 0 }, 0)
 }
 </script>

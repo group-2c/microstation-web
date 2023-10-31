@@ -169,7 +169,7 @@
     }
   }
 
-  const _getControllerDevices = async () => {
+  const _getControllerDevices = async (inception = true) => {
     try {
       const res = await unmannedApi.queryEquipmentStatistics(controllerId.value)
       const array = []
@@ -190,8 +190,10 @@
         })
       })
       deviceList.value = array
-      currentDevice.value = deviceList.value[0]
-      columns.value = dataynamicColumns.common
+      if(inception) {
+        currentDevice.value = deviceList.value[0]
+        columns.value = dataynamicColumns.common
+      }
       deviceCount.value = Lodash.sumBy(deviceList.value, x => x.count)
       handleSearch()
       setChartData(deviceList.value)
@@ -401,7 +403,7 @@
   const _interfacePolling = () => {
     _clearPollingTimer()
     timer = setInterval(() => {
-      _getControllerDevices()
+      _getControllerDevices(false)
     }, 10 * 1000)
   }
 
