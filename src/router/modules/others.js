@@ -21,7 +21,7 @@ const route = [
     path: "distributionMonitoring", 
     name: "DistributionMonitoring",
     component: DistributionMonitoring,
-    meta: { title: "配电监控", index: 2 },
+    meta: { title: "配电监控", index: 2, disableBreadcrumb: true },
   },
   { 
     path: "realTimeVideo", 
