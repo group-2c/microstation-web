@@ -39,7 +39,7 @@
           :data-source="dataCenter.tableList" 
           :pagination="dataCenter.pagination"
           :row-selection="rowSelection"
-          :scroll="{ y: 'calc(100vh - 410px)', x: 1800 }"
+          :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }"
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
@@ -81,15 +81,15 @@
   import EditDrawer from "@/views/operations/User/EditDrawer.vue"
 
   const constColumns = [
-    { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
-    { title: "用户名", dataIndex: "username", align: "left" },    
+    { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1, fixed: "left" },    
+    { title: "用户名", dataIndex: "username", align: "left", fixed: "left" },    
     { title: "所属部门", dataIndex: "departmentName", align: "left" },    
     { title: "联系电话", dataIndex: "telephone", align: "left" },
     { title: "真实姓名", dataIndex: "realname", align: "left" },
     { title: "角色", dataIndex: "role", align: "left" },
     { title: "创建时间", dataIndex: "createAt", align: "left" },
     { title: "更新时间", dataIndex: "createAt", align: "left" },
-    { title: "操 作", dataIndex: "operation", align: "center", width: 200 }
+    { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
   ]
 
   const dataDefault = {

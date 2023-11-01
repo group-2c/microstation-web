@@ -46,7 +46,7 @@
           :data-source="dataCenter.tableList" 
           :pagination="dataCenter.pagination"
           :row-selection="rowSelection"
-          :scroll="{ y: 'calc(100vh - 320px)', x: 1800 }"
+          :scroll="{ y: 'calc(100vh - 320px)', x: 'max-content' }"
           @change="handleTableChange"
         >
           <template #bodyCell="{ column, record }">
@@ -88,8 +88,8 @@
   import EditDrawer from "./EditDrawer.vue"
 
   const constColumns = [
-    { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
-    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true },    
+    { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1, fixed: "left" },    
+    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true, fixed: "left" },    
     { title: "设备地址", dataIndex: "slaveId", align: "left", width: 250, ellipsis: true },
     { title: "波特率", dataIndex: "baudRate", align: "left", width: 180 },
     { title: "数据位", dataIndex: "dataBit", align: "left", width: 180 },

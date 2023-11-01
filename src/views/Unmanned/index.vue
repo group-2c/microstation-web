@@ -100,7 +100,7 @@
                 :columns="columns"
                 :data-source="tableList" 
                 :pagination="pagination"
-                :scroll="{ y: 'calc(100vh - 410px)', x: 1500 }"
+                :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }"
                 @change="handleTableChange"
                 :row-class-name="_record => (_record.id === tableActiveItem.id ? 'itemActive' : '')"
                 :customRow="customRow"
