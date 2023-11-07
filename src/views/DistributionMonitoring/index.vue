@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="powerDistribution" style="height: calc(100vh - 244px);">
-          <!-- <div v-if="!currentItem?.id" class="empty">暂无电路图数据</div> -->
+          <div v-if="!currentItem?.id" class="empty">暂无电路图数据</div>
           <component
             ref="svgComponentRef"
             :is="currentComponent"
