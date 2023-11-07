@@ -1,0 +1,125 @@
+/*
+ * @author: zzp
+ * @date: 2023-11-07 08:40:08
+ * @fileName: index.less
+ * @filePath: src/views/DistributionMonitoring/index.less
+ * @description:  
+ */
+ .contentContainer {
+  margin: 0 !important;
+  padding: 0 20px 20px 20px;
+  background: #081834;
+  .microstationContainer {
+    display: flex;
+    .leftArea {
+      width: 250px;
+      flex: none;
+      ::v-deep(.ant-list) {
+        margin-top: 20px;
+        font-size: 0;
+        .ant-list-items {
+          height: calc(100vh - 460px);
+          overflow-y: auto;
+          .ant-list-item  {
+            cursor: pointer;
+            &:last-child {
+              border-bottom: 1px solid #44668A !important;
+            }
+          }
+        }
+      }
+      .controls {
+        margin-top: 20px;
+        border: 1px solid #44668A;
+        .title {
+          font-size: 16px;
+          font-weight: bold;
+          background: linear-gradient(180deg, #0552B6 0%, #01294C 100%) !important;
+          height: 40px;
+          line-height: 40px;
+          color: #ffffff;
+          padding-left: 25px;
+          border-bottom: 1px solid #44668A;
+        }
+        .controlsBody {
+          height: 100px;
+          width: 100%;
+          .buttons {
+            padding: 30px 0 0 30px;
+            .ant-btn {
+              margin-right: 30px;
+              background: #197CD1;
+              border-radius: 2px;
+              font-size: 14px;
+              color: #DFF6FF;
+              border: none;
+              &:disabled {
+                background: #AAAAAA;
+                opacity: .5;
+                color: #ffffff;
+              }
+            }
+          }
+        }
+        .controlItem {
+          width: 100%;
+          text-align: right;
+          align-items: center;
+          display: -webkit-flex;
+          height: 45px;
+          label {
+            width: 80px;
+            color: #ffffff;
+            font-size: 14px;
+            margin-right: 10px;
+          }
+          .content {
+            ::v-deep(.ant-btn) {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+    .powerDistribution {
+      width: 100%;
+      height: 100%;
+      margin-top: 20px;
+      font-size: 0;
+      margin-left: 20px;
+      border: 1px solid #44668A;
+      overflow: hidden;
+      background: #081834;
+      ::v-deep(.svg-pan-zoom__default) {
+        width: 100%;
+        height: 100%;
+        background: #081834;
+        svg {
+          width: 100%;
+          height: 100%;
+          background: #081834;
+          .cursor {
+            cursor: pointer;
+            &:hover {
+              fill-opacity: 0.7;
+            }
+          }
+        }
+      }
+      ::v-deep(.svgPanZoom) {
+        width: 100%;
+        height: 100%;
+      }
+
+      .empty {
+        color: #5796d1;
+        font-size: 40px;
+        letter-spacing: 2px;
+        text-align: center;
+        align-items: center;
+        display: grid;
+        height: 100%;
+      }
+    }
+  }
+}

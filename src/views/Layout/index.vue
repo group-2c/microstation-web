@@ -52,7 +52,7 @@
   import { useStore } from "vuex"
   import { useRoute } from "vue-router"
   import { UserOutlined, DownOutlined } from "@ant-design/icons-vue"
-  import { getThreeNameParents } from "@/function/formatting"
+  import { getThreeNameParents } from "_utils/function"
   import Lodash from "lodash"
   import MenuBar from "./MenuBar.vue"
   import Constant from "_constant"
