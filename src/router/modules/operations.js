@@ -25,6 +25,7 @@ import LineProtectiveDevice from "@/views/operations/LineProtectiveDevice/index.
 import ReactivePowerCompensator from "@/views/operations/ReactivePowerCompensator/index.vue"
 import TelemetryUnit from "@/views/operations/TelemetryUnit/index.vue"
 import TransformerProtectionDevice from "@/views/operations/TransformerProtectionDevice/index.vue"
+import SvgManagement from "@/views/operations/SvgManagement/index.vue"
 
 const route = {
   path: "operations",
@@ -151,6 +152,12 @@ const route = {
       name: "AirConditioning",
       component: AirConditioning,
       meta: { title: "空调" }
+    },
+    {
+      path: "svgManagement",
+      name: "SvgManagement",
+      component: SvgManagement,
+      meta: { title: "配电图管理" }
     }
   ]
 }
