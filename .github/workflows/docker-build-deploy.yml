@@ -24,7 +24,7 @@ jobs:
           
       - name: 打包项目
         run: |
-          pnpm install
+          pnpm install --no-frozen-lockfile
           pnpm build
       - name: 构建镜像
         run: docker build --file Dockerfile --tag registry.cn-beijing.aliyuncs.com/zhangzhengpeng/microstation-web .
