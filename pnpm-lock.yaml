@@ -56,6 +56,9 @@ dependencies:
   stylus:
     specifier: ^0.59.0
     version: 0.59.0
+  svg-pan-zoom:
+    specifier: ^3.6.1
+    version: 3.6.1
   vue:
     specifier: ^3.2.45
     version: 3.3.8
@@ -1492,6 +1495,10 @@ packages:
 
   /svg-pan-zoom@3.6.0:
     resolution: {integrity: sha512-ZBEL2z/n/W2fLLFzn3NTQgd+7QEfbrKvKmu29U3qvMflmJgLaWkwKbOzWJYESFidTiGYMHkijAKmY6m64moyYg==}
+    dev: false
+
+  /svg-pan-zoom@3.6.1:
+    resolution: {integrity: sha512-JaKkGHHfGvRrcMPdJWkssLBeWqM+Isg/a09H7kgNNajT1cX5AztDTNs+C8UzpCxjCTRrG34WbquwaovZbmSk9g==}
     dev: false
 
   /tar-stream@2.2.0:

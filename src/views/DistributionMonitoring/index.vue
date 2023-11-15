@@ -37,12 +37,13 @@
           </div>
         </div>
         <div class="powerDistribution" style="height: calc(100vh - 244px);">
-          <div v-if="!currentItem?.id" class="empty">暂无电路图数据</div>
+          <div id="svgPanZoom"></div>
+          <!-- <div v-if="!currentItem?.id" class="empty">暂无电路图数据</div>
           <component
             ref="svgComponentRef"
             :is="currentComponent"
             :record="currentItem"
-          />
+          /> -->
         </div>
       </div>
     </div>
@@ -50,16 +51,21 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, shallowRef, defineAsyncComponent } from "vue"
+  import { onMounted, ref, shallowRef, defineAsyncComponent, nextTick } from "vue"
+  import { message } from "ant-design-vue"
   import { useStore } from "vuex"
+  import svgPanZoom from "svg-pan-zoom"
   import controllerApi from "_api/controller"
+  import svgManagementApi from "_api/svgManagement"
 
   const store = useStore()
+  let svgTiger, lastEmbed
 
   const currentComponent = shallowRef()
   const controllerList = ref([])
   const currentItem = ref({})
   const circuit = store.state.circuit
+  const svgPanZoomRef = ref()
 
   const svgComponentRef = ref()
 
@@ -75,11 +81,32 @@
     }
   }
 
+  const _downloadSvg = async () => {
+    const loading = message.loading("正在加载配电图...", 0)
+    try {
+      const res = await svgManagementApi.svgFileDownload("t_1700013683095.svg")
+  
+      const el = document.querySelector("#svgPanZoom")
+      el.innerHTML = res
+
+      const panZoomTiger = svgPanZoom(el.querySelector("svg"))
+      panZoomTiger.fit()
+      panZoomTiger.center()
+    } catch(err) {
+      console.log(err)
+      message.error(`配电图加载失败:${err}`)
+    } finally {
+      setTimeout(loading) 
+    }   
+  }
+
   const listItemClick = item => {
-    store.dispatch("circuit/setKey", undefined)
-    store.dispatch("circuit/setStatus", false)
-    currentItem.value = item
-    currentComponent.value = defineAsyncComponent(() => import(`@/views/DistributionMonitoring/svg/circuit${item.svgIndex}.vue`))
+    _downloadSvg()
+    
+    // store.dispatch("circuit/setKey", undefined)
+    // store.dispatch("circuit/setStatus", false)
+    // currentItem.value = item
+    // currentComponent.value = defineAsyncComponent(() => import(`@/views/DistributionMonitoring/svg/circuit${item.svgIndex}.vue`))
   }
 
   const circuitClick = status => {

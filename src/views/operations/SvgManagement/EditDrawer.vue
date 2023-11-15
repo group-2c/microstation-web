@@ -21,12 +21,14 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="SVG上传" name="fileUrl">
-            <a-input v-show="false" v-model:value="dataCenter.record.fileUrl" />
-            <a-button type="primary" size="small" @click.stop="handleClickUpload">点击上传</a-button>
-            <div v-if="dataCenter.record.fileUrl" class="uploadFileList">
-              <span class="tips">已上传</span>
-              <a-button type="primary" size="small" @click.stop="handleClickDowload">下载</a-button>
+          <a-form-item label="SVG上传" name="fileName">
+            <div class="fileArea">
+              <a-input v-show="false" v-model:value="dataCenter.record.fileName" />
+              <a-button type="primary" size="small" @click.stop="handleClickUpload">点击上传</a-button>
+              <div v-if="dataCenter.record.fileName" class="uploadFileList">
+                <span class="tips">{{ dataCenter.record.fileName }}</span>
+                <a-button type="primary" size="small" @click.stop="handleClickDownload">下载</a-button>
+              </div>
             </div>
           </a-form-item>
         </a-col>
@@ -86,7 +88,7 @@ import Lodash from "lodash"
 const formRules = {
   name: [{ required: true, message: "请输入设备名称" }],
   controllerId: [{ required: true, message: "请选择所属微站" }],
-  fileUrl: [{ required: true, message: "请上传SVG图片" }],
+  fileName: [{ required: true, message: "请上传SVG图片" }],
 }
 
 const props = defineProps({
@@ -116,11 +118,14 @@ const _getControllerList = async () => {
 
 const _uploadStart = async data => {
   const loading = message.loading("正在上传...", 0)
+  const formData = new FormData()
+  formData.append("file", data)
   try {
-    const res = await svgManagementApi.svgFileUpload(data)
+    const res = await svgManagementApi.svgFileUpload(formData)
     message.success("上传成功!")
-    record.value.fileUrl = res.data.data
+    dataCenter.value.record.fileName = res.fileName
   } catch(err) {
+    console.log(err)
     message.error(`上传失败:${err}`)
   } finally {
     setTimeout(loading) 
@@ -153,8 +158,25 @@ const handleClickUpload = () => {
   tempInput.click()
 }
 
-const handleClickDowload = () => {
-
+const handleClickDownload = async () => {
+  const loading = message.loading("正在下载...", 0)
+  try {
+    const res = await svgManagementApi.svgFileDownload(dataCenter.value.record.fileName)
+    let url = window.URL.createObjectURL(new Blob([res]))
+    let link = document.createElement("a")
+    link.style.display = "none"
+    link.href = url
+    link.setAttribute("download", dataCenter.value.record.fileName)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch(err) {
+    console.log(err)
+    message.error(`下载失败:${err}`)
+  } finally {
+    setTimeout(loading) 
+  }   
 }
 
 const handleShow = (item = {}) => {
@@ -230,14 +252,23 @@ defineExpose({ handleShow })
 }
 
 .uploadFileList {
-  display: inline-block;
+  display: flex;
   padding: 5px;
   border: #3882e1 1px solid;
   border-radius: 5px;
   margin-left: 30px;
+  max-width: 300px;
+  overflow: hidden;
+  flex: none;
   .tips {
     margin-right: 10px;
+    width: calc(100% - 10px);
+    overflow: hidden;
   }
+}
+
+.fileArea {
+  display: flex;
 }
 
 </style>

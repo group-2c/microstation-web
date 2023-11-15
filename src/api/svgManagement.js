@@ -14,7 +14,7 @@ const toSubmitFields = values => {
     "id",
     "name",
     "controllerId",
-    "fileUrl",
+    "fileName",
     "nodeList",
   ])
 }
@@ -23,7 +23,7 @@ class svgManagementApi extends CommonRestfulModel {
 
   constructor() {
     super({
-      sourceURL: "/svgManagement",
+      sourceURL: "/circuitDiagram",
       toSubmitFields
     })
   }
@@ -34,7 +34,7 @@ class svgManagementApi extends CommonRestfulModel {
    */
   svgFileUpload(data) {
     return new Promise((resolve, reject) => {
-      request.post(`${sourceURL}/upload`, data)
+      request.post(`${this._sourceURL}/upload`, data)
         .then(res => {
           resolve(res.data)
         }, err => {
@@ -42,7 +42,37 @@ class svgManagementApi extends CommonRestfulModel {
         })
     })
   }
-  
+
+  /**
+   * 下载配电图SVG
+   * @returns 
+   */
+  svgFileDownload(fileName) {
+    return new Promise((resolve, reject) => {
+      request.get(`${this._sourceURL}/download?fileName=${fileName}`)
+        .then(res => {
+          resolve(res)
+        }, err => {
+          reject(err)
+        })
+    })
+  }
+
+  /**
+   * 预览配电图SVG
+   * @returns 
+   */
+  svgFilePreview(data) {
+    return new Promise((resolve, reject) => {
+      request.post(`${this._sourceURL}/preview`, data)
+        .then(res => {
+          resolve(res)
+        }, err => {
+          reject(err)
+        })
+    })
+  }
+
 }
 
 export default new svgManagementApi()
