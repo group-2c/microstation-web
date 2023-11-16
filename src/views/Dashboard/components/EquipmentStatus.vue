@@ -13,7 +13,7 @@
   <div class="equipmentStatus">
     <div class="highLevelTitleBar">
       <i class="equipmentIcon" />
-      <span class="chTitle">设备状态</span>
+      <span class="chTitle">微站状态</span>
     </div>
     <div class="contentBar">
       <div class="chart" ref="chartRef" />

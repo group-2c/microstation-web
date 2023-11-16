@@ -10,7 +10,7 @@
       <a-row :gutter="30"> 
         <a-col :span="24">
           <a-form-item label="用户名" name="username">
-            <a-input v-model:value="dataCenter.record.username" placeholder="请输入用户名" />
+            <a-input v-model:value="dataCenter.record.username" placeholder="请输入用户名" :disabled="dataCenter.record.id" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
