@@ -12,74 +12,10 @@
   .microstationContainer {
     display: flex;
     .leftArea {
-      width: 250px;
+      width: 300px;
       flex: none;
-      ::v-deep(.ant-list) {
-        margin-top: 20px;
-        font-size: 0;
-        .ant-list-items {
-          height: calc(100vh - 460px);
-          overflow-y: auto;
-          .ant-list-item  {
-            cursor: pointer;
-            &:last-child {
-              border-bottom: 1px solid #44668A !important;
-            }
-          }
-        }
-      }
-      .controls {
-        margin-top: 20px;
-        border: 1px solid #44668A;
-        .title {
-          font-size: 16px;
-          font-weight: bold;
-          background: linear-gradient(180deg, #0552B6 0%, #01294C 100%) !important;
-          height: 40px;
-          line-height: 40px;
-          color: #ffffff;
-          padding-left: 25px;
-          border-bottom: 1px solid #44668A;
-        }
-        .controlsBody {
-          height: 100px;
-          width: 100%;
-          .buttons {
-            padding: 30px 0 0 30px;
-            .ant-btn {
-              margin-right: 30px;
-              background: #197CD1;
-              border-radius: 2px;
-              font-size: 14px;
-              color: #DFF6FF;
-              border: none;
-              &:disabled {
-                background: #AAAAAA;
-                opacity: .5;
-                color: #ffffff;
-              }
-            }
-          }
-        }
-        .controlItem {
-          width: 100%;
-          text-align: right;
-          align-items: center;
-          display: -webkit-flex;
-          height: 45px;
-          label {
-            width: 80px;
-            color: #ffffff;
-            font-size: 14px;
-            margin-right: 10px;
-          }
-          .content {
-            ::v-deep(.ant-btn) {
-              margin-right: 10px;
-            }
-          }
-        }
-      }
+      margin-top: 20px;
+      height: calc(100vh - 245px);
     }
     .powerDistribution {
       width: 100%;

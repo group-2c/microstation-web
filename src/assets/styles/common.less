@@ -601,6 +601,49 @@
   }
 }
 
+.treeEBox {
+  border-radius: 0;
+  border: 1px solid #44668A;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .threeTitle {
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+    background: linear-gradient(180deg, #0552B6 0%, #01294C 100%) !important;
+    background: none;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid #44668A;
+  }
+  .ant-tree {
+    height: 100%;
+    overflow-y: auto;
+    background: none;
+    .ant-tree-list {
+      background: #081834;
+      padding: 15px 20px;
+      .ant-tree-node-selected {
+        background: none !important;
+      }
+      .ant-tree-node-content-wrapper {
+        background: none !important;
+      }
+      .ant-tree-treenode-selected {
+        background: #3d7eff;
+      }
+    }
+    .ant-tree-treenode {
+      padding: 0;
+      height: 35px;
+      line-height: 35px;
+      display: block;
+    }
+  }
+}
+
 &::-webkit-scrollbar {
   width: 5px;
   height: 8px;

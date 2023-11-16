@@ -134,6 +134,7 @@
     try {
       const res = await svgManagementApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
+        item.nodeList = JSON.parse(item.nodeList)
         item.nodeCount = item.nodeList.length
         return item
       })
@@ -237,7 +238,7 @@
   }
 
   const editDrawerConfirm = () => {
-    _getTableList()
+    handleSearch()
   }
 
   onMounted(() => {

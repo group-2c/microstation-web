@@ -138,3 +138,9 @@ export const dict_unmanned_equipment = {
 export const mistakesColors = ["有故障", "故障", "失败", "负载", "异常", "停机失败"]
 export const offlineColors = ["常闭", "关", "关机", "关闭"]
 export const warnColors = ["警告", "报警", "停机"]
+
+export const dict_svg_device_types = [
+  { key: "electricity_meter", value: "多功能电表" },
+  { key: "line_protective_device", value: "线路保护装置" },
+  { key: "transformer_protection_device", value: "变压器保护装置" }
+]

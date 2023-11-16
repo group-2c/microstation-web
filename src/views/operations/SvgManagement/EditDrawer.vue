@@ -1,7 +1,7 @@
 <template>
   <a-drawer
     :title="dataCenter.record.id ? '编辑' : '新增'"
-    :width="800"
+    :width="1000"
     :open="dataCenter.visible"
     :closable="false"
     class="editDrawer"
@@ -15,7 +15,7 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label="所属微站" name="controllerId">
-            <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站">
+            <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站" @change="controllerChange">
               <a-select-option v-for="item in dataCenter.controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
             </a-select>
           </a-form-item>
@@ -32,7 +32,7 @@
             </div>
           </a-form-item>
         </a-col>
-        <a-col :span="24">
+        <a-col v-if="dataCenter.record.controllerId" :span="24">
           <div class="nodeConfig contentContainer">
             <div class="conTitle">绑定节点配置</div>
             <div class="controlBtns">
@@ -45,6 +45,32 @@
               size="middle"
             >
               <a-table-column title="序号" data-index="index" width="100px" align="center" />
+              <a-table-column title="设备类型" data-index="deviceType">
+                <template #default="{ record }">
+                  <a-select 
+                    v-model:value="record.deviceType" 
+                    popupClassName="modalSelect" 
+                    placeholder="请选择设备类型"
+                    @change="() => deviceTypeChange(record)"
+                  >
+                    <a-select-option v-for="item in dict_svg_device_types" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
+                  </a-select>
+                </template>
+              </a-table-column>
+              <a-table-column title="所属设备" data-index="deviceId">
+                <template #default="{ record }">
+                  <a-select
+                    v-if="!record._initStatus"
+                    v-model:value="record.deviceId" 
+                    popupClassName="modalSelect" 
+                    placeholder="请选择设备" 
+                    @change="() => deviceIdChange(record)"
+                  >
+                    <a-select-option v-for="item in dataCenter.record.deviceList" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
+                  </a-select>
+                  <div v-else>{{ record.deviceName }}</div>
+                </template>
+              </a-table-column>
               <a-table-column title="节点ID" data-index="dom_node_id">
                 <template #default="{ record }">
                   <a-input v-model:value="record.dom_node_id" placeholder="请输入对应的节点ID" />
@@ -81,6 +107,7 @@
 <script setup>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
+import { dict_svg_device_types } from "_utils/dictionary"
 import controllerApi from "_api/controller"
 import svgManagementApi from "_api/svgManagement"
 import Lodash from "lodash"
@@ -101,7 +128,8 @@ const dataDefault = {
   record: {
     nodeList: []
   },
-  controllerList: []
+  controllerList: [],
+  deviceList: []
 }
 
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
@@ -147,6 +175,34 @@ const deleteNodeRow = index => {
   })
 }
 
+const controllerChange = () => {
+  dataCenter.value.record.nodeList = []
+}
+
+const deviceTypeChange = async item => {
+  dataCenter.value.record.deviceList = []
+  delete item.deviceId
+  delete item._initStatus
+  const loading = message.loading("获取设备列表...", 0)
+  try {
+    const res = await controllerApi.getDeviceByDeviceType({
+      deviceType: item.deviceType,
+      controllerID: dataCenter.value.record.controllerId
+    })
+    dataCenter.value.record.deviceList = res
+  } catch(err) {
+    console.log(err)
+    message.error(`获取设备列表失败:${err}`)
+  } finally {
+    setTimeout(loading) 
+  }  
+}
+
+const deviceIdChange = item => {
+  const data = dataCenter.value.record.deviceList.find(x => x.id === item.deviceId)
+  item.deviceName = data.name
+}
+
 const handleClickUpload = () => {
   const tempInput = document.createElement("input")
   tempInput.setAttribute("type", "file")
@@ -180,6 +236,12 @@ const handleClickDownload = async () => {
 }
 
 const handleShow = (item = {}) => {
+  if(item.id) {
+    item.nodeList.forEach(item => {
+      item._initStatus = true
+    })
+  }
+
   dataCenter.value.visible = true
   dataCenter.value.record = Lodash.cloneDeep({
     ...item,
@@ -198,7 +260,10 @@ const handleOk = async () => {
     if(nodeList.length === 0) {
       return message.error("请配置节点！")
     }
-    const values = { ...dataCenter.value.record }
+    const values = { 
+      ...dataCenter.value.record,
+      nodeList: JSON.stringify(nodeList)
+    }
 
     try {
       dataCenter.value.loading = true
@@ -237,10 +302,11 @@ defineExpose({ handleShow })
     font-weight: bold;
     color: #DFF6FE;
     height: 40px;
+    display: inline-block;
   }
   .controlBtns {
     margin-bottom: 10px;
-    text-align: right;
+    float: right;
   }
 }
 

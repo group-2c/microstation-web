@@ -6,6 +6,7 @@
  * @description: 微站控制器接口
  */
 import CommonRestfulModel from "./CommonRestful.js"
+import request from "_utils/request"
 import Lodash from "lodash"
 
 const toSubmitFields = values => {
@@ -31,6 +32,22 @@ class ControllerApi extends CommonRestfulModel {
     super({
       sourceURL: "/controllers",
       toSubmitFields
+    })
+  }
+  
+  /**
+   * 根据设备类型和微站ID获取设备
+   * @param {*} id 
+   * @returns 
+   */
+  getDeviceByDeviceType(data) {
+    return new Promise((resolve, reject) => {
+      request.post(`${this._sourceURL}/getDeviceByDeviceType`, data)
+        .then(res => {
+          resolve(res.data)
+        }, err => {
+          reject(err)
+        })
     })
   }
 
