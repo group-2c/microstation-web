@@ -18,7 +18,7 @@
                 <a-input class="passwordInput" autocomplete="off" v-model:value="formState.password" placeholder="请输入密码" />
               </a-form-item>
               <div class="register">
-                还没有账号？<span @click="register">立即注册</span>
+                忘记密码了？<span @click="retrievePassword">找回密码</span>
               </div>
               <div class="loginBtn" @click="handleClickLogin">登 录</div>
             </a-form>
@@ -78,6 +78,10 @@ const registerVisible = ref(false)
 const register = () => {
   document.body.removeEventListener("keydown", _handleKeyDown)
   registerVisible.value = true
+}
+
+const retrievePassword = () => {
+  return message.warning("请联系管理员找回密码！")
 }
 
 const registerClose = () => {
