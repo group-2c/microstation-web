@@ -41,70 +41,37 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, shallowRef, nextTick } from "vue"
+  import { onMounted, ref, nextTick } from "vue"
   import { message } from "ant-design-vue"
-  import { useStore } from "vuex"
   import svgPanZoom from "svg-pan-zoom"
-  import controllerApi from "_api/controller"
   import svgManagementApi from "_api/svgManagement"
 
-  const store = useStore()
-
-  const currentComponent = shallowRef()
-  const controllerList = ref([])
-  const currentItem = ref({
-    "id": 1,
-    "name": "配电图1",
-    "fileName": "2_1700112872937.svg",
-    "nodeList": "[{\"index\":1,\"dom_node_id\":\"直线_912\",\"switch\":\"1\",\"deviceType\":\"electricity_meter\",\"deviceId\":1,\"deviceName\":\"多功能电表1\",\"_initStatus\":true},{\"index\":2,\"dom_node_id\":\"直线_930\",\"switch\":\"0\",\"deviceType\":\"line_protective_device\",\"deviceId\":2,\"deviceName\":\"1\",\"_initStatus\":true},{\"index\":3,\"dom_node_id\":\"直线_940\",\"switch\":\"0\",\"deviceType\":\"transformer_protection_device\",\"deviceId\":2,\"deviceName\":\"1\",\"_initStatus\":true}]"
-  })
-  const circuit = store.state.circuit
+  const currentItem = ref({})
   const autoExpandParent = ref(true)
   const expandedKeys = ref([])
   const treeList = ref([])
 
-  const svgComponentRef = ref()
-
-
   const _getControllerList = async () => {
-    const data = [
-      {
-        title: '微站1',
-        key: '1',
-        selectable: false,
-        children: [
-          {
-            title: '配电图1',
-            key: '1-1',
-          },
-          {
-            title: '配电图1',
-            key: '1-2',
-          }    
-        ]
-      },
-      {
-        title: '微站2',
-        key: '2',
-        selectable: false,
-        children: [
-          {
-            title: '配电图2',
-            key: '2-1',
-          },
-        ]
-      },
-    ]
-    treeList.value = data
-    // try {
-    //   const res = await controllerApi.getAll()
-    //   controllerList.value = res.data.map((item, index) => {
-    //     item.svgIndex = index + 1
-    //     return item
-    //   })
-    // } catch(err) {
-    //   message.error(`获取微站列表失败: ${err}`)
-    // }
+    const loading = message.loading("正在加载微站数据...", 0)
+    try {
+      const res = await svgManagementApi.getCircuitDiagramByID()
+      treeList.value = res.data
+      res.data.forEach(item => {
+        item.key = Math.random().toString().slice(-6)
+        item.title = item.controllerName
+        item.selectable = false
+        if(item.children) {
+          item.children.forEach(child => {
+            child.key = Math.random().toString().slice(-6)
+            child.title = child.name
+          })
+        }
+      })
+    } catch(err) {
+      message.error(`微站数据加载失败:${err}`)
+    } finally {
+      setTimeout(loading) 
+    }
   }
 
   const _svgOperate = () => {
@@ -120,24 +87,33 @@
     })
   }
 
-  const _downloadSvg = async () => {
+  const _downloadSvg = async fileName => {
     const loading = message.loading("正在加载配电图...", 0)
     try {
-      const res = await svgManagementApi.svgFileDownload("2_1700112872937.svg")
-  
+      const res = await svgManagementApi.svgFileDownload(fileName)
       const el = document.querySelector("#svgPanZoom")
       el.innerHTML = res
-
       const panZoomTiger = svgPanZoom(el.querySelector("svg"))
       panZoomTiger.fit()
       panZoomTiger.center()
       _svgOperate()
     } catch(err) {
-      console.log(err)
       message.error(`配电图加载失败:${err}`)
     } finally {
       setTimeout(loading) 
     }   
+  }
+
+  const _getNodeList = async () => {
+    const loading = message.loading("正在获取配电图节点数据...", 0)
+    try {
+      const res = await svgManagementApi.getNodeList(currentItem.value.id)
+      currentItem.value.nodeList = res.data.nodeList || []
+    } catch(err) {
+      message.error(`获取配电图节点数据失败:${err}`)
+    } finally {
+      setTimeout(loading) 
+    }  
   }
 
   const onExpand = keys => {
@@ -145,10 +121,14 @@
     autoExpandParent.value = false
   }
 
-  const threeSelect = selectedKeys => {
-    // const item = treeList.value.find(x => x.id === selectedKeys[0])
-    // _downloadSvg(item.fileName)
-    console.log(selectedKeys)
+  const threeSelect = async selectedKeys => {
+    currentItem.value = treeList.value.reduce((accumulator, dicItem) => 
+      accumulator.concat(dicItem.children), []
+    ).find(childrenItem => childrenItem.key === selectedKeys[0])
+    delete currentItem.value.nodeList
+
+    await _getNodeList()
+    await _downloadSvg(currentItem.value.fileName)
   }
 
   onMounted(() => {

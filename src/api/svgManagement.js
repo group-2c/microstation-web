@@ -73,6 +73,35 @@ class svgManagementApi extends CommonRestfulModel {
     })
   }
 
+  /**
+   * 根据controller_id分类获取配电图信息
+   * @returns 
+   */
+  getCircuitDiagramByID() {
+    return new Promise((resolve, reject) => {
+      request.get(`${this._sourceURL}/getCircuitDiagramByID`)
+        .then(res => {
+          resolve(res)
+        }, err => {
+          reject(err)
+        })
+    })
+  }
+
+  /**
+   * 根据配电图id获取nodeList
+   * @returns 
+   */
+  getNodeList(id) {
+    return new Promise((resolve, reject) => {
+      request.get(`${this._sourceURL}/getNodeList/${id}`)
+        .then(res => {
+          resolve(res)
+        }, err => {
+          reject(err)
+        })
+    })
+  }  
 }
 
 export default new svgManagementApi()
