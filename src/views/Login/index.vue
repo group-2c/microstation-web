@@ -90,27 +90,24 @@ const registerClose = () => {
 }
 
 const handleClickLogin = async () => {
-  store.dispatch("auth/login", { userInfo: { name: "2222", id: 1 }, token: "2323232323" })
-  message.success("登录成功！")
-  routeJump({ name: "Dashboard" })
-  // if(!formState.value.username) {
-  //   return message.warning("请输入账号！")
-  // }
-  // if(!formState.value.password) {
-  //   return message.warning("请输入密码！")
-  // }
-  // try {
-  //   loading.value = true
-  //   const res = await AuthApi.login(formState.value)
-  //   store.dispatch("auth/login", { userInfo: { name: res.real_name, id: 1 }, token: res.token })
-  //   message.success("登录成功！")
-  //   document.body.removeEventListener("keydown", _handleKeyDown)
-  //   routeJump({ name: "Dashboard" })
-  // } catch(err) {
-  //   message.error(`登录失败: ${err}`)
-  // } finally {
-  //   loading.value = false
-  // }
+  if(!formState.value.username) {
+    return message.warning("请输入账号！")
+  }
+  if(!formState.value.password) {
+    return message.warning("请输入密码！")
+  }
+  try {
+    loading.value = true
+    const res = await AuthApi.login(formState.value)
+    store.dispatch("auth/login", { userInfo: { name: res.real_name, id: 1 }, token: res.token })
+    message.success("登录成功！")
+    document.body.removeEventListener("keydown", _handleKeyDown)
+    routeJump({ name: "Dashboard" })
+  } catch(err) {
+    message.error(`登录失败: ${err}`)
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleClickRegister = () => {
