@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-08-25 15:46:56
+ * @date: 2023-09-05 14:57:23
  * @fileName: index.vue
- * @filePath: src/views/operations/User/index.vue
- * @description: 用户管理 
+ * @filePath: src/views/equipments/Screen/index.vue
+ * @description: JK01B直流屏
  */
 <template>
   <div class="parcel">
@@ -81,28 +81,31 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_departments } from "_utils/dictionary"
+  import { dict_manufacturers } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
-  import userApi from "_api/user"
-  import EditDrawer from "@/views/operations/User/EditDrawer.vue"
+  import screenApi from "_api/screen"
+  import EditDrawer from "./EditDrawer.vue"
 
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1, fixed: "left" },    
-    { title: "用户名", dataIndex: "username", align: "left", fixed: "left" },    
-    { title: "所属部门", dataIndex: "departmentName", align: "left" },    
-    { title: "联系电话", dataIndex: "telephone", align: "left" },
-    { title: "真实姓名", dataIndex: "realname", align: "left" },
-    { title: "角色", dataIndex: "role", align: "left" },
-    { title: "创建时间", dataIndex: "createAt", align: "left" },
-    { title: "更新时间", dataIndex: "createAt", align: "left" },
+    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true, fixed: "left" },    
+    { title: "设备地址", dataIndex: "slaveId", align: "left", width: 250, ellipsis: true },
+    { title: "波特率", dataIndex: "baudRate", align: "left", width: 180 },
+    { title: "数据位", dataIndex: "dataBit", align: "left", width: 180 },
+    { title: "停止位", dataIndex: "stopBit", align: "left", width: 180 },
+    { title: "校验位", dataIndex: "parity", align: "left", width: 180 },
+    { title: "所属微站", dataIndex: "controllerName", align: "left", width: 250, ellipsis: true },
+    { title: "制造商", dataIndex: "manufacturerName", align: "left", width: 250, ellipsis: true },
+    { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
+    { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
   ]
 
   const dataDefault = {
     loading: false,
     operationKey: undefined,
-    pageName: "用户",
+    pageName: "JK01B直流屏",
     searchForm: {},
     tableList: [],
     selectedRowKeys: [],
@@ -135,9 +138,9 @@
     const data = { ...searchForm, page: current, size: pageSize }
 
     try {
-      const res = await userApi.getByPage(data)
+      const res = await screenApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
+        item.manufacturerName = dict_manufacturers.find(x => x.key === item. manufacturer)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
@@ -184,7 +187,7 @@
       dataCenter.value.loading = true
       try {
         const { selectedRowKeys } = dataCenter.value
-        await userApi.deleteManyById(selectedRowKeys)
+        await screenApi.deleteManyById(selectedRowKeys)
       } catch(err) {
         message.error("删除失败: " + err)
       } finally {
@@ -209,7 +212,7 @@
   const handleDeleteItem = async row => {
     dataCenter.value.loading = true
     try {
-      await userApi.deleteById(row.id)
+      await screenApi.deleteById(row.id)
     } catch(err) {
       message.error("删除失败: " + err)
     } finally {
@@ -226,12 +229,15 @@
 
     const dataArray = [{
       id: `${pageName}id`,
-      realname: "真实姓名",
-      telephone: "联系电话",
-      username: "用户名",
-      role: "角色",
-      departmentName: "部门名称",
-      createAt: "创建时间"
+      name: "设备名称",
+      slaveId: "设备地址",
+      baudRate: "波特率",
+      dataBit: "数据位",
+      stopBit: "停止位",
+      parity: "校验位",
+      controllerName: "所属微站",
+      manufacturerName: "制造商",
+      createAt: "创建时间",
     }]
 
     tableList.forEach(item => {

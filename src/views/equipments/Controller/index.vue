@@ -1,11 +1,11 @@
 /*
  * @author: zzp
- * @date: 2023-08-25 15:46:56
+ * @date: 2023-08-27 14:59:52
  * @fileName: index.vue
- * @filePath: src/views/operations/User/index.vue
- * @description: 用户管理 
+ * @filePath: src/views/equipments/Controller/index.vue
+ * @description: 微站控制器
  */
-<template>
+ <template>
   <div class="parcel">
     <a-spin :spinning="dataCenter.loading" >
       <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">
@@ -81,28 +81,32 @@
   import { h, ref, onMounted, createVNode, computed } from "vue"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_departments } from "_utils/dictionary"
+  import { dict_manufacturers, dict_controller_equipment_model } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
-  import userApi from "_api/user"
-  import EditDrawer from "@/views/operations/User/EditDrawer.vue"
+  import controllerApi from "_api/controller"
+  import EditDrawer from "./EditDrawer.vue"
 
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1, fixed: "left" },    
-    { title: "用户名", dataIndex: "username", align: "left", fixed: "left" },    
-    { title: "所属部门", dataIndex: "departmentName", align: "left" },    
-    { title: "联系电话", dataIndex: "telephone", align: "left" },
-    { title: "真实姓名", dataIndex: "realname", align: "left" },
-    { title: "角色", dataIndex: "role", align: "left" },
-    { title: "创建时间", dataIndex: "createAt", align: "left" },
-    { title: "更新时间", dataIndex: "createAt", align: "left" },
+    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true, fixed: "left" },    
+    { title: "设备编号", dataIndex: "code", align: "left", width: 200, ellipsis: true },
+    { title: "设备IP地址", dataIndex: "ip", align: "left", width: 200 },
+    { title: "设备型号", dataIndex: "modelName", align: "left", width: 200 },
+    { title: "经度", dataIndex: "longitude", align: "left", width: 200 },
+    { title: "纬度", dataIndex: "latitude", align: "left", width: 200 },
+    { title: "安装位置", dataIndex: "location", align: "left", width: 200, ellipsis: true },
+    { title: "制造商", dataIndex: "manufacturerName", align: "left", width: 200, ellipsis: true },
+    { title: "安装日期", dataIndex: "installationDate", align: "left", width: 200 },
+    { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
+    { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
   ]
 
   const dataDefault = {
     loading: false,
     operationKey: undefined,
-    pageName: "用户",
+    pageName: "微站控制器",
     searchForm: {},
     tableList: [],
     selectedRowKeys: [],
@@ -135,13 +139,15 @@
     const data = { ...searchForm, page: current, size: pageSize }
 
     try {
-      const res = await userApi.getByPage(data)
+      const res = await controllerApi.getByPage(data)
       dataCenter.value.tableList = res.data.content.map(item => {
-        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
+        item.coordinates = `${item.longitude},${item.latitude}`
+        item.manufacturerName = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
+        item.modelName = dict_controller_equipment_model.find(x => x.key === item.model)?.value
         return item
       })
       dataCenter.value.pagination.total = res.data.totalElements
-      dataCenter.value.pagination.current = res.data.number
+      dataCenter.value.pagination.current = res.data.pageNumber
     } catch(err) {
       message.error("获取列表失败: " + err)
     } finally {
@@ -160,6 +166,7 @@
     _getTableList()
   }
 
+  
   const handleEditItem = row => {
     editDrawerRef.value.handleShow(row)
   }
@@ -184,7 +191,7 @@
       dataCenter.value.loading = true
       try {
         const { selectedRowKeys } = dataCenter.value
-        await userApi.deleteManyById(selectedRowKeys)
+        await controllerApi.deleteManyById(selectedRowKeys)
       } catch(err) {
         message.error("删除失败: " + err)
       } finally {
@@ -209,7 +216,7 @@
   const handleDeleteItem = async row => {
     dataCenter.value.loading = true
     try {
-      await userApi.deleteById(row.id)
+      await controllerApi.deleteById(row.id)
     } catch(err) {
       message.error("删除失败: " + err)
     } finally {
@@ -226,12 +233,18 @@
 
     const dataArray = [{
       id: `${pageName}id`,
-      realname: "真实姓名",
+      name: "设备名称",
+      code: "设备编号",
+      ip: "设备IP",
+      longitude: "经度",
+      latitude: "纬度",
+      model: "设备型号",
+      location: "安装位置",
+      manufacturer: "制造商",
+      installationDate: "安装日期",
+      repairer: "维修人员",
       telephone: "联系电话",
-      username: "用户名",
-      role: "角色",
-      departmentName: "部门名称",
-      createAt: "创建时间"
+      createAt: "创建时间",
     }]
 
     tableList.forEach(item => {

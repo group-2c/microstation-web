@@ -44,7 +44,7 @@
   import { onMounted, ref, nextTick } from "vue"
   import { message } from "ant-design-vue"
   import svgPanZoom from "svg-pan-zoom"
-  import svgManagementApi from "_api/svgManagement"
+  import circuitManageApi from "_api/circuitManage"
 
   const currentItem = ref({})
   const autoExpandParent = ref(true)
@@ -54,7 +54,7 @@
   const _getControllerList = async () => {
     const loading = message.loading("正在加载微站数据...", 0)
     try {
-      const res = await svgManagementApi.getCircuitDiagramByID()
+      const res = await circuitManageApi.getCircuitDiagramByID()
       treeList.value = res.data
       res.data.forEach(item => {
         item.key = Math.random().toString().slice(-6)
@@ -90,7 +90,7 @@
   const _downloadSvg = async fileName => {
     const loading = message.loading("正在加载配电图...", 0)
     try {
-      const res = await svgManagementApi.svgFileDownload(fileName)
+      const res = await circuitManageApi.svgFileDownload(fileName)
       const el = document.querySelector("#svgPanZoom")
       el.innerHTML = res
       const panZoomTiger = svgPanZoom(el.querySelector("svg"))
@@ -107,7 +107,7 @@
   const _getNodeList = async () => {
     const loading = message.loading("正在获取配电图节点数据...", 0)
     try {
-      const res = await svgManagementApi.getNodeList(currentItem.value.id)
+      const res = await circuitManageApi.getNodeList(currentItem.value.id)
       currentItem.value.nodeList = res.data.nodeList || []
     } catch(err) {
       message.error(`获取配电图节点数据失败:${err}`)

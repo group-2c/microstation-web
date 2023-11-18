@@ -9,6 +9,7 @@ import Layout from "@/views/Layout/index.vue"
 import Login from "@/views/Login/index.vue"
 import Dashboard from "@/views/Dashboard/index.vue"
 import operations from "./modules/operations"
+import equipments from "./modules/equipments"
 import dataAnalysis from "./modules/dataAnalysis"
 import others from "./modules/others"
 
@@ -34,6 +35,7 @@ export const routes = [
       ...others,
       dataAnalysis,
       operations,
+      equipments,
     ]
   }
 ]

@@ -16,7 +16,7 @@ class AuthApi  {
    */
   login(values) {
     return new Promise((resolve, reject) => {
-      request.post("/login", values)
+      request.post("/auth/login", values)
         .then(res => {
           resolve(res.data)
         }, err => {
