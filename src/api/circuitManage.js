@@ -44,6 +44,21 @@ class circuitManageApi extends CommonRestfulModel {
   }
 
   /**
+   * 下载文件Svg
+   * @returns 
+   */
+  svgFileDownload(data) {
+    return new Promise((resolve, reject) => {
+      request.post(`${this._sourceURL}/download`, data)
+        .then(res => {
+          resolve(res)
+        }, err => {
+          reject(err)
+        })
+    })
+  }
+
+  /**
    * 下载文件
    * @returns 
    */

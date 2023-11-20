@@ -217,7 +217,7 @@ const handleClickUpload = () => {
 const handleClickDownload = async () => {
   const loading = message.loading("正在下载...", 0)
   try {
-    const res = await circuitManageApi.fileDownload({ fileName: dataCenter.value.record.fileName })
+    const res = await circuitManageApi.svgFileDownload({ fileName: dataCenter.value.record.fileName })
     let url = window.URL.createObjectURL(new Blob([res]))
     let link = document.createElement("a")
     link.style.display = "none"
