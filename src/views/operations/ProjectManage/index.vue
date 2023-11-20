@@ -94,6 +94,7 @@
     { title: "负责人", dataIndex: "leader", align: "left", width: 150 },
     { title: "联系电话", dataIndex: "telephone", align: "left", width: 150 },
     { title: "公司名称", dataIndex: "company", align: "left", width: 200 },
+    { title: "图纸数量", dataIndex: "fileCount", align: "center", width: 100 },
     { title: "创建时间", dataIndex: "createAt", align: "left" },
     { title: "更新时间", dataIndex: "updateAt", align: "left" },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
@@ -136,7 +137,10 @@
 
     try {
       const res = await projectsApi.getByPage(data)
-      dataCenter.value.tableList = res.data.content
+      dataCenter.value.tableList = res.data.content.map(item => {
+        item.fileCount = JSON.parse(item.files || '[]').length
+        return item
+      })
       dataCenter.value.pagination.total = res.data.totalElements
       dataCenter.value.pagination.current = res.data.number
     } catch(err) {

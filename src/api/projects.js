@@ -18,6 +18,8 @@ const toSubmitFields = values => {
     "leader",
     "company",
     "telephone",
+    "files",
+    'description'
   ])
 }
 

@@ -149,7 +149,7 @@ const _uploadStart = async data => {
   const formData = new FormData()
   formData.append("file", data)
   try {
-    const res = await circuitManageApi.svgFileUpload(formData)
+    const res = await circuitManageApi.fileUpload(formData)
     message.success("上传成功!")
     dataCenter.value.record.fileName = res.fileName
   } catch(err) {
@@ -217,7 +217,7 @@ const handleClickUpload = () => {
 const handleClickDownload = async () => {
   const loading = message.loading("正在下载...", 0)
   try {
-    const res = await circuitManageApi.svgFileDownload(dataCenter.value.record.fileName)
+    const res = await circuitManageApi.fileDownload({ fileName: dataCenter.value.record.fileName })
     let url = window.URL.createObjectURL(new Blob([res]))
     let link = document.createElement("a")
     link.style.display = "none"

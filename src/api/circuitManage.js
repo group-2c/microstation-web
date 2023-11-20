@@ -29,10 +29,10 @@ class circuitManageApi extends CommonRestfulModel {
   }
 
   /**
-   * 上传配电图SVG
+   * 上传文件
    * @returns 
    */
-  svgFileUpload(data) {
+  fileUpload(data) {
     return new Promise((resolve, reject) => {
       request.post(`${this._sourceURL}/upload`, data)
         .then(res => {
@@ -44,12 +44,14 @@ class circuitManageApi extends CommonRestfulModel {
   }
 
   /**
-   * 下载配电图SVG
+   * 下载文件
    * @returns 
    */
-  svgFileDownload(fileName) {
+  fileDownload(data) {
     return new Promise((resolve, reject) => {
-      request.get(`${this._sourceURL}/download?fileName=${fileName}`)
+      request.post(`${this._sourceURL}/download`, data, {
+        responseType: "blob"
+      })
         .then(res => {
           resolve(res)
         }, err => {

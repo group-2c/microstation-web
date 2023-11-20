@@ -90,7 +90,7 @@
   const _downloadSvg = async fileName => {
     const loading = message.loading("正在加载配电图...", 0)
     try {
-      const res = await circuitManageApi.svgFileDownload(fileName)
+      const res = await circuitManageApi.fileDownload({ fileName })
       const el = document.querySelector("#svgPanZoom")
       el.innerHTML = res
       const panZoomTiger = svgPanZoom(el.querySelector("svg"))

@@ -39,6 +39,11 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
+          <a-form-item label="项目描述" name="description" :label-col="{ span: 3 }" style="margin-left: -5px;">
+            <a-textarea v-model:value="dataCenter.record.description" placeholder="请输入项目描述" :rows="4" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <div class="nodeConfig contentContainer">
             <div class="conTitle">项目图纸管理</div>
             <div class="controlBtns">
@@ -61,12 +66,17 @@
                   {{ record.createAt }}
                 </template>
               </a-table-column>   
-              <a-table-column title="操作" width="160px" align="center">
+              <a-table-column title="操作" width="220px" align="right">
                 <template #default="{ record }">
+                  <a-button
+                    v-if="record.fileName"
+                    type="link"
+                    @click.stop="handleClickDowload(record.fileName)" 
+                  >下载</a-button>
                   <a-button 
                     type="primary" 
                     size="small" 
-                    @click.stop="handleClickUpload(record.index)" 
+                    @click.stop="handleClickUpload(record)" 
                     style="margin-right: 20px;"
                   >上传文件</a-button>
                   <a-popconfirm
@@ -95,7 +105,7 @@
 import { ref } from "vue"
 import { message } from "ant-design-vue"
 import projectsApi from "_api/projects"
-import drawingApi from "_api/drawing"
+import circuitManageApi from "_api/circuitManage"
 import Lodash from "lodash"
 import dayjs from "dayjs"
 
@@ -128,7 +138,7 @@ const _uploadStart = async (data, callback) => {
   const formData = new FormData()
   formData.append("file", data)
   try {
-    const res = await drawingApi.create(formData)
+    const res = await circuitManageApi.fileUpload(formData)
     message.success("上传成功!")
     callback(res)
   } catch(err) {
@@ -152,24 +162,46 @@ const deleteNodeRow = index => {
   })
 }
 
-const handleClickUpload = index => {
+const handleClickUpload = item => {
   const tempInput = document.createElement("input")
   tempInput.setAttribute("type", "file")
   tempInput.setAttribute("accept", "*")
   tempInput.addEventListener("change", e => {
     const file = e.target.files[0]
     _uploadStart(file, data => {
-      console.log(data)
+      item.fileName = data.fileName
+      item.createAt = dayjs().format("YYYY-MM-DD HH:mm:ss")
     })
   })
   tempInput.click()
+}
+
+const handleClickDowload = async fileName => {
+  const loading = message.loading("正在下载...", 0)
+  try {
+    const res = await circuitManageApi.fileDownload({ fileName })
+    let url = window.URL.createObjectURL(new Blob([res]))
+    let link = document.createElement("a")
+    link.style.display = "none"
+    link.href = url
+    link.setAttribute("download", fileName)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch(err) {
+    console.log(err)
+    message.error(`下载失败:${err}`)
+  } finally {
+    setTimeout(loading) 
+  }  
 }
 
 const handleShow = (item = {}) => {
   dataCenter.value.visible = true
   dataCenter.value.record = Lodash.cloneDeep({
     ...item,
-    files: (item.files || []).map((file, index) => {
+    files: JSON.parse(item.files || '[]').map((file, index) => {
       file.index = index + 1
       return file
     }),
@@ -188,6 +220,10 @@ const handleOk = async () => {
    
     if(files.find(x => !x.name)) {
       return message.warning("请输入文件名！")
+    }
+
+    if(files.find(x => !x.fileName)) {
+      return message.warning("请上传文件！")
     }
 
     const values = { 
