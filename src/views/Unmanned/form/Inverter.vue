@@ -75,7 +75,10 @@ const labelAndFields = [
   { label: "设备地址", field: "device_address" },
   { label: "软件版本信息", field: "software_version_information" },
   { label: "状态信息 1", field: "status_information_1" },
-  { label: "状态信息 2", field: "status_information_2" }
+  { label: "状态信息 2", field: "status_information_2" },
+  
+  { label: "1#单体电池电压", field: "op", unit: "V" },
+  { label: "18#单体电池电压", field: "op", unit: "V" },
 ]
 
 const accessControlOutput = () => {

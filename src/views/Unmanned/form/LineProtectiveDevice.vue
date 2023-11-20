@@ -18,6 +18,9 @@
       </div>
     </div>
     <div class="blockItem">
+      <bit-data-tidy ref="bitRef" :binaryChs="binaryChs" />
+    </div>
+    <div class="blockItem">
       <div class="conTitle">SOE事件</div>
       <div class="contentContainer">
         <a-table 
@@ -33,6 +36,9 @@
 </template>
 
 <script setup>
+import { ref, watch } from "vue"
+import BitDataTidy from "./BitDataTidy.vue"
+
 const props = defineProps({ 
   record: {
     type: Object,
@@ -63,9 +69,6 @@ const labelAndFields = [
   { label: "I2负序电流", field: "i2_negative_sequence_a_current", unit: "V" },
   { label: "SOE总数", field: "soe_total" },
   { label: "SOE指针", field: "soe_pointer" },
-  { label: "状态字1", field: "status_word_one" },
-  { label: "状态字2", field: "status_word_Two" },
-  { label: "状态字3", field: "status_word_Three" },
   { label: "有功电度低", field: "active_energy_low", unit: "kW" },
   { label: "有功电度高", field: "active_energy_high", unit: "kW" },
   { label: "无功电度低", field: "reactive_energy_low" },
@@ -77,4 +80,78 @@ const columns = [
   { title: "事件相关值", dataIndex: "event_value", align: "left", width: 250, ellipsis: true },
   { title: "时 间", dataIndex: "time", align: "left", width: 250, ellipsis: true },
 ]
+
+const bitRef = ref()
+const binaryChs = ref([
+  {
+    sequence: "40020",
+    filed: "status_word_one",
+    values: [
+      "装置告警",
+      "过流I段",
+      "过流II段",
+      "过流III段",
+      "过流加速",
+      "零序过流I段",
+      "零序过流II段",
+      "零序加速",
+      "重合闸",
+      "PT断线",
+      "控回断线",
+      "A项接地",
+      "B项接地",
+      "C项接地",
+      "过负荷",
+      "定值错"
+    ]
+  },
+  {
+    sequence: "40021",
+    filed: "status_word_Two",
+    values: [
+      "装置参数错",
+      "精度系数错",
+      "FLASH错",
+      "低电压",
+      "过电压",
+      "零序过压",
+      "非电量1",
+      "失压",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-",
+      "-"
+    ]
+  },
+  {
+    sequence: "40022",
+    filed: "status_word_Three",
+    values: [
+      "合位(33)",
+      "分位(34)",
+      "弹簧未储能(35)",
+      "开入4(36)",
+      "闭锁重合(37)",
+      "开入6(38)",
+      "远方控制(39)",
+      "手跳(40)",
+      "开入9(41)",
+      "接地刀/开入10(42)",
+      "手车试验位置/开入11/下隔离刀(序号)",
+      "手车工作位置/开入12/上隔离刀(序号)",
+      "-",
+      "-",
+      "-",
+      "-"
+    ]
+  }
+])
+
+watch(() => props.record, () => {
+  bitRef.value.bitDataTidy(props.record)
+})
 </script>

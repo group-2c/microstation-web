@@ -31,6 +31,15 @@ const labelAndFields = [
   { label: "正地电压", field: "positive_ground_voltage", unit: "V" },
   { label: "负地电压", field: "negative_ground_voltage", unit: "V" },
   { label: "环境温度", field: "ambient_temperature", unit: "°C" },
-  { label: "硅链温度", field: "silicon_temperature", unit: "°C" }
+  { label: "硅链温度", field: "silicon_temperature", unit: "°C" },
+
+  { label: "电池组过压", field: "op", dictionary: ["正常", "故障"] },
+  { label: "电池组欠压", field: "op", dictionary: ["正常", "故障"] },
+  { label: "控母过压", field: "op", dictionary: ["正常", "故障"] },
+  { label: "控母欠压", field: "op", dictionary: ["正常", "故障"] },
+  { label: "0#充电模块通信", field: "op", dictionary: ["正常", "故障"] },
+  { label: "1#充电模块通信", field: "op", dictionary: ["正常", "故障"] },
+  { label: "1#单体电池电压", field: "op", unit: "V" },
+  { label: "18#单体电池电压", field: "op", unit: "V" },
 ]
 </script>
