@@ -41,6 +41,18 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
+          <a-form-item label="所属项目" name="projectId">
+            <a-select v-model:value="dataCenter.record.projectId" popupClassName="modalSelect" placeholder="请选择项目">
+              <a-select-option v-for="item in dataCenter.projectList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="隧管站" name="tunnel">
+            <a-input v-model:value="dataCenter.record.tunnel" placeholder="请输入隧管站" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <a-form-item label="制造商" name="manufacturer">
             <a-select v-model:value="dataCenter.record.manufacturer" popupClassName="modalSelect" placeholder="请选择制造商">
               <a-select-option v-for="item in dict_manufacturers" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
@@ -77,6 +89,7 @@ import { ref } from "vue"
 import { message } from "ant-design-vue"
 import { dict_manufacturers, dict_controller_equipment_model } from "_utils/dictionary"
 import controllerApi from "_api/controller"
+import projectsApi from "_api/projects"
 import Lodash from "lodash"
 import dayjs from "dayjs"
 import PickCoordinate from "_components/PickCoordinate/index.vue"
@@ -86,6 +99,8 @@ const formRules = {
   code: [{ required: true, message: "请输入设备编号" }],
   ip: [{ required: true, message: "请输入设备IP地址" }],
   coordinates: [{ required: true, message: "请选择坐标位置" }],
+  projectId: [{ required: true, message: "请选择项目" }],
+  tunnel: [{ required: true, message: "请输入隧管站" }],
   model: [{ required: true, message: "请选择设备型号" }],
   location: [{ required: true, message: "请输入安装位置" }],
   manufacturer: [{ required: true, message: "请选择制造商" }],
@@ -99,12 +114,22 @@ const props = defineProps({
 const dataDefault = {
   visible: false,
   loading: false,
-  record: {}
+  record: {},
+  projectList: []
 }
 
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
 const formRef = ref()
 const pickCoordinateRef = ref()
+
+const _getProjectList = async () => {
+  try {
+    const res = await projectsApi.getAll()
+    dataCenter.value.projectList = res.data
+  } catch(err) {
+    message.error(`获取项目列表失败: ${err}`)
+  }
+}
 
 const handleShow = (item = {}) => {
   dataCenter.value.visible = true
@@ -112,6 +137,7 @@ const handleShow = (item = {}) => {
     ...Lodash.cloneDeep(item),
     installationDate: item.installationDate ? dayjs(item.installationDate) : ""
   }
+  _getProjectList()
 }
 
 const _validateForm = callback => {

@@ -95,7 +95,7 @@
     { title: "真实姓名", dataIndex: "realname", align: "left" },
     { title: "角色", dataIndex: "role", align: "left" },
     { title: "创建时间", dataIndex: "createAt", align: "left" },
-    { title: "更新时间", dataIndex: "createAt", align: "left" },
+    { title: "更新时间", dataIndex: "updateAt", align: "left" },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
   ]
 
