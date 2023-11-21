@@ -84,6 +84,8 @@
         </div>
         <div class="wMarkerInfoWindow"> 
           <div>微站编号：${item.code}</div>
+          <div>微站IP：${item.ip}</div>
+          <div>安装日期：${item.installationDate}</div>
           <div>所属项目：${item.projectName}</div>
           <div>隧 管 站：${item.tunnel}</div>
         </div>
