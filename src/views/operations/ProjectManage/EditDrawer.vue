@@ -66,12 +66,14 @@
                   {{ record.createAt }}
                 </template>
               </a-table-column>   
-              <a-table-column title="操作" width="220px" align="right">
+              <a-table-column title="操作" width="240px" align="center">
                 <template #default="{ record }">
                   <a-button
                     v-if="record.fileName"
-                    type="link"
+                    type="primary" 
+                    size="small" 
                     @click.stop="handleClickDowload(record.fileName)" 
+                    style="margin-right: 20px;"
                   >下载</a-button>
                   <a-button 
                     type="primary" 
