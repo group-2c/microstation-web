@@ -3,7 +3,7 @@
  * @date: 2023-10-27 15:06:11
  * @fileName: Rvb.vue
  * @filePath: src/views/Unmanned/form/Rvb.vue
- * @description: 局方监测装置
+ * @description: 局放监测装置
  */
 <style lang="less" scoped>
   @import url("./index.less");

@@ -40,10 +40,10 @@
             </div>
           </div>
           <div class="controlsBtns">
-            <a-button @click.stop="accessControl(0)">开门</a-button>
-            <a-button @click.stop="accessControl(1)">关门</a-button>
-            <a-button @click.stop="accessControl(2)">常开</a-button>
-            <a-button @click.stop="accessControl(3)">常关</a-button>
+            <a-button @click.stop="openModal(0)">开门</a-button>
+            <a-button @click.stop="openModal(1)">关门</a-button>
+            <a-button @click.stop="openModal(2)">常开</a-button>
+            <a-button @click.stop="openModal(3)">常关</a-button>
           </div>
         </a-row>
       </div>
@@ -77,6 +77,11 @@
         />
       </div>
     </div>
+    <a-modal v-model:open="visible" title="密码验证" ok-text="确认" cancel-text="取消" @ok="modalConfirm" @cancel="closureModal">
+      <div style="margin: 20px 0;">
+        <a-input v-model:value="password" placeholder="请输入密码..." />
+      </div>
+    </a-modal>
   </div>
 
 </template>
@@ -84,6 +89,8 @@
 <script setup>
 import { ref } from "vue"
 import { LayoutFilled } from "@ant-design/icons-vue"
+import { message } from "ant-design-vue"
+import Constant from "_constant"
 
 const props = defineProps({
   deviceItem: {
@@ -100,6 +107,10 @@ const props = defineProps({
   publish: Function
 })
 
+const visible = ref(false)
+const password = ref("")
+const currentType = ref("")
+
 const columns = [  
   { title: "时 间", dataIndex: "time", align: "left", width: 160, ellipsis: true },    
   { title: "类 型", dataIndex: "type_name", align: "left", width: 100, ellipsis: true },
@@ -112,10 +123,32 @@ const columns = [
 
 const doorIndex = ref(0)
 
-const accessControl = type => {
+const modalConfirm = () => {
+  if(!password.value) {
+    return message.warning("请输入密码！")
+  }
+  if(password.value !== Constant.accessControlPassword) {
+    return message.error("密码错误！")
+  }
+  accessControl()
+}
+
+const openModal = type => {
+  currentType.value = type
+  visible.value = true
+}
+
+const closureModal = () => {
+  currentType.value = ""
+  password.value = ""
+  visible.value = false
+}
+
+const accessControl = () => {
   props.publish({
-    cmd: type, 
+    cmd: currentType.value, 
     channel: doorIndex.value
   }, 0)
+  closureModal()
 }
 </script>

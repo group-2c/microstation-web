@@ -3,7 +3,7 @@
  * @date: 2023-10-12 11:03:13
  * @fileName: index.vue
  * @filePath: src/views/equipments/FourInOneDevice/index.vue
- * @description: 局方监测装置
+ * @description: 局放监测装置
  */
 <template>
   <div class="parcel">
@@ -105,7 +105,7 @@
   const dataDefault = {
     loading: false,
     operationKey: undefined,
-    pageName: "局方监测装置",
+    pageName: "局放监测装置",
     searchForm: {},
     tableList: [],
     selectedRowKeys: [],

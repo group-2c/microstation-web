@@ -58,7 +58,6 @@ export const dict_unmanned_equipment = {
   },
   dc_screen: {
     name: "直流屏",
-    drawerWidth: 550,
     subKey: "microstation:$microstation_id:dcsreen:$equipment_id:status"
   },
   diesel_engine: {
@@ -111,7 +110,7 @@ export const dict_unmanned_equipment = {
     subKey: "microstation:$microstation_id:reactivepowercompensator:$equipment_id:status"
   },
   rvb: {
-    name: "局方监测装置",
+    name: "局放监测装置",
     subKey: "microstation:$microstation_id:rvb:$equipment_id:status"
   },
   telemetry_unit: {

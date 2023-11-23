@@ -10,7 +10,7 @@
     <a-row :gutter="30">
       <template v-for="item, index in binaryChs">
         <a-col :span="8">
-          <div class="conTitle">寄存器号{{ item.sequence }}</div>
+          <div class="conTitle" v-if=" item.sequence">寄存器号{{ item.sequence }}</div>
           <a-table 
             row-key="id" 
             :columns="statusColumns" 
@@ -47,6 +47,7 @@ const statusColumns = ref([
 
 const bitDataTidy = record => {
   props.binaryChs.forEach((item, num) => {
+    console.log(record[item.filed])
     if(record[item.filed]) {
       const array = []
       Object.values(record[item.filed].split("")).forEach((value, index) => {

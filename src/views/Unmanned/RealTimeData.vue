@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { ref, shallowRef, defineAsyncComponent } from "vue"
+import { ref, shallowRef, defineAsyncComponent, onMounted } from "vue"
 import { message } from "ant-design-vue"
 import * as mqtt from "mqtt/dist/mqtt"
 import Constant from "_constant"
@@ -132,6 +132,34 @@ const handleCancel = () => {
   visible.value = false
   props.onCancel()
 }
+
+onMounted(() => {
+  visible.value = true
+  currentCompoent.value = defineAsyncComponent(() => import(`./form/TelemetryUnit.vue`))
+  setTimeout(() => {
+    record.value = {
+      input: [0, 1, 1, 0]
+    }
+  }, 500)
+  // setTimeout(() => {
+  //   record.value = {
+  //     switch_input: "0101",
+  //     device_status: "010101010",
+  //     charging_module_status: "01010101001",
+  //     single_battery_voltage: '[122,10,21,10,1,20,1,20,21,0,1,1,1,11,21,20,21,21]'
+  //   }
+  // }, 500)
+
+  // setTimeout(() => {
+  //   record.value = {
+  //     switch_input: "0101",
+  //     device_status: "010101010",
+  //     charging_module_status: "01010101001",
+  //     single_battery_voltage: '[999,10,21,999,1,20,1,999,21,0,1,1,1,999,21,20,21,999]'
+  //   }
+  // }, 2500)
+})
+
 
 defineExpose({ handleShow })
 </script>

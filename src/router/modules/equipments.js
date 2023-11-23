@@ -113,7 +113,7 @@ const route = {
       path: "fourInOneDevice",
       name: "FourInOneDevice",
       component: FourInOneDevice,
-      meta: { title: "局方监测装置" }
+      meta: { title: "局放监测装置" }
     },
     {
       path: "dieselEngine",
