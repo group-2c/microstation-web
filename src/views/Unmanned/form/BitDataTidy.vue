@@ -53,13 +53,13 @@ const bitDataTidy = record => {
   props.binaryChs.forEach((item, num) => {
     if(record[item.filed]) {
       const array = []
-      Object.values(record[item.filed].split("")).forEach((value, index) => {
+      Object.values(`${record[item.filed]}`.split("")).forEach((value, index) => {
         const _isObj = Object.prototype.toString.call(item.values[index]) === '[object Object]'
         array.push({
           bit: `Bit${index}`,
           status: Number(value),
           noColor: _isObj,
-          statusName: _isObj ? item.values[index][value] : item.values[index]
+          statusName: _isObj ? item.values[index]?.[value] : item.values[index]
         })
       })
       binaryData.value[num] = array
