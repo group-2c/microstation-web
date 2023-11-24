@@ -32,8 +32,11 @@
           </div>
         </div>
         <div class="powerDistribution" style="height: calc(100vh - 244px);">
-          <div id="svgPanZoom"></div>
+          <a-spin :spinning="loading">
+            <div id="svgPanZoom"></div>
+          </a-spin>
           <div v-if="!currentItem?.id" class="empty">暂无电路图数据</div>
+          <div v-if="errorMsg" class="empty">加载失败, 图源配置有误。</div>
         </div>
       </div>
     </div>
@@ -50,6 +53,8 @@
   const autoExpandParent = ref(true)
   const expandedKeys = ref([])
   const treeList = ref([])
+  const loading = ref(false)
+  const errorMsg = ref(false)
 
   const _getControllerList = async () => {
     const loading = message.loading("正在加载微站数据...", 0)
@@ -75,20 +80,37 @@
   }
 
   const _svgOperate = () => {
+    const _errorShow = msg => {
+      document.querySelector("#svgPanZoom").innerHTML = ""
+      errorMsg.value = true
+      message.error(msg)
+    }
     nextTick(() => {
       const svgPanZoom = document.querySelector("#svgPanZoom")
       const nodeList = JSON.parse(currentItem.value.nodeList)
-      nodeList.forEach(item => {
+      for(let i = 0; i < nodeList.length; i ++) {
+        const item = nodeList[i]
         const closeEl = svgPanZoom.querySelector(`#${item.dom_node_id}`)
         const openEl = svgPanZoom.querySelector(`#${item.dom_node_id}_1`)
+        if(!closeEl) {
+          _errorShow(`节点配置有误，请检查 #${item.dom_node_id} 节点是否存在！`)
+          break
+        }
+        if(!openEl) {
+          _errorShow(`节点配置有误，请检查 #${item.dom_node_id}_1 节点是否存在！`)
+          break
+        }
         openEl.style.display = item.switch == "0" ? "block" : "none"
         closeEl.style.display = item.switch == "1" ? "block" : "none"
-      })
+      }
     })
   }
 
   const _downloadSvg = async fileName => {
-    const loading = message.loading("正在加载配电图...", 0)
+    const _loading = message.loading("正在加载配电图...", 0)
+    loading.value = true
+    errorMsg.value = false
+    document.querySelector("#svgPanZoom").innerHTML = ""
     try {
       const res = await circuitManageApi.svgFileDownload({ fileName })
       const el = document.querySelector("#svgPanZoom")
@@ -100,7 +122,8 @@
     } catch(err) {
       message.error(`配电图加载失败:${err}`)
     } finally {
-      setTimeout(loading) 
+      loading.value = false
+      setTimeout(_loading)
     }   
   }
 

@@ -15,7 +15,7 @@
         </a-col>
         <a-col :span="12">
           <a-form-item label="所属微站" name="controllerId">
-            <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站" @change="controllerChange">
+            <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站">
               <a-select-option v-for="item in dataCenter.controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
             </a-select>
           </a-form-item>
@@ -173,10 +173,6 @@ const deleteNodeRow = index => {
    dataCenter.value.record.nodeList.forEach((item, index) => {
     item.index = index + 1
   })
-}
-
-const controllerChange = () => {
-  dataCenter.value.record.nodeList = []
 }
 
 const deviceTypeChange = async item => {
