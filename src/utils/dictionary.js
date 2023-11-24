@@ -91,6 +91,7 @@ export const dict_unmanned_equipment = {
   },
   ups: {
     name: "UPS电源",
+    drawerWidth: 1400,
     subKey: "microstation:$microstation_id:ups:$equipment_id:status"
   },
   inverter: {
@@ -136,7 +137,7 @@ export const dict_unmanned_equipment = {
 
 export const mistakesColors = ["有故障", "故障", "失败", "负载", "异常", "停机失败"]
 export const offlineColors = ["常闭", "关", "关机", "关闭"]
-export const warnColors = ["警告", "报警", "停机"]
+export const warnColors = ["警告", "报警", "停机", "超限"]
 
 export const dict_svg_device_types = [
   { key: "electricity_meter", value: "多功能电表" },

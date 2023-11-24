@@ -47,14 +47,23 @@
     <div class="blockItem">
       <div class="conTitle">实时数据</div>
       <div class="retract">
-        <x-descriptions :list="labelAndFields" :record="record" :column="2" :minWidth="100"/>
+        <a-row :gutter="30">
+          <a-col :span="12">
+            <bit-data-tidy ref="bitRef" :binaryChs="binaryChs" :spanNum="24" />
+          </a-col>
+          <a-col :span="12">
+            <x-descriptions :list="labelAndFields" :record="record" :column="1" :minWidth="200" />
+          </a-col>
+        </a-row>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, watch } from "vue"
+import BitDataTidy from "./BitDataTidy.vue"
 
 const props = defineProps({
   record: Object,
@@ -73,13 +82,37 @@ const labelAndFields = [
   { label: "输出电流", field: "output_current", unit: "A" },
   { label: "温度", field: "temperature", unit: "°" },
   { label: "设备地址", field: "device_address" },
-  { label: "软件版本信息", field: "software_version_information" },
-  { label: "状态信息 1", field: "status_information_1" },
-  { label: "状态信息 2", field: "status_information_2" },
-  
-  { label: "1#单体电池电压", field: "op", unit: "V" },
-  { label: "18#单体电池电压", field: "op", unit: "V" },
+  { label: "软件版本信息", field: "software_version_information" }
 ]
+
+const bitRef = ref()
+const binaryChs = ref([
+  {
+    filed: "status_information_1",
+    values: [
+      "输入异常报警信息",
+      "输入过压报警信息",
+      "输入欠压报警信息",
+      "市电异常报警信息",
+      "市电过压报警信息",
+      "市电欠压报警信息",
+      "-",
+      "-",
+      "过温告警信息",
+      "过载告警信息",
+      "逆变异常信息",
+      {"0": "逆变", "1": "市电"},
+      {"0": "开机", "1": "关机"},
+      "输出短路信息",
+      "-",
+      "-"
+    ]
+  }
+])
+
+watch(() => props.record, () => {
+  bitRef.value.bitDataTidy(props.record)
+})
 
 const accessControlOutput = () => {
   props.publish({ cmd: outputType.value, cmd_type: 0 }, 0)

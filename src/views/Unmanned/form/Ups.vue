@@ -11,9 +11,21 @@
 
 <template>
   <div class="blockItem">
-    <div class="conTitle">实时数据</div>
+    <div class="conTitle">状态量</div>
     <div class="retract">
-      <x-descriptions :list="labelAndFields" :record="record" />
+      <x-descriptions :list="labelAndFields1" :record="record" :column="4" />
+    </div>
+  </div>
+  <div class="blockItem">
+    <div class="conTitle">告警量</div>
+    <div class="retract">
+      <x-descriptions :list="labelAndFields2" :record="record" :column="4" />
+    </div>
+  </div>
+  <div class="blockItem">
+    <div class="conTitle">模拟量</div>
+    <div class="retract">
+      <x-descriptions :list="labelAndFields3" :record="record" :column="4" />
     </div>
   </div>
 </template>
@@ -21,7 +33,7 @@
 <script setup>
 const props = defineProps({ record: Object })
 
-const labelAndFields = [
+const labelAndFields1 = [
   { label: "主电路电压", field: "main_circuit_voltage_normal", dictionary: ["正常", "异常"] },
   { label: "旁路电压", field: "bypass_voltage_normal", dictionary: ["正常", "异常"] },
   { label: "整流器", field: "rectifier_operation", dictionary: ["关闭", "正在工作"] },
@@ -33,6 +45,9 @@ const labelAndFields = [
   { label: "声音报警", field: "audible_alarm", dictionary: ["蜂鸣器正常", "蜂鸣器静音"] },
   { label: "电池状态", field: "battery_status", dictionary: ["充电", "放电"] },
   { label: "UPS在线状态", field: "ups_online_status", dictionary: ["主路逆变供电", "电池逆变供电"] },
+]
+
+const labelAndFields2 = [
   { label: "主路输入电压", field: "main_circuit_input_voltage_low", dictionary: ["正常", "交流输入电压低"] },
   { label: "母线过电压", field: "bus_over_voltage", dictionary: ["正常", "母线过压"] },
   { label: "电池低压报警", field: "battery_low_voltage_alarm", dictionary: ["正常", "电池电压低"] },
@@ -43,7 +58,10 @@ const labelAndFields = [
   { label: "风扇状态", field: "fan_failure", dictionary: ["正常", "故障"] },
   { label: "电池更换提示", field: "battery_replacement_prompt", dictionary: ["正常", "电池需更换"] },
   { label: "整流器状态", field: "rectifier_over_temperature", dictionary: ["正常", "整流器过温"] },
-  { label: "逆变器状态", field: "inverter_over_temperature", dictionary: ["正常", "逆变器过温"] },
+  { label: "逆变器状态", field: "inverter_over_temperature", dictionary: ["正常", "逆变器过温"] }
+]
+
+const labelAndFields3 = [
   { label: "输入线电压(AB)", field: "input_line_voltage_ab", unit: "V" },
   { label: "输入线电压(BC)", field: "input_line_voltage_bc", unit: "V" },
   { label: "输入线电压(CA)", field: "input_line_voltage_ca", unit: "V" },

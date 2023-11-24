@@ -9,7 +9,7 @@
   <div class="contentContainer">
     <a-row :gutter="30">
       <template v-for="item, index in binaryChs">
-        <a-col :span="8">
+        <a-col :span="props.spanNum">
           <div class="conTitle" v-if=" item.sequence">寄存器号{{ item.sequence }}</div>
           <a-table 
             row-key="id" 
@@ -19,7 +19,7 @@
           >
             <template #bodyCell="{ column, record }">
               <template v-if="column.dataIndex === 'statusName'">
-                <div :class="['sequenceStatus', `sequence-${record.status}`]">
+                <div :class="['sequenceStatus', !record.noColor ? `sequence-${record.status}` : '']">
                   {{ record.statusName }}
                 </div>
               </template>
@@ -35,6 +35,10 @@
 import { ref, onMounted } from "vue"
 
 const props = defineProps({
+  spanNum: {
+    type: Number,
+    default: 8
+  },
   binaryChs: Array
 })
 
@@ -47,14 +51,15 @@ const statusColumns = ref([
 
 const bitDataTidy = record => {
   props.binaryChs.forEach((item, num) => {
-    console.log(record[item.filed])
     if(record[item.filed]) {
       const array = []
       Object.values(record[item.filed].split("")).forEach((value, index) => {
+        const _isObj = Object.prototype.toString.call(item.values[index]) === '[object Object]'
         array.push({
           bit: `Bit${index}`,
           status: Number(value),
-          statusName: item.values[index]
+          noColor: _isObj,
+          statusName: _isObj ? item.values[index][value] : item.values[index]
         })
       })
       binaryData.value[num] = array

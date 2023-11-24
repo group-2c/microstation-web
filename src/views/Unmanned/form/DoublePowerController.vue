@@ -7,19 +7,76 @@
  */
 <style lang="less" scoped>
   @import url("./index.less");
+  .controlsBtns {
+    margin-top: 2px;
+  }
 </style> 
 
 <template>
-  <div class="blockItem">
-    <div class="conTitle">实时数据</div>
-    <div class="retract">
-      <x-descriptions :list="labelAndFields" :record="record" :minWidth="130" />
+  <div>
+    <div class="blockItem">
+      <div class="conTitle">远程控制</div>
+      <div class="retract">
+        <a-row>
+          <div class="operationItem">
+            <label>设置: </label>
+            <div class="content">
+              <a-select v-model:value="automatic" popupClassName="modalSelect" style="margin-right: 10px;">
+                <a-select-option :value="0">自动</a-select-option>
+                <a-select-option :value="1">手动</a-select-option>
+              </a-select>
+              <a-select v-model:value="surrender" popupClassName="modalSelect">
+                <a-select-option :value="0">自投自复</a-select-option>
+                <a-select-option :value="1">自投不自复</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <div class="controlsBtns">
+            <a-button @click.stop="settingClick">确定</a-button>
+          </div>
+        </a-row>
+        <a-row style="margin-top: 20px;">
+          <div class="operationItem">
+            <label>遥测: </label>
+            <div class="content">
+              <a-select v-model:value="switchType" popupClassName="modalSelect" style="margin-right: 10px;">
+                <a-select-option :value="1">切换为手动</a-select-option>
+                <a-select-option :value="2">切换为自动</a-select-option>
+              </a-select>
+              <a-select v-model:value="startUp" popupClassName="modalSelect">
+                <a-select-option :value="1">OFF启动</a-select-option>
+                <a-select-option :value="2">S1启动</a-select-option>
+                <a-select-option :value="2">S2启动</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <div class="controlsBtns">
+            <a-button @click.stop="telemetryClick">确定</a-button>
+          </div>
+        </a-row>
+      </div>
+    </div>
+    <div class="blockItem">
+      <div class="conTitle">实时数据</div>
+      <div class="retract">
+        <x-descriptions :list="labelAndFields" :record="record" :minWidth="130" />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({ record: Object })
+import { ref } from "vue"
+
+const props = defineProps({ 
+  record: Object,
+  publish: Function
+})
+
+const automatic = ref(0)
+const surrender = ref(0)
+const switchType = ref(1)
+const startUp = ref(1)
 
 const labelAndFields = [
   { label: "S1开关状态", field: "switch_status_1", dictionary: ["分闸", "合闸"] },
@@ -50,4 +107,12 @@ const labelAndFields = [
   { label: "短时间并联条件2", field: "parallel_condition_2" },
   { label: "短时间并联条件3", field: "parallel_condition_3" }
 ]
+
+const settingClick = () => {
+  props.publish({ cmd: switchType.value, cmd_type: 0 }, 0)
+}
+
+const telemetryClick = () => {
+  props.publish({ cmd: switchType.value, cmd_type: 0 }, 0)
+}
 </script>

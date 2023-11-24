@@ -111,6 +111,89 @@ const labelAndFields = [
       "E0H": "未接入",
       "E1H": "已接入",
     }
-  }
+  },
+  {
+    label: "逆变器同步/不同步", field: "inverter_synchronous_or_asynchronous", dictionary: {
+      "00H": "正常",
+      "03H": "不同步",
+    }
+  },
+  {
+    label: "充电器电压", field: "charger_voltage", dictionary: {
+      "00H": "正常",
+      "F0H": "异常",
+    }
+  },
+  {
+    label: "充电器封锁", field: "charger_voltage_charger_blocked", dictionary: {
+      "00H": "正常",
+      "F0H": "故障",
+    }
+  },
+  {
+    label: "逆变输出电压", field: "inverter_output_voltage", dictionary: {
+      "00H": "正常",
+      "F0H": "异常",
+    }
+  },
+  {
+    label: "市电情况(电压或频率)", field: "electricity_situation", dictionary: {
+      "00H": "正常",
+      "E0H": "超限",
+    }
+  },
+  {
+    label: "蓄电池总电压状态", field: "battery_total_voltage_status", dictionary: {
+      "00H": "正常",
+      "01H": "低于下限(关机点)",
+      "02H": "高于上限(电压过高)",
+      "F0H": "电池无",
+      "E1H": "预告警",
+      "E2H": "电池接反"
+    }
+  },
+  { label: "标示电池数量m", field: "indicate_number_of_batteries" },
+  { label: "用户自定义告警数量为56", field: "user_defined_number_of_alarms" },
+  {
+    label: "充电输入频率异常", field: "charging_input_frequency", dictionary: {
+      "00H": "正常",
+      "E0H": "超限",
+    }
+  },
+  {
+    label: "充电器熔丝", field: "charger_fuse_broken", dictionary: {
+      "00H": "正常",
+      "F0H": "断",
+    }
+  },
+  {
+    label: "单机过载超时", field: "single_machine_overload_timeout", dictionary: {
+      "00H": "正常"
+    }
+  },
+  {
+    label: "市电异常关机", field: "abnormal_shutdown_of_mains_power", dictionary: {
+      "00H": "正常",
+      "F0H": "异常",
+    }
+  },
+  {
+    label: "交流输出过压", field: "ac_output_over_voltage", dictionary: {
+      "00H": "正常",
+      "F0H": "故障",
+    }
+  },
+  {
+    label: "逆变器过流", field: "inverter_over_current", dictionary: {
+      "00H": "正常",
+      "F0H": "故障",
+    }
+  },
+  {
+    label: "市电相序反", field: "reverse_phase_sequence_of_mains_supply", dictionary: {
+      "00H": "正常",
+      "F0H": "故障",
+    }
+  },
 ]
 </script>
