@@ -22,6 +22,7 @@
               :auto-expand-parent="autoExpandParent"
               :tree-data="treeList"
               :blockNode="true"
+              v-model:selectedKeys="selectedKeys"
               @expand="onExpand"
               @select="threeSelect"
             >
@@ -55,6 +56,7 @@
   const treeList = ref([])
   const loading = ref(false)
   const errorMsg = ref(false)
+  const selectedKeys = ref([])
 
   const _getControllerList = async () => {
     const loading = message.loading("正在加载微站数据...", 0)
@@ -144,14 +146,17 @@
     autoExpandParent.value = false
   }
 
-  const threeSelect = async selectedKeys => {
-    currentItem.value = treeList.value.reduce((accumulator, dicItem) => 
-      accumulator.concat(dicItem.children), []
-    ).find(childrenItem => childrenItem.key === selectedKeys[0])
-    delete currentItem.value.nodeList
+  const threeSelect = async keys => {
+    if(keys.length !== 0) {
+      currentItem.value = treeList.value.reduce((accumulator, dicItem) => 
+        accumulator.concat(dicItem.children), []
+      ).find(childrenItem => childrenItem.key === keys[0])
+      delete currentItem.value.nodeList
 
-    await _getNodeList()
-    await _downloadSvg(currentItem.value.fileName)
+      await _getNodeList()
+      await _downloadSvg(currentItem.value.fileName)
+    }
+    selectedKeys.value = [currentItem.value.key]
   }
 
   onMounted(() => {
