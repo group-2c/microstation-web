@@ -11,6 +11,7 @@ import Dashboard from "@/views/Dashboard/index.vue"
 import operations from "./modules/operations"
 import equipments from "./modules/equipments"
 import dataAnalysis from "./modules/dataAnalysis"
+import systems from "./modules/systems"
 import others from "./modules/others"
 
 export const routes = [
@@ -36,6 +37,7 @@ export const routes = [
       dataAnalysis,
       operations,
       equipments,
+      systems
     ]
   }
 ]

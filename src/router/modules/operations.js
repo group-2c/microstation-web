@@ -6,6 +6,8 @@
  * @description: 基础数据路由
  */
 import User from "@/views/operations/User/index.vue"
+import Role from "@/views/operations/Role/index.vue"
+import Organization from "@/views/operations/Organization/index.vue"
 import CircuitManage from "@/views/operations/CircuitManage/index.vue"
 import ProjectManage from "@/views/operations/ProjectManage/index.vue"
 
@@ -20,6 +22,18 @@ const route = {
       name: "User",
       component: User,
       meta: { title: "用户管理" }
+    },
+    {
+      path: "role",
+      name: "Role",
+      component: Role,
+      meta: { title: "角色管理" }
+    },
+    {
+      path: "organization",
+      name: "Organization",
+      component: Organization,
+      meta: { title: "组织机构管理" }
     },
     {
       path: "circuitManage",
