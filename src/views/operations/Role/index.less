@@ -1,0 +1,52 @@
+.rightsProfile {
+  padding: 10px 40px;
+  .title {
+    color: #dff6ff;
+    font-weight: 600;
+    font-size: 16px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #3882E1;
+    display: inline-block;
+  }
+}
+
+.treeList {
+  margin-top: 5px;
+  ::v-deep(.ant-tree) {
+    background: none !important;
+    .ant-tree-checkbox-inner {
+      background: none !important;
+      border: solid 1px #bbb;
+    }
+    .ant-tree-title {
+      span {
+        color: #bbb;
+      }
+    }
+    .ant-tree-checkbox-checked {
+      .ant-tree-checkbox-inner {
+        background: none !important;
+        border: solid 1px #1392c4;
+      }
+    }
+    .ant-tree-treenode-checkbox-checked {
+      .ant-tree-title {
+        span {
+          color: #dff6ff !important;
+        }
+      }
+    }
+  }
+}
+
+.noPers {
+  color: red;
+}
+
+::v-deep(.ant-table-tbody) {
+  tr {
+    td {
+      padding: 4px 16px !important; 
+    }
+  }
+}
