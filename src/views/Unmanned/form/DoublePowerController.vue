@@ -8,7 +8,10 @@
 <style lang="less" scoped>
   @import url("./index.less");
   .controlsBtns {
-    margin-top: 2px;
+    margin-top: 3px;
+  }
+  .minSelect {
+    min-width: 120px !important;
   }
 </style> 
 
@@ -21,36 +24,27 @@
           <div class="operationItem">
             <label>设置: </label>
             <div class="content">
-              <a-select v-model:value="automatic" popupClassName="modalSelect" style="margin-right: 10px;">
-                <a-select-option :value="0">自动</a-select-option>
-                <a-select-option :value="1">手动</a-select-option>
-              </a-select>
-              <a-select v-model:value="surrender" popupClassName="modalSelect">
-                <a-select-option :value="0">自投自复</a-select-option>
-                <a-select-option :value="1">自投不自复</a-select-option>
+              <a-select v-model:value="automatic" popupClassName="modalSelect" class="minSelect" style="margin-right: 10px;">
+                <a-select-option :value="1">自动</a-select-option>
+                <a-select-option :value="2">手动</a-select-option>
+                <a-select-option :value="3">切换为手动</a-select-option>
+                <a-select-option :value="4">切换为自动</a-select-option>
               </a-select>
             </div>
           </div>
-          <div class="controlsBtns">
-            <a-button @click.stop="settingClick">确定</a-button>
-          </div>
-        </a-row>
-        <a-row style="margin-top: 20px;">
-          <div class="operationItem">
+          <div class="operationItem" style="margin-left: 20px;">
             <label>遥测: </label>
             <div class="content">
               <a-select v-model:value="switchType" popupClassName="modalSelect" style="margin-right: 10px;">
-                <a-select-option :value="1">切换为手动</a-select-option>
-                <a-select-option :value="2">切换为自动</a-select-option>
-              </a-select>
-              <a-select v-model:value="startUp" popupClassName="modalSelect">
-                <a-select-option :value="1">OFF启动</a-select-option>
-                <a-select-option :value="2">S1启动</a-select-option>
-                <a-select-option :value="2">S2启动</a-select-option>
+                <a-select-option :value="1">自投自复</a-select-option>
+                <a-select-option :value="2">自投不自复</a-select-option>
+                <a-select-option :value="3">OFF启动</a-select-option>
+                <a-select-option :value="4">S1启动</a-select-option>
+                <a-select-option :value="5">S2启动</a-select-option>
               </a-select>
             </div>
           </div>
-          <div class="controlsBtns">
+          <div class="controlsBtns" style="margin-left: 20px;">
             <a-button @click.stop="telemetryClick">确定</a-button>
           </div>
         </a-row>
@@ -73,10 +67,8 @@ const props = defineProps({
   publish: Function
 })
 
-const automatic = ref(0)
-const surrender = ref(0)
+const automatic = ref(1)
 const switchType = ref(1)
-const startUp = ref(1)
 
 const labelAndFields = [
   { label: "S1开关状态", field: "switch_status_1", dictionary: ["分闸", "合闸"] },
@@ -108,11 +100,7 @@ const labelAndFields = [
   { label: "短时间并联条件3", field: "parallel_condition_3" }
 ]
 
-const settingClick = () => {
-  props.publish({ cmd: switchType.value, cmd_type: 0 }, 0)
-}
-
 const telemetryClick = () => {
-  props.publish({ cmd: switchType.value, cmd_type: 0 }, 0)
+  props.publish({ cmd: switchType.value, cmd_type: automatic.value }, 0)
 }
 </script>

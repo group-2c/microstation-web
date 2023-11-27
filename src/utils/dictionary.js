@@ -65,7 +65,10 @@ export const dict_unmanned_equipment = {
   double_power_controller: {
     name: "双电源控制器",
     drawerWidth: 850,
-    subKey: "microstation:$microstation_id:doublepowercontroller:$equipment_id:status"
+    subKey: "microstation:$microstation_id:doublepowercontroller:$equipment_id:status",
+    controlSubKeys: [
+      "microstation:$microstation_id:doublepowercontroller:$equipment_id:remotecontrol"
+    ]
   },
   dry_temperature_controller: {
     name: "干变温控器",
