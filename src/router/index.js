@@ -126,7 +126,14 @@ export const getPermissions = () => {
   const name = router.currentRoute.value.name
   const owns = getStorageItem({ key: AUTH_OWNS, isJson: true })
   const item = owns.find(x => x.name === name)
-  return item.permissions
+  if(!item) {
+    message.error("没有页面访问权限！")
+    router.push({ name: "Dashboard" })
+    setTimeout(() => {
+      location.reload()
+    }, 1000)
+  }
+  return item?.permissions || {}
 }
 
 

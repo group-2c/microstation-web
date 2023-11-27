@@ -84,7 +84,6 @@
   import { getPermissions } from "@/router"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
-  import { dict_departments } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
   import userApi from "_api/user"
@@ -92,13 +91,13 @@
 
   const constColumns = [
     { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1, fixed: "left" },    
-    { title: "用户名", dataIndex: "username", align: "left", fixed: "left" },    
-    { title: "所属部门", dataIndex: "departmentName", align: "left" },    
-    { title: "联系电话", dataIndex: "telephone", align: "left" },
-    { title: "真实姓名", dataIndex: "realname", align: "left" },
-    { title: "角色", dataIndex: "role", align: "left" },
-    { title: "创建时间", dataIndex: "createAt", align: "left" },
-    { title: "更新时间", dataIndex: "updateAt", align: "left" },
+    { title: "用户名", dataIndex: "username", align: "left", fixed: "left", width: 150, ellipsis: true },    
+    { title: "组织机构", dataIndex: "organizationName", width: 150, align: "left", ellipsis: true },    
+    { title: "联系电话", dataIndex: "telephone", align: "left", width: 150, ellipsis: true },
+    { title: "真实姓名", dataIndex: "realname", align: "left", width: 150, ellipsis: true },
+    { title: "角色", dataIndex: "roleName", align: "left", width: 150, ellipsis: true },
+    { title: "创建时间", dataIndex: "createAt", align: "left", width: 200 },
+    { title: "更新时间", dataIndex: "updateAt", align: "left", width: 200 },
     { title: "操 作", dataIndex: "operation", align: "center", width: 200, fixed: "right" }
   ]
 
@@ -141,10 +140,7 @@
 
     try {
       const res = await userApi.getByPage(data)
-      dataCenter.value.tableList = res.data.content.map(item => {
-        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
-        return item
-      })
+      dataCenter.value.tableList = res.data.content
       dataCenter.value.pagination.total = res.data.totalElements
       dataCenter.value.pagination.current = res.data.number
     } catch(err) {
@@ -234,8 +230,8 @@
       realname: "真实姓名",
       telephone: "联系电话",
       username: "用户名",
-      role: "角色",
-      departmentName: "部门名称",
+      roleName: "角色",
+      organizationName: "组织机构",
       createAt: "创建时间"
     }]
 

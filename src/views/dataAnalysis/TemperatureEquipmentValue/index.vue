@@ -10,7 +10,7 @@
     <a-spin :spinning="dataCenter.loading" >
       <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">
         <template #extra> 
-          <a-button :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
+          <a-button v-if="permissions.export" :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
         </template>
       </a-page-header>
       <div class="searchContainer">
@@ -42,6 +42,7 @@
 
 <script setup>
   import { h, ref, onMounted } from "vue"
+  import { getPermissions } from "@/router"
   import { FileExcelOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
   import Lodash from "lodash"
@@ -72,6 +73,7 @@
   }
 
   const dataCenter = ref(Lodash.cloneDeep(dataDefault))
+  const permissions = getPermissions()
 
   const _getTableList = async () => {
     dataCenter.value.loading = true

@@ -18,11 +18,6 @@
             <a-input v-model:value="dataCenter.record.realname" placeholder="请输入真实姓名" />
           </a-form-item>
         </a-col>
-        <a-col :span="24">
-          <a-form-item label="角色" name="role">
-            <a-input v-model:value="dataCenter.record.role" placeholder="请输入角色" />
-          </a-form-item>
-        </a-col>
         <a-col v-if="dataCenter.record.id" :span="24">
           <a-form-item label="修改密码" name="isEditPassword">
             <a-switch v-model:checked="dataCenter.isEditPassword" @change="changeEditPassword"/>
@@ -39,9 +34,16 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="组织机构" name="department">
-            <a-select v-model:value="dataCenter.record.department" popupClassName="modalSelect" placeholder="请选择组织机构">
+          <a-form-item label="组织机构" name="organizationId">
+            <a-select v-model:value="dataCenter.record.organizationId" popupClassName="modalSelect" placeholder="请选择组织机构">
               <a-select-option v-for="item in dataCenter.organizationList" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="角色" name="roleId">
+            <a-select v-model:value="dataCenter.record.roleId" popupClassName="modalSelect" placeholder="请选择角色">
+              <a-select-option v-for="item in dataCenter.roleList" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -62,15 +64,16 @@
 <script setup>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
-import { dict_departments } from "_utils/dictionary"
 import userApi from "_api/user"
 import organizationApi from "_api/organizations"
+import roleApi from "_api/roles"
 import Lodash from "lodash"
 
 const formRules = ref({
   username: [{ required: true, message: "请输入用户名" }],
   realname: [{ required: true, message: "请输入真实姓名" }],
-  department: [{ required: true, message: "请选择部门" }]
+  organizationId: [{ required: true, message: "请选择组织机构" }],
+  roleId: [{ required: true, message: "请选择角色" }],
 })
 
 const passwordRule = {
@@ -95,7 +98,8 @@ const dataDefault = {
   loading: false,
   record: {},
   isEditPassword: false,
-  organizationList: []
+  organizationList: [],
+  roleList: []
 }
 
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
@@ -104,12 +108,18 @@ const formRef = ref()
 const _getOrganizationList = async () => {
   try {
     const res = await organizationApi.getAll()
-    dataCenter.value.organizationList = res.data.map(item => {
-      item.id = `${item.id}`
-      return item
-    })
+    dataCenter.value.organizationList = res.data
   } catch(err) {
     message.error(`获取组织机构列表失败: ${err}`)
+  }
+}
+
+const _getRoleList = async () => {
+  try {
+    const res = await roleApi.getAll()
+    dataCenter.value.roleList = res.data
+  } catch(err) {
+    message.error(`获取角色列表失败: ${err}`)
   }
 }
 
@@ -121,6 +131,7 @@ const handleShow = (item = {}) => {
     password: ""
   }
   _getOrganizationList()
+  _getRoleList()
 }
 
 const _validateForm = callback => {

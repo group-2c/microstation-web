@@ -10,14 +10,15 @@
     <a-spin :spinning="dataCenter.loading" >
       <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">
         <template #extra> 
-          <a-button :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
-          <a-button :icon="h(PlusOutlined)" @click.stop="handleAdd">添加</a-button>
+          <a-button v-if="permissions.export" :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
+          <a-button v-if="permissions.add" :icon="h(PlusOutlined)" @click.stop="handleAdd">添加</a-button>
         </template>
       </a-page-header>
       <div class="searchContainer">
         <a-row justify="space-between">
           <a-col>
             <a-select
+              v-if="permissions.delete"
               v-model:value="dataCenter.operationKey"
               class="batchOperation"
               allowClear
@@ -52,7 +53,7 @@
           <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex === 'operation'">
               <span>
-                <a-button type="link" @click.stop="handleEditItem(record)">
+                <a-button :disabled="!permissions.edit" type="link" @click.stop="handleEditItem(record)">
                   <template #icon><EditOutlined /></template>
                   编辑
                 </a-button>
@@ -61,6 +62,7 @@
                   ok-text="是"
                   cancel-text="否"
                   @confirm="() => handleDeleteItem(record)"
+                  v-if="permissions.delete"
                 >
                   <a-button type="link">
                     <template #icon><DeleteOutlined /></template>
@@ -79,6 +81,7 @@
 
 <script setup>
   import { h, ref, onMounted, createVNode, computed } from "vue"
+  import { getPermissions } from "@/router"
   import { FileExcelOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons-vue"
   import { message, Modal } from "ant-design-vue"
   import Lodash from "lodash"
@@ -112,6 +115,8 @@
   }
 
   const dataCenter = ref(Lodash.cloneDeep(dataDefault))
+  const permissions = getPermissions()
+  
   const rowSelection = ref({
     columnWidth: 80,
     onChange: selectedRowKeys => {

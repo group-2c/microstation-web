@@ -14,7 +14,7 @@
         <a-row :gutter="30"> 
           <a-col :span="24">
             <a-form-item label="角色名称" name="name">
-              <a-input v-model:value="dataCenter.record.name" placeholder="请输入角色名称" :disabled="dataCenter.record.id" />
+              <a-input v-model:value="dataCenter.record.name" placeholder="请输入角色名称" />
             </a-form-item>
           </a-col>
           <a-col :span="24">
@@ -23,6 +23,7 @@
                 <a-tab-pane key="1" tab="菜单配置">
                   <div class="treeList">
                     <a-tree
+                      v-if="dataCenter.visible"
                       :auto-expand-parent="dataCenter.autoExpandParent"
                       :tree-data="dataCenter.treeList"
                       :blockNode="true"
@@ -30,7 +31,6 @@
                       :fieldNames="fieldNames"
                       checkable
                       defaultExpandAll
-                      @expand="onExpand"
                     >
                       <template #title="{ title }">
                         <span>{{ title }}</span>
@@ -120,6 +120,7 @@ const props = defineProps({
   onOk: Function
 })
 
+const whitelist = ["Dashboard"]
 const dataDefault = {
   visible: false,
   loading: false,
@@ -142,6 +143,9 @@ const _getRouters = () => {
 const _setThreeData = (owns = []) => {
   dataCenter.value.treeList = _getRouters().map(item => {
     item.title = item.meta.title
+    if(whitelist.includes(item.name)) {
+      item.disabled = true
+    }
     if(item.children) {
       item.children.forEach(child => {
         child.title = child.meta.title
@@ -160,17 +164,13 @@ const _setThreeData = (owns = []) => {
 }
 
 const handleShow = (item = {}) => {
-  _setThreeData(item.owns)
+  const owns = JSON.parse(item.owns ? item.owns : '[]')
+  _setThreeData(owns)
   dataCenter.value.visible = true
-  dataCenter.value.checkedKeys = (item?.owns || []).map(x => x.name)
+  dataCenter.value.checkedKeys = Lodash.union(owns.map(x => x.name), whitelist)
   dataCenter.value.record = {
     ...Lodash.cloneDeep(item)
   }
-}
-
-const onExpand = keys => {
-  dataCenter.value.expandedKeys = keys
-  dataCenter.value.autoExpandParent = false
 }
 
 const _validateForm = callback => {

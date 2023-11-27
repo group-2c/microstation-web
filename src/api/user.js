@@ -16,7 +16,8 @@ const toSubmitFields = values => {
     "password",
     "telephone",
     "username",
-    "department",
+    "organizationId",
+    "roleId",
   ])
 }
 
