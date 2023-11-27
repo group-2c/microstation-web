@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import { getStorageItem, setStorageItem, removeStorageItem } from "_utils/storage"
-import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
+import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS, AUTH_OWNS } from "@/store/mutation-types"
 import { getThreeNameParents } from "_utils/function"
 import { message } from "ant-design-vue"
 import Lodash from "lodash"
@@ -66,8 +66,6 @@ router.beforeEach((to, _, next) => {
   }
 })
 
-
-
 /**
  * 路由跳转
  * @param {*} param0 
@@ -89,6 +87,10 @@ export const routeJump = ({
   if(!routeList || routeList.length === 0) {
     return message.error("路由错误！")
   } else {
+    const owns = getStorageItem({ key: AUTH_OWNS, isJson: true })
+    if(!owns.find(x => x.name === name)) {
+      return message.error("没有页面访问权限！")
+    }
     if(routeList.length > 1) {
       setStorageItem({ key: MENU_OPEN_KYES, value: [routeList[1].name] })
     }
@@ -115,5 +117,17 @@ export const pageReload = () => {
     setStorageItem({ key: MENU_SELECTED_KEYS, value: [ Lodash.upperFirst(currentURLs[currentURLs.length - 1]) ] })
   } 
 }
+
+/**
+ * 获取页面权限
+ * @returns 
+ */
+export const getPermissions = () => {
+  const name = router.currentRoute.value.name
+  const owns = getStorageItem({ key: AUTH_OWNS, isJson: true })
+  const item = owns.find(x => x.name === name)
+  return item.permissions
+}
+
 
 export default router

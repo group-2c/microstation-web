@@ -15,7 +15,7 @@
     >
       <template v-for="route in menuRoutes" :key="route.name">
         <a-menu-item
-          v-if="!route.children || !route.children.filter(item => !item.meta.hidden).length || isHiddenSub(route)"
+          v-if="isHiddenMenuItem(route)"
           :key="route.name"
           class="menuItem"
         >
@@ -23,17 +23,19 @@
         </a-menu-item>
 
         <a-sub-menu
-          v-else
+          v-if="isHiddenSub(route)"
           :key="route.name"
           class="menuItem"
-          :popupClassName="`subMenu ${route.children.length > 10 ? 'liInlineBlock' : ''}`"
+          :popupClassName="`subMenu ${(route?.children || []).filter(x => owns.find(_a => _a.name === x.name)).length > 10 ? 'liInlineBlock' : ''}`"
         >
           <template #title>
-            <span>{{ route.meta.title }} </span>
+            <span>{{ route.meta.title }}</span>
           </template>
-          <a-menu-item v-for="subRoute in route.children" :key="subRoute.name">
-            {{ subRoute.meta.title }}
-          </a-menu-item>
+          <template v-for="subRoute in route.children" :key="subRoute.name">
+            <a-menu-item v-if="owns.find(x => x.name === subRoute.name)" :key="subRoute.name">
+              {{ subRoute.meta.title }} 
+            </a-menu-item>
+          </template>
         </a-sub-menu>
       </template>
     </a-menu>
@@ -42,12 +44,15 @@
 
 <script setup>
   import { onMounted, computed, ref, inject } from "vue"
+  import { useStore } from "vuex"
   import { getStorageItem, setStorageItem } from "_utils/storage"
   import { MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
   import { onBeforeRouteUpdate } from "vue-router"
   import { routes } from "@/router/index.js"
 
   const routeJump = inject("$routeJump")
+  const store = useStore()
+  const owns = store.state.auth.owns
 
   const selectedKeys = ref([])
   const openKeys = ref([])
@@ -64,7 +69,24 @@
   })
 
   const isHiddenSub = route => {
-    return route.meta?.hiddenSub
+    if(!route.children || route.children.length === 0) {
+      return false
+    }
+
+    if(route.children) {
+      if(route.children.filter(x => owns.find(_a => _a.name === x.name)).length === 0) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  const isHiddenMenuItem = route => {
+    if(!route.children && !owns.find(x => x.name === route.name)) {
+      return false
+    }
+    return !route.children || !route.children.filter(item => !item.meta.hidden).length
   }
 
   const setOpenKeys = e => {
@@ -78,12 +100,8 @@
   }
 
   onMounted(() => {
-    // const storageOpenKeys = getStorageItem({ key: MENU_OPEN_KYES })
     const storageSelectedKeys = getStorageItem({ key: MENU_SELECTED_KEYS })
 
-    // if(storageOpenKeys) {
-    //   openKeys.value = storageOpenKeys
-    // }
     if(storageSelectedKeys) {
       selectedKeys.value = storageSelectedKeys
     }

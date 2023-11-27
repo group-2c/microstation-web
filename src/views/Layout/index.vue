@@ -60,6 +60,7 @@
   const route = useRoute()
   const store = useStore()
   const userInfo = store.state.auth.userInfo
+  const owns = store.state.auth.owns
 
   const topCenterAutoWidth = ref(0)
   const footerWidth = ref(0)
@@ -68,7 +69,15 @@
     const array = route.path.split("/").pop()
     const name = Lodash.upperFirst(array)
     const list = route.matched.find(x => x.name === "App").children
-    return getThreeNameParents(list, name)
+
+    const parents = getThreeNameParents(list, name).map((item, index) => {
+      if(index !== 0) {
+        item.children = item.children.filter(x => owns.find(_a => _a.name === x.name))
+      }
+      return item
+    })
+
+    return parents
   })
 
   const handleLogout = () => {

@@ -84,7 +84,7 @@
   import { dict_departments } from "_utils/dictionary"
   import Lodash from "lodash"
   import ExportXlsx from "_utils/exportXlsx"
-  import userApi from "_api/user"
+  import roleApi from "_api/roles"
   import EditDrawer from "@/views/operations/Role/EditDrawer.vue"
 
   const constColumns = [
@@ -131,11 +131,8 @@
     const data = { ...searchForm, page: current, size: pageSize }
 
     try {
-      const res = await userApi.getByPage(data)
-      dataCenter.value.tableList = res.data.content.map(item => {
-        item.departmentName = dict_departments.find(x => x.key === item.department)?.value
-        return item
-      })
+      const res = await roleApi.getByPage(data)
+      dataCenter.value.tableList = res.data.content
       dataCenter.value.pagination.total = res.data.totalElements
       dataCenter.value.pagination.current = res.data.number
     } catch(err) {
@@ -180,7 +177,7 @@
       dataCenter.value.loading = true
       try {
         const { selectedRowKeys } = dataCenter.value
-        await userApi.deleteManyById(selectedRowKeys)
+        await roleApi.deleteManyById(selectedRowKeys)
       } catch(err) {
         message.error("删除失败: " + err)
       } finally {
@@ -205,7 +202,7 @@
   const handleDeleteItem = async row => {
     dataCenter.value.loading = true
     try {
-      await userApi.deleteById(row.id)
+      await roleApi.deleteById(row.id)
     } catch(err) {
       message.error("删除失败: " + err)
     } finally {
@@ -240,6 +237,9 @@
 
   onMounted(() => {
     _getTableList()
-    editDrawerRef.value.handleShow({})
+    // editDrawerRef.value.handleShow({
+    //   name: "测试",
+    //   owns: [{"name":"Unmanned"},{"name":"TemperatureEquipmentValue","permissions":{"add":true,"edit":true,"delete":true,"export":true}},{"name":"Controller","permissions":{"add":false,"edit":true,"delete":false,"export":true}},{"name":"Organization","permissions":{"add":false,"edit":false,"delete":false,"export":false}}]
+    // })
   })
 </script> 

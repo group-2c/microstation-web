@@ -19,7 +19,7 @@
           </a-col>
           <a-col :span="24">
             <div class="rightsProfile">
-              <a-tabs v-model:activeKey="dataCenter.activeKey" @change="tabChange">
+              <a-tabs v-model:activeKey="dataCenter.activeKey">
                 <a-tab-pane key="1" tab="菜单配置">
                   <div class="treeList">
                     <a-tree
@@ -31,7 +31,6 @@
                       checkable
                       defaultExpandAll
                       @expand="onExpand"
-                      @select="threeSelect"
                     >
                       <template #title="{ title }">
                         <span>{{ title }}</span>
@@ -51,28 +50,32 @@
                     >
                       <template #bodyCell="{ column, record }">
                         <template v-if="column.dataIndex === 'add'">
-                          <CheckOutlined v-if="record.permissions.add" /> 
-                          <CloseOutlined v-else class="noPers" /> 
+                          <div class="permissionChange" @click.stop="permissionChange(record, 'add')">
+                            <MinusOutlined class="disabled" v-if="!record.permissions" />
+                            <CheckOutlined v-else-if="record.permissions.add" /> 
+                            <CloseOutlined v-else class="noPers" /> 
+                          </div>
                         </template>
                         <template v-if="column.dataIndex === 'edit'">
-                          <CheckOutlined v-if="record.permissions.edit" /> 
-                          <CloseOutlined v-else class="noPers" /> 
+                          <div class="permissionChange" @click.stop="permissionChange(record, 'edit')">
+                            <MinusOutlined class="disabled" v-if="!record.permissions" />
+                            <CheckOutlined v-else-if="record.permissions.edit" /> 
+                            <CloseOutlined v-else class="noPers" /> 
+                          </div>
                         </template>
                         <template v-if="column.dataIndex === 'delete'">
-                          <CheckOutlined v-if="record.permissions.delete" /> 
-                          <CloseOutlined v-else class="noPers" /> 
+                          <div class="permissionChange" @click.stop="permissionChange(record, 'delete')">
+                            <MinusOutlined class="disabled" v-if="!record.permissions" />
+                            <CheckOutlined v-else-if="record.permissions.delete" /> 
+                            <CloseOutlined v-else class="noPers" /> 
+                          </div>
                         </template>
                         <template v-if="column.dataIndex === 'export'">
-                          <CheckOutlined v-if="record.permissions.export" /> 
-                          <CloseOutlined v-else class="noPers" /> 
-                        </template>
-                        <template v-if="column.dataIndex === 'operation'">
-                          <span>
-                            <a-button type="link" @click.stop="handleEditItem(record)">
-                              <template #icon><EditOutlined /></template>
-                              编辑
-                            </a-button>
-                          </span>
+                          <div class="permissionChange" @click.stop="permissionChange(record, 'export')">
+                            <MinusOutlined class="disabled" v-if="!record.permissions" />
+                            <CheckOutlined v-else-if="record.permissions.export" /> 
+                            <CloseOutlined v-else class="noPers" /> 
+                          </div>
                         </template>
                       </template>
                     </a-table>
@@ -88,34 +91,15 @@
         <a-button type="primary" @click="handleOk">确定</a-button>
       </template>
     </a-drawer>
-    <a-modal v-model:open="dataCenter.modalVisible" title="设置权限" ok-text="确认" cancel-text="取消" @ok="modalConfirm" @cancel="closureModal">
-      <div style="margin: 20px 0;">
-        <a-form :model="dataCenter.currentItem.permissions" :label-col="{ span: 4 }">
-          <a-row :gutter="0"> 
-            <a-col :span="24">
-              <a-form-item label="新增权限" name="add">
-                <a-switch v-model:checked="dataCenter.currentItem.permissions.add" />
-              </a-form-item>
-            </a-col>
-            <a-col :span="24">
-              <a-form-item label="删除权限" name="delete">
-                <a-switch v-model:checked="dataCenter.currentItem.permissions.delete" />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-form>
-      </div>
-    </a-modal>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue"
 import { message } from "ant-design-vue"
-import { EditOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons-vue"
+import { MinusOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons-vue"
 import { routes } from "@/router/index.js"
-import { dict_departments } from "_utils/dictionary"
-import userApi from "_api/user"
+import roleApi from "_api/roles"
 import Lodash from "lodash"
 
 const formRules = ref({
@@ -128,7 +112,6 @@ const columns = [
   { title: "编 辑", dataIndex: "edit", align: "center" },
   { title: "删 除", dataIndex: "delete", align: "center" },
   { title: "导 出", dataIndex: "export", align: "center" },
-  { title: "操 作", dataIndex: "operation", align: "center", width: 100, fixed: "right" },
 ]
 
 const fieldNames = { children: "children", title: "title", key: "name" }
@@ -141,14 +124,10 @@ const dataDefault = {
   visible: false,
   loading: false,
   record: {},
-  isEditPassword: false,
   treeList: [],
   autoExpandParent: true,
   activeKey: "1",
-  checkedKeys: ["Unmanned", "Organization"],
-  tableList: [],
-  modalVisible: false,
-  currentItem: {}
+  checkedKeys: []
 }
 
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
@@ -160,12 +139,20 @@ const _getRouters = () => {
   return list.filter(route => route.meta && !route.meta.hidden)
 }
 
-const _setThreeData = () => {
+const _setThreeData = (owns = []) => {
   dataCenter.value.treeList = _getRouters().map(item => {
     item.title = item.meta.title
     if(item.children) {
       item.children.forEach(child => {
         child.title = child.meta.title
+        const _x = owns.find(x => x.name === child.name)
+        const _per = _x?.permissions
+        child.permissions = { 
+          add: _per?.add === undefined ? true : _per.add,
+          edit: _per?.edit === undefined ? true : _per.edit,
+          delete: _per?.delete === undefined ? true : _per.delete,
+          export: _per?.export === undefined ? true : _per.export,
+        }
       })
     }
     return item
@@ -173,8 +160,9 @@ const _setThreeData = () => {
 }
 
 const handleShow = (item = {}) => {
-  _setThreeData()
+  _setThreeData(item.owns)
   dataCenter.value.visible = true
+  dataCenter.value.checkedKeys = (item?.owns || []).map(x => x.name)
   dataCenter.value.record = {
     ...Lodash.cloneDeep(item)
   }
@@ -185,95 +173,60 @@ const onExpand = keys => {
   dataCenter.value.autoExpandParent = false
 }
 
-const threeSelect = async keys => {
-
-}
-
-const tabChange = () => {
-  console.log(dataCenter.value.treeList)
-}
-
 const _validateForm = callback => {
   formRef.value.validate().then(() => callback()).catch(() => {})
 }
 
-const handleEditItem = row => {
-  dataCenter.value.currentItem = row
-  dataCenter.value.modalVisible = true
-  console.log(row)
-}
-
-const modalConfirm = () => {
-  const { treeList, currentItem } = dataCenter.value
-  treeList.forEach(item => {
-    if(item.name === currentItem.name) {
-      item.permissions = currentItem.permissions
-    }
-    if(item.children) {
-      item.children.forEach(child => {
-        if(child.name === currentItem.name) {
-          child.permissions = currentItem.permissions
-        }
-      })
-    }
-  })
-  dataCenter.value.treeList = Lodash.cloneDeep(treeList)
-  console.log(treeList)
-}
-
 const tableData = computed(() => {
-  const list = Lodash.cloneDeep(dataCenter.value.treeList).filter(item => {
-    if(item.children) {
-      const _data = item.children.filter(x => dataCenter.value.checkedKeys.includes(x.name))
-      item.children = _data
-      if(_data.length !== 0) {
-        return item
+  const _filterTree = (node) => {
+    if (dataCenter.value.checkedKeys.includes(node.name)) {
+      return node.children ? { ...node, children: node.children.map(_filterTree) } : { ...node }
+    }
+    if(node.children) {
+      const filteredChildren = node.children.map(_filterTree).filter(child => child !== null)
+      if (filteredChildren.length > 0) {
+        return { ...node, children: filteredChildren }
       }
     }
-    if(dataCenter.value.checkedKeys.includes(item.name)) {
-      return item
-    }
-  })
-  
-  return list.map(item => {
-    if(!item.permissions) item.permissions = {}
-    item.permissions = {
-      add: item.permissions.add || true,
-      edit: item.permissions.edit || true,
-      delete: item.permissions.delete || true,
-      export: item.permissions.export || true,
-    }
-    if(item.children) {
-      item.children.forEach(child => {
-        if(!child.permissions) child.permissions = {}
-        child.permissions = {
-          add: child.permissions.add || true,
-          edit: child.permissions.edit || true,
-          delete: child.permissions.delete || true,
-          export: child.permissions.export || true,
-        }
-      })
-    }
-    return item
-  })
+    return null
+  }
+
+  return dataCenter.value.treeList.map(_filterTree).filter(root => root !== null)
 })
 
-const closureModal = () => {
-  dataCenter.value.modalVisible = false
+const permissionChange = (item, type) => {
+  if(item.permissions) {
+    item.permissions[type] = !item.permissions[type]
+  }
 }
 
 const handleOk = async () => {
   _validateForm(async () => {
-    const { record } = dataCenter.value
+    const { checkedKeys, record } = dataCenter.value
+    const array = []
+    tableData.value.forEach(item => {
+      if(checkedKeys.includes(item.name)) {
+        array.push({ name: item.name })
+      }
+      if(item.children) {
+        item.children.forEach(child => {
+          if(checkedKeys.includes(child.name)) {
+            array.push({ name: child.name, permissions: child.permissions })
+          }
+        })
+      }
+    })
+
+    const data = { name: record.name, owns: JSON.stringify(array) }
 
     try {
       dataCenter.value.loading = true
  
       if (!record.id) {
-        await userApi.create(record)
+        await roleApi.create(data)
         message.success("新增成功！")
       } else {
-        await userApi.updateById(record.id, record)
+        await roleApi.updateById(record.id, data)
         message.success("编辑成功！")
       }
       handleCancel()
