@@ -5,7 +5,7 @@
  * @filePath: src/views/equipments/Controller/index.vue
  * @description: 微站控制器
  */
- <template>
+<template>
   <div class="parcel">
     <a-spin :spinning="dataCenter.loading" >
       <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">

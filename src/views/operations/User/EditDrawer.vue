@@ -39,9 +39,9 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="所属部门" name="department">
-            <a-select v-model:value="dataCenter.record.department" popupClassName="modalSelect" placeholder="请选择所属部门">
-              <a-select-option v-for="item in dict_departments" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
+          <a-form-item label="组织机构" name="department">
+            <a-select v-model:value="dataCenter.record.department" popupClassName="modalSelect" placeholder="请选择组织机构">
+              <a-select-option v-for="item in dataCenter.organizationList" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -64,6 +64,7 @@ import { ref } from "vue"
 import { message } from "ant-design-vue"
 import { dict_departments } from "_utils/dictionary"
 import userApi from "_api/user"
+import organizationApi from "_api/organizations"
 import Lodash from "lodash"
 
 const formRules = ref({
@@ -94,11 +95,23 @@ const dataDefault = {
   loading: false,
   record: {},
   isEditPassword: false,
-  departmentList: []
+  organizationList: []
 }
 
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
 const formRef = ref()
+
+const _getOrganizationList = async () => {
+  try {
+    const res = await organizationApi.getAll()
+    dataCenter.value.organizationList = res.data.map(item => {
+      item.id = `${item.id}`
+      return item
+    })
+  } catch(err) {
+    message.error(`获取组织机构列表失败: ${err}`)
+  }
+}
 
 const handleShow = (item = {}) => {
   Lodash.merge(formRules.value, passwordRule)
@@ -107,6 +120,7 @@ const handleShow = (item = {}) => {
     ...Lodash.cloneDeep(item),
     password: ""
   }
+  _getOrganizationList()
 }
 
 const _validateForm = callback => {
