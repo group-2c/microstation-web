@@ -49,6 +49,7 @@
   import { MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
   import { onBeforeRouteUpdate } from "vue-router"
   import { routes } from "@/router/index.js"
+  import Lodash from "lodash"
 
   const routeJump = inject("$routeJump")
   const store = useStore()
@@ -58,7 +59,7 @@
   const openKeys = ref([])
 
   const menuRoutes = computed(() => {
-    const array = routes.find(x => x.name === "App")?.children
+    const array = Lodash.cloneDeep(routes).find(x => x.name === "App")?.children
     const list = array.sort((a, b) => a.meta.index - b.meta.index)
     return list.filter(route => route.meta && !route.meta.hidden)
   })

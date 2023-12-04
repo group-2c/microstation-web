@@ -70,7 +70,7 @@
     const name = Lodash.upperFirst(array)
     const list = route.matched.find(x => x.name === "App").children
 
-    const parents = getThreeNameParents(list, name).map((item, index) => {
+    const parents = getThreeNameParents(Lodash.cloneDeep(list), name).map((item, index) => {
       if(index !== 0) {
         item.children = item.children.filter(x => owns.find(_a => _a.name === x.name))
       }

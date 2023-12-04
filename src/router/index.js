@@ -79,7 +79,7 @@ export const routeJump = ({
   let parentName = ""
   if(query) data.query = query
 
-  const routeList = getThreeNameParents(routes, name)
+  const routeList = getThreeNameParents(Lodash.cloneDeep(routes), name)
 
   removeStorageItem({ key: MENU_OPEN_KYES })
   removeStorageItem({ key: MENU_SELECTED_KEYS })
