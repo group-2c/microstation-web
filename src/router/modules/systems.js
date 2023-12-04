@@ -31,7 +31,7 @@ const route = {
       path: "userMonitoring",
       name: "UserMonitoring",
       component: UserMonitoring,
-      meta: { title: "用户登录信息" }
+      meta: { title: "登录日志" }
     },
   ]
 }

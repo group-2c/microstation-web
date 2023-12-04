@@ -5,124 +5,30 @@
  * @filePath: src/views/dataAnalysis/WateImmersionSensorValue/index.vue
  * @description: 水浸传感器数据
  */
- <template>
-  <div class="parcel">
-    <a-spin :spinning="dataCenter.loading" >
-      <a-page-header class="pageHeader" :title="`${dataCenter.pageName}列表`">
-        <template #extra> 
-          <a-button v-if="permissions.export" :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
-        </template>
-      </a-page-header>
-      <div class="searchContainer">
-        <a-row justify="space-between">
-          <a-col />
-          <a-col>
-            <a-input-search
-              v-model:value="dataCenter.searchForm.name"
-              class="searchBox"
-              placeholder="模糊搜索"
-              enter-button
-              size="large"
-              @search="handleSearch"
-            />
-          </a-col>
-        </a-row> 
-      </div>
-      <div class="contentContainer">
-        <a-table 
-          row-key="id"
-          :columns="constColumns"
-          :data-source="dataCenter.tableList" 
-          :pagination="dataCenter.pagination"
-        />
-      </div>
-    </a-spin>
+<template>
+  <div>
+    <basic-list-layout
+      pageName="水浸传感器数据"
+      :oApi="waterImmersionSensorValueApi"
+      :permissions="permissions"
+      :columns="columns"
+      :notOperation="true"
+      :logOnly="true"
+    />
   </div>
 </template>
 
 <script setup>
-  import { h, ref, onMounted } from "vue"
+  import { ref } from "vue"
   import { getPermissions } from "@/router"
-  import { FileExcelOutlined } from "@ant-design/icons-vue"
-  import { message } from "ant-design-vue"
-  import Lodash from "lodash"
-  import ExportXlsx from "_utils/exportXlsx"
   import waterImmersionSensorValueApi from "_api/waterImmersionSensorValue"
+  
+  const permissions = getPermissions()
 
-  const constColumns = [
-    { title: "序 号", dataIndex: "index", align: "center",  width: 80, customRender: data => data.index + 1 },    
+  const columns = ref([  
     { title: "状态字", dataIndex: "status", align: "left" },    
     { title: "泄漏阻抗", dataIndex: "leakage_impedance", align: "left" },
     { title: "工作电流", dataIndex: "current", align: "left" },
     { title: "泄露电流", dataIndex: "leakage_current", align: "left" },
-    { title: "创建时间", dataIndex: "createAt", align: "left" },
-    { title: "更新时间", dataIndex: "updateAt", align: "left" }
-  ]
-
-  const dataDefault = {
-    loading: false,
-    pageName: "水浸传感器数据",
-    tableList: [],
-    searchForm: {},
-    pagination: {
-      total: 0,
-      current: 1,
-      pageSize: 10,
-      showTotal: total => `共有 ${total} 条数据`
-    }
-  }
-
-  const dataCenter = ref(Lodash.cloneDeep(dataDefault))
-  const permissions = getPermissions()
-
-  const _getTableList = async () => {
-    dataCenter.value.loading = true
-    
-    const { searchForm, pagination } = dataCenter.value
-    const { current, pageSize } = pagination
-    const data = { ...searchForm, page: current, size: pageSize }
-
-    try {
-      const res = await waterImmersionSensorValueApi.getByPage(data)
-      dataCenter.value.tableList = res.data
-      dataCenter.value.pagination.total = res.total
-      dataCenter.value.pagination.current = res.page_num
-    } catch(err) {
-      message.error("获取列表失败: " + err)
-    } finally {
-      dataCenter.value.loading = false
-    }
-  }
-
-  const handleSearch = () => {
-    dataCenter.value.pagination.current = 1
-    _getTableList()
-  }
-
-  const exportExcel = () => {
-    const { tableList, pageName } = dataCenter.value
-    if(tableList.length === 0) {
-      return message.error("列表为空！")
-    }
-
-    const dataArray = [{
-      id: `${pageName}id`,
-      status: "状态字",
-      leakage_impedance: "泄漏阻抗",
-      current: "工作电流",
-      leakage_current: "泄露电流",
-      createAt: "创建时间",
-    }]
-
-    tableList.forEach(item => {
-      const data = {}
-      Object.keys(dataArray[0]).forEach(key => data[key] = item[key])
-      dataArray.push(data)
-    })
-    ExportXlsx.downloadExcel(dataArray, `${pageName}信息表_${new Date().toLocaleString()}`)
-  }
-
-  onMounted(() => {
-    _getTableList()
-  })
+  ])
 </script> 

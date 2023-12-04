@@ -6,61 +6,61 @@
     :closable="false"
     class="editDrawer"
   > 
-    <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 5 }">
+    <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 5 }">
       <a-row :gutter="30"> 
         <a-col :span="24">
-          <a-form-item label="设备名称" name="name">
+          <a-form-item label="设备名称" name="name" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入设备名称" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="设备编号" name="code">
+          <a-form-item label="设备编号" name="code" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.code" placeholder="请输入设备编号" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="设备IP地址" name="ip">
+          <a-form-item label="设备IP地址" name="ip" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.ip" placeholder="请输入设备IP地址" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="设备型号" name="model">
+          <a-form-item label="设备型号" name="model" :rules="[{ required: true }]">
             <a-select v-model:value="dataCenter.record.model" popupClassName="modalSelect" placeholder="请选择设备型号">
               <a-select-option v-for="item in dict_controller_equipment_model" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="坐标位置" name="coordinates">
+          <a-form-item label="坐标位置" name="coordinates" :rules="[{ required: true }]">
             <a-input class="coordinates" v-model:value="dataCenter.record.coordinates" placeholder="点击选择" readonly @click="selectionCoordinate"/>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="安装位置" name="location">
+          <a-form-item label="安装位置" name="location" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.location" placeholder="请输入安装位置" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="所属项目" name="projectId">
+          <a-form-item label="所属项目" name="projectId" :rules="[{ required: true }]">
             <a-select v-model:value="dataCenter.record.projectId" popupClassName="modalSelect" placeholder="请选择项目">
               <a-select-option v-for="item in dataCenter.projectList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="隧管站" name="tunnel">
+          <a-form-item label="隧管站" name="tunnel" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.tunnel" placeholder="请输入隧管站" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="制造商" name="manufacturer">
+          <a-form-item label="制造商" name="manufacturer" :rules="[{ required: true }]">
             <a-select v-model:value="dataCenter.record.manufacturer" popupClassName="modalSelect" placeholder="请选择制造商">
               <a-select-option v-for="item in dict_manufacturers" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="安装日期" name="installationDate">
+          <a-form-item label="安装日期" name="installationDate" :rules="[{ required: true }]">
             <a-date-picker v-model:value="dataCenter.record.installationDate" placeholder="请选择安装日期" />
           </a-form-item>
         </a-col>
@@ -93,19 +93,6 @@ import projectsApi from "_api/projects"
 import Lodash from "lodash"
 import dayjs from "dayjs"
 import PickCoordinate from "_components/PickCoordinate/index.vue"
-
-const formRules = {
-  name: [{ required: true, message: "请输入设备名称" }],
-  code: [{ required: true, message: "请输入设备编号" }],
-  ip: [{ required: true, message: "请输入设备IP地址" }],
-  coordinates: [{ required: true, message: "请选择坐标位置" }],
-  projectId: [{ required: true, message: "请选择项目" }],
-  tunnel: [{ required: true, message: "请输入隧管站" }],
-  model: [{ required: true, message: "请选择设备型号" }],
-  location: [{ required: true, message: "请输入安装位置" }],
-  manufacturer: [{ required: true, message: "请选择制造商" }],
-  installationDate: [{ required: true, message: "请选择安装日期" }],
-}
 
 const props = defineProps({
   onOk: Function

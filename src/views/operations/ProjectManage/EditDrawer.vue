@@ -6,25 +6,25 @@
     :closable="false"
     class="editDrawer"
   > 
-    <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 6 }">
+    <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 6 }">
       <a-row :gutter="30"> 
         <a-col :span="24">
-          <a-form-item label="项目名称" name="name" :label-col="{ span: 3 }" style="margin-left: -5px;">
+          <a-form-item label="项目名称" name="name" :rules="[{ required: true }]" :label-col="{ span: 3 }" style="margin-left: -5px;">
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入项目名称" />
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="开始日期" name="startDate">
+          <a-form-item label="开始日期" name="startDate" :rules="[{ required: true }]">
             <a-date-picker v-model:value="dataCenter.record.startDate" placeholder="请选择开始日期" />
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="结束日期" name="endDate">
+          <a-form-item label="结束日期" name="endDate" :rules="[{ required: true }]">
             <a-date-picker v-model:value="dataCenter.record.endDate" placeholder="请选择结束日期" />
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="负责人" name="leader">
+          <a-form-item label="负责人" name="leader" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.leader" placeholder="请输入负责人姓名" />
           </a-form-item>
         </a-col>
@@ -34,7 +34,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="公司名称" name="company">
+          <a-form-item label="公司名称" name="company" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.company" placeholder="请输入公司名称" />
           </a-form-item>
         </a-col>
@@ -111,15 +111,6 @@ import projectsApi from "_api/projects"
 import fileApi from "_api/files"
 import Lodash from "lodash"
 import dayjs from "dayjs"
-
-const formRules = {
-  name: [{ required: true, message: "请输入设备名称" }],
-  startDate: [{ required: true, message: "请选择项目开始日期" }],
-  endDate: [{ required: true, message: "请选择项目结束日期" }],
-  leader: [{ required: true, message: "请输入负责人名称" }],
-  telephone: [{ required: true, message: "请输入联系电话" }],
-  company: [{ required: true, message: "请输入公司名称" }],
-}
 
 const props = defineProps({
   onOk: Function

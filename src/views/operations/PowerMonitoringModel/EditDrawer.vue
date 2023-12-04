@@ -6,22 +6,22 @@
     :closable="false"
     class="editDrawer"
   > 
-    <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 5 }">
+    <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 5 }">
       <a-row :gutter="30"> 
         <a-col :span="24">
-          <a-form-item label="模型名称" name="name">
+          <a-form-item label="模型名称" name="name" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入模型名称" />
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="所属微站" name="controllerId">
+          <a-form-item label="所属微站" name="controllerId" :rules="[{ required: true }]">
             <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站">
               <a-select-option v-for="item in dataCenter.controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="模型上传" name="fileName">
+          <a-form-item label="模型上传" name="fileName" :rules="[{ required: true, message: '请上传模型文件' }]">
             <div class="fileArea">
               <a-input v-show="false" v-model:value="dataCenter.record.fileName" />
               <a-button type="primary" size="small" @click.stop="handleClickUpload">点击上传</a-button>
@@ -49,12 +49,6 @@ import controllerApi from "_api/controller"
 import powerMonitoringApi from "_api/powerMonitorings"
 import fileApi from "_api/files"
 import Lodash from "lodash"
-
-const formRules = {
-  name: [{ required: true, message: "请输入模型名称" }],
-  controllerId: [{ required: true, message: "请选择所属微站" }],
-  fileName: [{ required: true, message: "请上传模型文件" }],
-}
 
 const props = defineProps({
   onOk: Function

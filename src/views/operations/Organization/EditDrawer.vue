@@ -6,10 +6,10 @@
     :closable="false"
     class="editDrawer"
   > 
-    <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 4 }">
+    <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 4 }">
       <a-row :gutter="30"> 
         <a-col :span="24">
-          <a-form-item label="名称" name="name">
+          <a-form-item label="名称" name="name" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入组织机构名称" />
           </a-form-item>
         </a-col>
@@ -27,10 +27,6 @@ import { ref } from "vue"
 import { message } from "ant-design-vue"
 import organizationApi from "_api/organizations"
 import Lodash from "lodash"
-
-const formRules = {
-  name: [{ required: true, message: "请输入组织机构名称" }]
-}
 
 const props = defineProps({
   onOk: Function
