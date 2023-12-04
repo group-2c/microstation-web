@@ -13,7 +13,7 @@ const route = {
   path: "system",
   name: "System",
   redirect: "/app/operations/operationLog",
-  meta: { title: "系统运行", index: 8 },
+  meta: { title: "系统运行", index: 9 },
   children: [
     {
       path: "operationLog",

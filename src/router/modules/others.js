@@ -7,7 +7,6 @@
  */
 import RealTimeVideo from "@/views/RealTimeVideo/index.vue"
 import Unmanned from "@/views/Unmanned/index.vue"
-import DistributionMonitoring from "@/views/DistributionMonitoring/index.vue"
 import AlarmManagement from "@/views/AlarmManagement/index.vue"
 
 const route = [
@@ -18,16 +17,10 @@ const route = [
     meta: { title: "无人微站", index: 1, disableBreadcrumb: true },
   },
   { 
-    path: "distributionMonitoring", 
-    name: "DistributionMonitoring",
-    component: DistributionMonitoring,
-    meta: { title: "配电监控", index: 2 },
-  },
-  { 
     path: "realTimeVideo", 
     name: "RealTimeVideo",
     component: RealTimeVideo,
-    meta: { title: "实时视频", index: 3 },
+    meta: { title: "实时视频", index: 4 },
   },
   { 
     path: "alarmManagement", 

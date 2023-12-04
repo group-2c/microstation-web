@@ -10,10 +10,10 @@
       :closable="false"
       class="editDrawer"
     > 
-      <a-form ref="formRef" :model="dataCenter.record" :rules="formRules" :label-col="{ span: 3 }">
+      <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 3 }">
         <a-row :gutter="30"> 
           <a-col :span="24">
-            <a-form-item label="角色名称" name="name">
+            <a-form-item label="角色名称" name="name" :rules="[{ required: true }]">
               <a-input v-model:value="dataCenter.record.name" placeholder="请输入角色名称" />
             </a-form-item>
           </a-col>
@@ -102,10 +102,6 @@ import { routes } from "@/router/index.js"
 import roleApi from "_api/roles"
 import Lodash from "lodash"
 
-const formRules = ref({
-  name: [{ required: true, message: "请输入角色名称" }]
-})
-
 const columns = [
   { title: "菜单名称", dataIndex: "title", align: "left" },    
   { title: "新 增", dataIndex: "add", align: "center" },
@@ -135,7 +131,7 @@ const dataCenter = ref(Lodash.cloneDeep(dataDefault))
 const formRef = ref()
 
 const _getRouters = () => {
-  const array = routes.find(x => x.name === "App")?.children
+  const array = Lodash.cloneDeep(routes).find(x => x.name === "App")?.children
   const list = array.sort((a, b) => a.meta.index - b.meta.index)
   return list.filter(route => route.meta && !route.meta.hidden)
 }
@@ -157,6 +153,12 @@ const _setThreeData = (owns = []) => {
           delete: _per?.delete === undefined ? true : _per.delete,
           export: _per?.export === undefined ? true : _per.export,
         }
+        if(!_x) {
+          const _index = dataCenter.value.checkedKeys.findIndex(x => x === item.name)
+          if(_index !== -1) {
+            dataCenter.value.checkedKeys.splice(_index, 1)
+          }
+        }
       })
     }
     return item
@@ -165,9 +167,9 @@ const _setThreeData = (owns = []) => {
 
 const handleShow = (item = {}) => {
   const owns = JSON.parse(item.owns ? item.owns : '[]')
-  _setThreeData(owns)
   dataCenter.value.visible = true
   dataCenter.value.checkedKeys = Lodash.union(owns.map(x => x.name), whitelist)
+  _setThreeData(owns)
   dataCenter.value.record = {
     ...Lodash.cloneDeep(item)
   }

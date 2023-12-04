@@ -108,8 +108,10 @@
 import { ref } from "vue"
 import { message } from "ant-design-vue"
 import { dict_svg_device_types } from "_utils/dictionary"
+import { fileBlobSave } from "_utils/function"
 import controllerApi from "_api/controller"
 import circuitManageApi from "_api/circuitManage"
+import fileApi from "_api/files"
 import Lodash from "lodash"
 
 const formRules = {
@@ -149,7 +151,7 @@ const _uploadStart = async data => {
   const formData = new FormData()
   formData.append("file", data)
   try {
-    const res = await circuitManageApi.fileUpload(formData)
+    const res = await fileApi.fileUpload(formData)
     message.success("上传成功!")
     dataCenter.value.record.fileName = res.fileName
   } catch(err) {
@@ -212,17 +214,10 @@ const handleClickUpload = () => {
 
 const handleClickDownload = async () => {
   const loading = message.loading("正在下载...", 0)
+  const { fileName } = dataCenter.value.record
   try {
-    const res = await circuitManageApi.svgFileDownload({ fileName: dataCenter.value.record.fileName })
-    let url = window.URL.createObjectURL(new Blob([res]))
-    let link = document.createElement("a")
-    link.style.display = "none"
-    link.href = url
-    link.setAttribute("download", dataCenter.value.record.fileName)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
+    const res = await fileApi.fileDownload({ fileName })
+    fileBlobSave(res, fileName)
   } catch(err) {
     console.log(err)
     message.error(`下载失败:${err}`)

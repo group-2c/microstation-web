@@ -10,12 +10,13 @@ import Role from "@/views/operations/Role/index.vue"
 import Organization from "@/views/operations/Organization/index.vue"
 import CircuitManage from "@/views/operations/CircuitManage/index.vue"
 import ProjectManage from "@/views/operations/ProjectManage/index.vue"
+import PowerMonitoringModel from "@/views/operations/PowerMonitoringModel/index.vue"
 
 const route = {
   path: "operations",
   name: "Operations",
   redirect: "/app/operations/user",
-  meta: { title: "基础数据", index: 7 },
+  meta: { title: "基础数据", index: 8 },
   children: [
     {
       path: "user",
@@ -46,6 +47,12 @@ const route = {
       name: "ProjectManage",
       component: ProjectManage,
       meta: { title: "项目管理" }
+    },
+    {
+      path: "powerMonitoringModel",
+      name: "PowerMonitoringModel",
+      component: PowerMonitoringModel,
+      meta: { title: "电力监控模型" }
     }
   ]
 }

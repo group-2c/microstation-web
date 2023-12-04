@@ -20,73 +20,10 @@ const toSubmitFields = values => {
 }
 
 class circuitManageApi extends CommonRestfulModel {
-
   constructor() {
     super({
       sourceURL: "/circuitDiagram",
       toSubmitFields
-    })
-  }
-
-  /**
-   * 上传文件
-   * @returns 
-   */
-  fileUpload(data) {
-    return new Promise((resolve, reject) => {
-      request.post(`${this._sourceURL}/upload`, data)
-        .then(res => {
-          resolve(res.data)
-        }, err => {
-          reject(err)
-        })
-    })
-  }
-
-  /**
-   * 下载文件Svg
-   * @returns 
-   */
-  svgFileDownload(data) {
-    return new Promise((resolve, reject) => {
-      request.post(`${this._sourceURL}/download`, data)
-        .then(res => {
-          resolve(res)
-        }, err => {
-          reject(err)
-        })
-    })
-  }
-
-  /**
-   * 下载文件
-   * @returns 
-   */
-  fileDownload(data) {
-    return new Promise((resolve, reject) => {
-      request.post(`${this._sourceURL}/download`, data, {
-        responseType: "blob"
-      })
-        .then(res => {
-          resolve(res)
-        }, err => {
-          reject(err)
-        })
-    })
-  }
-
-  /**
-   * 预览配电图SVG
-   * @returns 
-   */
-  svgFilePreview(data) {
-    return new Promise((resolve, reject) => {
-      request.post(`${this._sourceURL}/preview`, data)
-        .then(res => {
-          resolve(res)
-        }, err => {
-          reject(err)
-        })
     })
   }
 

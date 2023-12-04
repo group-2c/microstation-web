@@ -4,7 +4,6 @@ import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS, AUTH_OWNS } from "@/sto
 import { getThreeNameParents } from "_utils/function"
 import { message } from "ant-design-vue"
 import Lodash from "lodash"
-
 import Layout from "@/views/Layout/index.vue"
 import Login from "@/views/Login/index.vue"
 import Dashboard from "@/views/Dashboard/index.vue"
@@ -12,6 +11,7 @@ import operations from "./modules/operations"
 import equipments from "./modules/equipments"
 import dataAnalysis from "./modules/dataAnalysis"
 import systems from "./modules/systems"
+import siteMonitoring from "./modules/siteMonitoring"
 import others from "./modules/others"
 
 export const routes = [
@@ -37,6 +37,7 @@ export const routes = [
       dataAnalysis,
       operations,
       equipments,
+      siteMonitoring,
       systems
     ]
   }

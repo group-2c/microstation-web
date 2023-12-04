@@ -27,6 +27,24 @@ const getThreeNameParents = (list, name) => {
   }        
 }
 
+/**
+ * 文件流保存
+ * @param {*} blob 
+ * @param {*} fileName 
+ */
+const fileBlobSave = (blob, fileName) => {
+  let url = window.URL.createObjectURL(new Blob([blob]))
+  let link = document.createElement("a")
+  link.style.display = "none"
+  link.href = url
+  link.setAttribute("download", fileName)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  window.URL.revokeObjectURL(url)
+}
+
 export {
-  getThreeNameParents
+  getThreeNameParents,
+  fileBlobSave
 }

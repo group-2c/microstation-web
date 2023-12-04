@@ -29,7 +29,7 @@ const route = {
   path: "equipments",
   name: "Equipments",
   redirect: "/app/equipments/controller",
-  meta: { title: "设备管理", index: 6 },
+  meta: { title: "设备管理", index: 7 },
   children: [
     {
       path: "controller",

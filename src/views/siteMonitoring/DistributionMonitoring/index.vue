@@ -2,7 +2,7 @@
  * @author: zzp
  * @date: 2023-09-05 10:47:16
  * @fileName: index.vue
- * @filePath: src/views/DistributionMonitoring/index.vue
+ * @filePath: src/views/siteMonitoring/DistributionMonitoring/index.vue
  * @description: 配电监控
  */
 <style lang="less" scoped>
@@ -49,6 +49,7 @@
   import { message } from "ant-design-vue"
   import svgPanZoom from "svg-pan-zoom"
   import circuitManageApi from "_api/circuitManage"
+  import fileApi from "_api/files"
 
   const currentItem = ref({})
   const autoExpandParent = ref(true)
@@ -114,7 +115,7 @@
     errorMsg.value = false
     document.querySelector("#svgPanZoom").innerHTML = ""
     try {
-      const res = await circuitManageApi.svgFileDownload({ fileName })
+      const res = await fileApi.fileDownload({ fileName })
       const el = document.querySelector("#svgPanZoom")
       el.innerHTML = res
       const panZoomTiger = svgPanZoom(el.querySelector("svg"))

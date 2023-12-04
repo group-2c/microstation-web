@@ -106,8 +106,9 @@
 <script setup>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
+import { fileBlobSave } from "_utils/function"
 import projectsApi from "_api/projects"
-import circuitManageApi from "_api/circuitManage"
+import fileApi from "_api/files"
 import Lodash from "lodash"
 import dayjs from "dayjs"
 
@@ -140,7 +141,7 @@ const _uploadStart = async (data, callback) => {
   const formData = new FormData()
   formData.append("file", data)
   try {
-    const res = await circuitManageApi.fileUpload(formData)
+    const res = await fileApi.fileUpload(formData)
     message.success("上传成功!")
     callback(res)
   } catch(err) {
@@ -181,16 +182,8 @@ const handleClickUpload = item => {
 const handleClickDowload = async fileName => {
   const loading = message.loading("正在下载...", 0)
   try {
-    const res = await circuitManageApi.fileDownload({ fileName })
-    let url = window.URL.createObjectURL(new Blob([res]))
-    let link = document.createElement("a")
-    link.style.display = "none"
-    link.href = url
-    link.setAttribute("download", fileName)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(url)
+    const res = await fileApi.fileDownload({ fileName }, { responseType: "blob" })
+    fileBlobSave(res, fileName)
   } catch(err) {
     console.log(err)
     message.error(`下载失败:${err}`)
