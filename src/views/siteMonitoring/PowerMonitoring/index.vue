@@ -41,6 +41,7 @@
 import { onMounted, ref } from "vue"
 import { message } from "ant-design-vue"
 import fileApi from "_api/files"
+import powerMonitoringApi from "_api/powerMonitorings"
 import PowerModel from "./model"
 
 const loading = ref(false)
@@ -51,34 +52,14 @@ const modelRef = ref()
 
 const _getModelList = async () => {
   const loading = message.loading("正在加载模型数据...", 0)
-  try {
-    modelList.value = [
-      {
-        id: 1,
-        name: "模型101",
-        fileName: "NoLod_0_1701675987233.glb"
-      },
-      {
-        id: 2,
-        name: "模型102",
-        fileName: "NoLod_1_1701676020419.glb"
-      },
-      {
-        id: 3,
-        name: "模型103",
-        fileName: "NoLod_0_1701675987233.glb"
-      },
-      {
-        id: 4,
-        name: "模型104",
-        fileName: "NoLod_1_1701676020419.glb"
-      }
-    ]
-  } catch (err) {
-    message.error(`模型数据加载失败:${err}`)
-  } finally {
-    setTimeout(loading)
-  }
+    try {
+      const res = await powerMonitoringApi.getAll()
+      modelList.value = res.data
+    } catch(err) {
+      message.error(`模型数据加载失败:${err}`)
+    } finally {
+      setTimeout(loading) 
+    }
 }
 
 const _initModelView = url => {
