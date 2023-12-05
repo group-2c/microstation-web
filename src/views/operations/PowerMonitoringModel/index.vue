@@ -3,13 +3,13 @@
  * @date: 2023-12-04 13:43:45
  * @fileName: index.vue
  * @filePath: src/views/operations/PowerMonitoringModel/index.vue
- * @description: 电力监控模型
+ * @description: 变电微站模型
  */
 <template>
   <div>
     <basic-list-layout
       ref="layoutRef"
-      pageName="电力监控模型"
+      pageName="变电微站模型"
       :oApi="powerMonitoringApi"
       :permissions="permissions"
       :columns="columns"

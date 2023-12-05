@@ -13,7 +13,8 @@ const toSubmitFields = values => {
     "id",
     "name",
     "controllerId",
-    "fileName"
+    "fileName",
+    "nodeList"
   ])
 }
 

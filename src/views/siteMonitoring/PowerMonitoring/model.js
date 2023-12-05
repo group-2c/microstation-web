@@ -57,7 +57,8 @@ class PowerModel {
     }
 
     const loader = new GLTFLoader(manager)
-    loader.load(url, gltf => {
+    loader.load("/NoLod_0.glb", gltf => {
+      console.log(gltf)
       this.model = gltf.scene
       this.model.position.set(1, 1, 0)
       this.scene.add(this.model)

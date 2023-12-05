@@ -1,26 +1,26 @@
 <template>
   <a-drawer
     :title="dataCenter.record.id ? '编辑' : '新增'"
-    :width="600"
+    :width="1000"
     :open="dataCenter.visible"
     :closable="false"
     class="editDrawer"
   > 
-    <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 5 }">
+    <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 6 }">
       <a-row :gutter="30"> 
-        <a-col :span="24">
+        <a-col :span="12">
           <a-form-item label="模型名称" name="name" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入模型名称" />
           </a-form-item>
         </a-col>
-        <a-col :span="24">
+        <a-col :span="12">
           <a-form-item label="所属微站" name="controllerId" :rules="[{ required: true }]">
             <a-select v-model:value="dataCenter.record.controllerId" popupClassName="modalSelect" placeholder="请选择微站">
               <a-select-option v-for="item in dataCenter.controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="24">
+        <a-col :span="12">
           <a-form-item label="模型上传" name="fileName" :rules="[{ required: true, message: '请上传模型文件' }]">
             <div class="fileArea">
               <a-input v-show="false" v-model:value="dataCenter.record.fileName" />
@@ -31,6 +31,58 @@
               </div>
             </div>
           </a-form-item>
+        </a-col>
+        <a-col v-if="dataCenter.record.controllerId" :span="24">
+          <div class="nodeConfig contentContainer">
+            <div class="conTitle">绑定节点配置</div>
+            <div class="controlBtns">
+              <a-button type="primary" size="small" @click.stop="nodeAddRow">添加行</a-button>
+            </div>
+            <a-table 
+              row-key="index"
+              :data-source="dataCenter.record.nodeList" 
+              :pagination="false"
+              size="middle"
+            >
+              <a-table-column title="序号" data-index="index" width="100px" align="center" />
+              <a-table-column title="设备类型" data-index="deviceType">
+                <template #default="{ record }">
+                  <a-select 
+                    v-model:value="record.deviceType" 
+                    popupClassName="modalSelect" 
+                    placeholder="请选择设备类型"
+                    @change="() => deviceTypeChange(record)"
+                  >
+                    <a-select-option v-for="item in dict_svg_device_types" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
+                  </a-select>
+                </template>
+              </a-table-column>
+              <a-table-column title="所属设备" data-index="deviceId">
+                <template #default="{ record }">
+                  <a-select
+                    v-if="!record._initStatus"
+                    v-model:value="record.deviceId" 
+                    popupClassName="modalSelect" 
+                    placeholder="请选择设备" 
+                    @change="() => deviceIdChange(record)"
+                  >
+                    <a-select-option v-for="item in dataCenter.record.deviceList" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
+                  </a-select>
+                  <div v-else>{{ record.deviceName }}</div>
+                </template>
+              </a-table-column>
+              <a-table-column title="节点ID" data-index="dom_node_id">
+                <template #default="{ record }">
+                  <a-input v-model:value="record.dom_node_id" placeholder="请输入对应的节点ID" />
+                </template>
+              </a-table-column>     
+              <a-table-column title="操作" width="80px" align="center">
+                <template #default="{ record }">
+                  <a-button type="primary" size="small" danger @click.stop="deleteNodeRow(record.index)">删除</a-button>
+                </template>
+              </a-table-column>        
+            </a-table>
+          </div>
         </a-col>
       </a-row>
     </a-form>
@@ -44,6 +96,7 @@
 <script setup>
 import { ref } from "vue"
 import { message } from "ant-design-vue"
+import { dict_svg_device_types } from "_utils/dictionary"
 import { fileBlobSave } from "_utils/function"
 import controllerApi from "_api/controller"
 import powerMonitoringApi from "_api/powerMonitorings"
@@ -57,8 +110,11 @@ const props = defineProps({
 const dataDefault = {
   visible: false,
   loading: false,
-  record: {},
-  controllerList: []
+  record: {
+    nodeList: []
+  },
+  controllerList: [],
+  deviceList: []
 }
 
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
@@ -89,6 +145,45 @@ const _uploadStart = async data => {
   }   
 }
 
+const nodeAddRow = () => {
+  dataCenter.value.record.nodeList.push({
+    index:  dataCenter.value.record.nodeList.length + 1,
+    dom_node_id: "",
+    switch: "0"
+  })
+}
+
+const deleteNodeRow = index => {
+   dataCenter.value.record.nodeList.splice((index - 1), 1)
+   dataCenter.value.record.nodeList.forEach((item, index) => {
+    item.index = index + 1
+  })
+}
+
+const deviceTypeChange = async item => {
+  dataCenter.value.record.deviceList = []
+  delete item.deviceId
+  delete item._initStatus
+  const loading = message.loading("获取设备列表...", 0)
+  try {
+    const res = await controllerApi.getDeviceByDeviceType({
+      deviceType: item.deviceType,
+      controllerID: dataCenter.value.record.controllerId
+    })
+    dataCenter.value.record.deviceList = res
+  } catch(err) {
+    console.log(err)
+    message.error(`获取设备列表失败:${err}`)
+  } finally {
+    setTimeout(loading) 
+  }  
+}
+
+const deviceIdChange = item => {
+  const data = dataCenter.value.record.deviceList.find(x => x.id === item.deviceId)
+  item.deviceName = data.name
+}
+
 const handleClickUpload = () => {
   const tempInput = document.createElement("input")
   tempInput.setAttribute("type", "file")
@@ -114,8 +209,17 @@ const handleClickDownload = async () => {
 }
 
 const handleShow = (item = {}) => {
+  if(item.id) {
+    item.nodeList.forEach(item => {
+      item._initStatus = true
+    })
+  }
+
   dataCenter.value.visible = true
-  dataCenter.value.record = Lodash.cloneDeep({ ...item })
+  dataCenter.value.record = Lodash.cloneDeep({
+    ...item,
+    nodeList: item.nodeList || []
+  })
   _getControllerList()
 }
 
@@ -125,7 +229,14 @@ const _validateForm = callback => {
 
 const handleOk = async () => {
   _validateForm(async () => {
-    const values = { ...dataCenter.value.record }
+    const { nodeList } = dataCenter.value.record
+    if(nodeList.length === 0) {
+      return message.error("请配置节点！")
+    }
+    const values = { 
+      ...dataCenter.value.record,
+      nodeList: JSON.stringify(nodeList)
+    }
 
     try {
       dataCenter.value.loading = true
@@ -157,6 +268,28 @@ defineExpose({ handleShow })
 </script>
 
 <style lang="less" scoped>
+.nodeConfig {
+  padding: 20px 0 0 20px;
+  .conTitle {
+    font-size: 14px;
+    font-weight: bold;
+    color: #DFF6FE;
+    height: 40px;
+    display: inline-block;
+  }
+  .controlBtns {
+    margin-bottom: 10px;
+    float: right;
+  }
+}
+
+::v-deep(.ant-switch) {
+  background: #23353c;
+}
+::v-deep(.ant-switch-checked) {
+  background: #199cd1 !important;
+}
+
 .uploadFileList {
   display: flex;
   padding: 5px;
@@ -176,4 +309,5 @@ defineExpose({ handleShow })
 .fileArea {
   display: flex;
 }
+
 </style>

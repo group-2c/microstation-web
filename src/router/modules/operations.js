@@ -52,7 +52,7 @@ const route = {
       path: "powerMonitoringModel",
       name: "PowerMonitoringModel",
       component: PowerMonitoringModel,
-      meta: { title: "电力监控模型" }
+      meta: { title: "变电微站模型" }
     }
   ]
 }
