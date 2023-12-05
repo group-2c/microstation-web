@@ -28,9 +28,10 @@
   const columns = ref([  
     { title: "用户", dataIndex: "username", align: "left", width: 150, ellipsis: true, fixed: "left" },    
     { title: "IP", dataIndex: "ip", align: "left", width: 150, ellipsis: true },
-    { title: "地址", dataIndex: "address", align: "left", width: 200 },
-    { title: "微站名称", dataIndex: "controllerName", align: "left", width: 200 },
-    { title: "操作内容", dataIndex: "content", align: "left", width: 250 },
+    { title: "地址", dataIndex: "address", align: "left", width: 200, ellipsis: true },
+    { title: "路由", dataIndex: "route", align: "left", width: 250, ellipsis: true },
+    { title: "方法", dataIndex: "method", align: "left", width: 150, ellipsis: true },
+    { title: "结果", dataIndex: "response", align: "left", width: 250, ellipsis: true },
     { title: "操作时间", dataIndex: "time", align: "left", width: 200 },
   ])
 </script> 
