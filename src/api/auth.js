@@ -25,6 +25,21 @@ class AuthApi  {
     })
   }
 
+  /**
+   * 心跳
+   * @param {*} values 
+   * @returns 
+   */
+  heartBeat() {
+    return new Promise((resolve, reject) => {
+      request.get("/loginInfo/heartBeat")
+        .then(res => {
+          resolve(res.data)
+        }, err => {
+          reject(err)
+        })
+    })
+  }
 }
 
 export default new AuthApi()

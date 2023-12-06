@@ -1,7 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import { getStorageItem, setStorageItem, removeStorageItem } from "_utils/storage"
 import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS, AUTH_OWNS } from "@/store/mutation-types"
-import { getThreeNameParents } from "_utils/function"
+import { getThreeNameParents, sendHeartBeat } from "_utils/function"
 import { message } from "ant-design-vue"
 import Lodash from "lodash"
 import Layout from "@/views/Layout/index.vue"
@@ -116,7 +116,9 @@ export const pageReload = () => {
   else if(currentURLs.length === 4) {
     setStorageItem({ key: MENU_OPEN_KYES, value: [ Lodash.upperFirst(currentURLs[currentURLs.length - 2]) ] })
     setStorageItem({ key: MENU_SELECTED_KEYS, value: [ Lodash.upperFirst(currentURLs[currentURLs.length - 1]) ] })
-  } 
+  }
+
+  sendHeartBeat()
 }
 
 /**

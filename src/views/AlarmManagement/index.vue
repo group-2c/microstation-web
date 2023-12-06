@@ -171,7 +171,7 @@ const _getStatistics = async () => {
 
 const getTableList = async () => {
   const { current, pageSize } = pagination.value
-  const data = { name: searchForm.value.name, page: current, size: pageSize, alarmType: alarmType.value, activeKey: activeKey.value }
+  const data = { name: searchForm.value.name, page: current, size: pageSize, type: alarmType.value, classification: activeKey.value }
   console.log(data)
   tableList.value = [
     {

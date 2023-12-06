@@ -5,7 +5,10 @@
  * @filePath: src/utils/function.js
  * @description: 常用函数方法
  */
-
+import { message } from "ant-design-vue"
+import store from "@/store"
+import authApi from "_api/auth"
+let timer = null
 
 /**
  * 根据name字段取数结构上层数据
@@ -44,7 +47,26 @@ const fileBlobSave = (blob, fileName) => {
   window.URL.revokeObjectURL(url)
 }
 
+/**
+ * 发送心跳数据
+ */
+const sendHeartBeat = async () => {
+  timer && clearInterval(timer)
+  timer = null
+
+  if(store.state.auth.token) {
+    timer = setInterval(async () => {
+      try {
+        await authApi.heartBeat()
+      } catch(err) {
+        message.error(`心跳数据发送失败: ${err}`)
+      } 
+    }, 1000 * 5)
+  }
+}
+
 export {
   getThreeNameParents,
-  fileBlobSave
+  fileBlobSave,
+  sendHeartBeat
 }
