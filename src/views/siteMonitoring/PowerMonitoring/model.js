@@ -29,6 +29,9 @@ class PowerModel {
   }
 
   initModelView = (container, url, callBack) => {
+    // Remove old model instance
+    container.innerHTML = ''
+
     this.clock = new THREE.Clock()
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -57,14 +60,14 @@ class PowerModel {
     }
 
     const loader = new GLTFLoader(manager)
-    loader.load("/NoLod_0.glb", gltf => {
+    loader.load(url, gltf => {
       console.log(gltf)
       this.model = gltf.scene
       this.model.position.set(1, 1, 0)
       this.scene.add(this.model)
 
       this.mixer = new THREE.AnimationMixer(this.model)
-      this.mixer.clipAction(gltf.animations[0]).play()
+      // this.mixer.clipAction(gltf.animations[0]).play()
 
       this._animate()
     })
