@@ -45,6 +45,23 @@ class alarmsApi extends CommonRestfulModel {
         })
     })
   }
+
+
+  /**
+   * 批量确认报警数据
+   * @param {*} data 
+   * @returns 
+   */
+  updateStatusByIds(data) {
+    return new Promise((resolve, reject) => {
+      request.post(`${this._sourceURL}/updateStatusByIds`, data)
+        .then(res => {
+          resolve(res.data)
+        }, err => {
+          reject(err)
+        })
+    })
+  }  
 }
 
 export default new alarmsApi()

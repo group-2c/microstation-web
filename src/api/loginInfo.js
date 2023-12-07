@@ -33,12 +33,12 @@ class loginInfoApi extends CommonRestfulModel {
   
   /**
    * 在线人数
-   * @param {*} values 
+   * @param {*} params 
    * @returns 
    */
-  getOnlineInfo() {
+  getOnlineInfo(params) {
     return new Promise((resolve, reject) => {
-      request.get(`${this._sourceURL}/getOnlineInfo`)
+      request.get(`${this._sourceURL}/getOnlineInfo`, { params })
         .then(res => {
           resolve(res.data)
         }, err => {

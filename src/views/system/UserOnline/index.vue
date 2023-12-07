@@ -85,12 +85,11 @@
     const { searchForm, pagination } = dataCenter.value
     const { current, pageSize } = pagination
     const data = { ...searchForm, page: current, size: pageSize }
-
     try {
       const res = await loginInfoApi.getOnlineInfo(data)
-      dataCenter.value.tableList = res.data?.content || []
-      dataCenter.value.pagination.total = res.data.totalElements
-      dataCenter.value.pagination.current = res.data.number
+      dataCenter.value.tableList = res.content || []
+      dataCenter.value.pagination.total = res.totalElements
+      dataCenter.value.pagination.current = res.number
     } catch(err) {
       message.error("获取用户在线数据失败: " + err)
     } finally {

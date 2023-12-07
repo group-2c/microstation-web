@@ -229,7 +229,17 @@ const handleSearch = () => {
 }
 
 const batchConfirm = async () => {
-
+  try {
+    loading.value = true
+    await alarmsApi.updateStatusByIds({ ids: selectedRowKeys.value })
+    message.success("批量确认成功！")
+    dataUpdate()
+  } catch(err) {
+    message.error(`批量确认失败: ${err}`)
+  } finally {
+    loading.value = false
+    operationKey.value = undefined
+  }
 }
 
 const confirmData = async row => {
