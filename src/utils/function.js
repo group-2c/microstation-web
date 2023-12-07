@@ -61,7 +61,7 @@ const sendHeartBeat = async () => {
       } catch(err) {
         message.error(`心跳数据发送失败: ${err}`)
       } 
-    }, 1000 * 5)
+    }, 1000 * 60)
   }
 }
 
