@@ -233,6 +233,7 @@ const batchConfirm = async () => {
     loading.value = true
     await alarmsApi.updateStatusByIds({ ids: selectedRowKeys.value })
     message.success("批量确认成功！")
+    selectedRowKeys.value = []
     dataUpdate()
   } catch(err) {
     message.error(`批量确认失败: ${err}`)
