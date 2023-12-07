@@ -78,7 +78,7 @@
                 :columns="columns"
                 :data-source="tableList" 
                 :pagination="pagination"
-                :row-selection="rowSelection"
+                :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: rowChange, getCheckboxProps: rowChangeDisabled  }"
                 :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }"
                 @change="handleTableChange"
               >
@@ -150,14 +150,12 @@ const columns = ref([
 const radarChartRef = ref()
 const pieChartRef = ref()
 
-const rowSelection = ref({
-  columnWidth: 80,
-  onChange: keys => {
-    selectedRowKeys.value = keys
-  },
-  getCheckboxProps: record => ({
-    disabled: record.status == "1"
-  }),
+const rowChange = keys => {
+  selectedRowKeys.value = keys
+}
+
+const rowChangeDisabled = record => ({
+  disabled: record.status == "1"
 })
 
 const operationDisabled = computed(() => {

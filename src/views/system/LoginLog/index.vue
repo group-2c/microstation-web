@@ -30,5 +30,6 @@
     { title: "IP", dataIndex: "ip", align: "left" },
     { title: "登录地址", dataIndex: "address", align: "left" },
     { title: "登录时间", dataIndex: "loginTime", align: "left" },
+    { title: "退出时间", dataIndex: "logoutTime", align: "left" },
   ])
 </script> 
