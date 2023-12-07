@@ -62,6 +62,7 @@ import { ref, onMounted, inject } from "vue"
 import { useStore } from "vuex"
 import { message } from "ant-design-vue"
 import { CloseOutlined } from "@ant-design/icons-vue"
+import { sendHeartBeat } from "_utils/function"
 import Constant from "_constant"
 import dayjs from "dayjs"
 import AuthApi from "_api/auth"
@@ -103,6 +104,7 @@ const handleClickLogin = async () => {
     message.success("登录成功！")
     document.body.removeEventListener("keydown", _handleKeyDown)
     routeJump({ name: "Dashboard" })
+    sendHeartBeat()
   } catch(err) {
     message.error(`登录失败: ${err}`)
   } finally {

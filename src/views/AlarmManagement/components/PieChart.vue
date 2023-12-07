@@ -47,9 +47,7 @@ const _initModeChart = data => {
           label: {
             show: true,
             position: "outside",
-            textStyle: {
-              color: "rgba(255, 255, 255, 0.8)",
-            },
+            color: "rgba(255, 255, 255, 0.8)",
           },
           emphasis: {
             label: {

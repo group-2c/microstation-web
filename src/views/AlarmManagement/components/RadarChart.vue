@@ -40,10 +40,8 @@ const _initModeChart = value => {
         splitArea: {
           show: false,
         },
-        name: {
-          textStyle: {
-            color: "rgba(255, 255, 255, 0.8)"
-          },
+        axisName: {
+          color: "rgba(255, 255, 255, 0.8)"
         },
       },
       series: [

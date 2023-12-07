@@ -44,7 +44,7 @@
   const tableListFormat = data => {
     return data.map(item => {
       item.coordinates = `${item.longitude},${item.latitude}`
-      item.manufacturerName = dict_manufacturers.find(x => x.key === item. manufacturer)?.value
+      item.manufacturerName = dict_manufacturers.find(x => x.key === item.manufacturer)?.value
       item.typeName = dict_camera_types.find(x => x.key === item.type)?.value
       return item
     })

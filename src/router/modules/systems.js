@@ -7,7 +7,8 @@
  */
 import OperationLog from "@/views/system/OperationLog/index.vue"
 import ControlLog from "@/views/system/ControlLog/index.vue"
-import UserMonitoring from "@/views/system/UserMonitoring/index.vue"
+import LoginLog from "@/views/system/LoginLog/index.vue"
+import UserOnline from "@/views/system/UserOnline/index.vue"
 
 const route = {
   path: "system",
@@ -28,10 +29,16 @@ const route = {
       meta: { title: "控制日志" }
     },
     {
-      path: "userMonitoring",
-      name: "UserMonitoring",
-      component: UserMonitoring,
+      path: "loginLog",
+      name: "LoginLog",
+      component: LoginLog,
       meta: { title: "登录日志" }
+    },
+    {
+      path: "userOnline",
+      name: "UserOnline",
+      component: UserOnline,
+      meta: { title: "用户在线" }
     },
   ]
 }

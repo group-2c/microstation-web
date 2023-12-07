@@ -8,7 +8,6 @@
 import request from "_utils/request"
 
 class AuthApi  {
-
   /**
    * 登录
    * @param {*} values 
@@ -24,7 +23,6 @@ class AuthApi  {
         })
     })
   }
-
 }
 
 export default new AuthApi()

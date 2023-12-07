@@ -129,6 +129,16 @@
       margin-bottom: 20px;
       box-shadow: 0 0 8px #1675af inset;
     }
+    .headerImportant {
+      font-size: 14px;
+      color: #DFF6FF;
+      line-height: 35px;
+      padding-right: 10px;
+      span {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
   }
 
   .searchContainer {
@@ -463,7 +473,8 @@
         }
         &:hover {
           td {
-            border-color: #1675af !important;
+            border-color: none !important;
+            background: none !important;
           }
         }
         .ant-btn-link {
@@ -485,43 +496,45 @@
       }
     }
     .ant-checkbox-wrapper {
-      .ant-checkbox-inner {
-        background: none !important;
-        border: solid 1px #def5fe;
-      }
-      .ant-checkbox-indeterminate {
-        .ant-checkbox-inner {
-          border: solid 1px #a3d4f9;
-          &::after {
-            background-color: #a3d4f9;
-          }
-        }
-      }
-      .ant-checkbox-checked {
+      &:not(.ant-checkbox-wrapper-disabled) {
         .ant-checkbox-inner {
           background: none !important;
-          border: solid 1px #a3d4f9;
-          &::after {
-            content: "";
-            border: 2px solid transparent;
-            border-left: 0;
-            border-top: 0;
-            border-color: #a3d4f9 !important;
-            width: 4px;
-            height: 7px;
-            position: absolute;
-            top: 6px;
-            left: 3px;
-            box-sizing: content-box;
-            transform-origin: center;
-          }
-          &:hover,  &:focus {
-            border: solid 1px #a3d4f9 !important;
-            box-shadow: none;
+          border: solid 1px #def5fe;
+        }
+        .ant-checkbox-indeterminate {
+          .ant-checkbox-inner {
+            border: solid 1px #a3d4f9;
+            &::after {
+              background-color: #a3d4f9;
+            }
           }
         }
-        &::after {
-          display: none;
+        .ant-checkbox-checked {
+          .ant-checkbox-inner {
+            background: none !important;
+            border: solid 1px #a3d4f9;
+            &::after {
+              content: "";
+              border: 2px solid transparent;
+              border-left: 0;
+              border-top: 0;
+              border-color: #a3d4f9 !important;
+              width: 4px;
+              height: 7px;
+              position: absolute;
+              top: 6px;
+              left: 3px;
+              box-sizing: content-box;
+              transform-origin: center;
+            }
+            &:hover,  &:focus {
+              border: solid 1px #a3d4f9 !important;
+              box-shadow: none;
+            }
+          }
+          &::after {
+            display: none;
+          }
         }
       }
     }
