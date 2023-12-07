@@ -7,7 +7,7 @@
  */
 import { message } from "ant-design-vue"
 import store from "@/store"
-import authApi from "_api/auth"
+import loginInfoApi from "_api/loginInfo"
 let timer = null
 
 /**
@@ -57,7 +57,7 @@ const sendHeartBeat = async () => {
   if(store.state.auth.token) {
     timer = setInterval(async () => {
       try {
-        await authApi.heartBeat()
+        await loginInfoApi.heartBeat()
       } catch(err) {
         message.error(`心跳数据发送失败: ${err}`)
       } 

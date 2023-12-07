@@ -6,6 +6,7 @@
  * @description: 用户登录信息
  */
 import CommonRestfulModel from "./CommonRestful"
+import request from "_utils/request"
 
 class loginInfoApi extends CommonRestfulModel {
   constructor() {
@@ -13,6 +14,40 @@ class loginInfoApi extends CommonRestfulModel {
       sourceURL: "/loginInfo"
     })
   }
+
+  /**
+   * 心跳
+   * @param {*} values 
+   * @returns 
+   */
+  heartBeat() {
+    return new Promise((resolve, reject) => {
+      request.get(`${this._sourceURL}/heartBeat`)
+        .then(res => {
+          resolve(res.data)
+        }, err => {
+          reject(err)
+        })
+    })
+  } 
+  
+  /**
+   * 在线人数
+   * @param {*} values 
+   * @returns 
+   */
+  getOnlineInfo() {
+    return new Promise((resolve, reject) => {
+      request.get(`${this._sourceURL}/getOnlineInfo`)
+        .then(res => {
+          resolve(res.data)
+        }, err => {
+          reject(err)
+        })
+    })
+  }    
 }
 
 export default new loginInfoApi()
+
+

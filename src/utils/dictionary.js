@@ -29,6 +29,23 @@ export const dict_camera_types = [
   { key: 3, value: "云台" }
 ]
 
+export const dict_alarms_types = [
+  { key: "0", value: "通讯状态" },
+  { key: "1", value: "现场报警" },
+  { key: "2", value: "一级报警" }
+]
+
+export const dict_alarms_level = [
+  { key: "0", value: "普通" },
+  { key: "1", value: "严重" },
+  { key: "2", value: "事故" }
+]
+
+export const dict_alarms_status = [
+  { key: "0", value: "未确认" },
+  { key: "1", value: "已确认" }
+]
+
 export const dict_unmanned_equipment = {
   access_control_controller: {
     name: "门禁控制器",

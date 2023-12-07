@@ -11,32 +11,32 @@
 
 <template>
   <div class="parcel">
-    <a-page-header class="pageHeader" title="报警信息" />
-    <div class="contentContainer">
-      <div class="microstationContainer">
-        <div class="leftArea">
-          <a-tabs class="superTabs" v-model:activeKey="activeKey" @change="getTableList">
-            <a-tab-pane key="1" tab="全部报警" />
-            <a-tab-pane key="2" tab="未处理报警" />
-          </a-tabs>
-          <div class="statistics">共计报警<span>249</span>条</div>
-          <div class="containerArea">
-            <div class="areaItem">
-              <div class="highLevelTitleBar">
-                <span class="chTitle">报警类型分析</span>
+    <a-spin :spinning="loading">
+      <a-page-header class="pageHeader" title="报警信息" />
+      <div class="contentContainer">
+        <div class="microstationContainer">
+          <div class="leftArea">
+            <a-tabs class="superTabs" v-model:activeKey="activeKey" @change="dataUpdate">
+              <a-tab-pane key="1" tab="全部报警" />
+              <a-tab-pane key="2" tab="未处理报警" />
+            </a-tabs>
+            <div class="statistics">共计报警<span>{{ alarmTotal }}</span>条</div>
+            <div class="containerArea">
+              <div class="areaItem">
+                <div class="highLevelTitleBar">
+                  <span class="chTitle">报警类型分析</span>
+                </div>
+                <radar-chart ref="radarChartRef" />
               </div>
-              <radar-chart ref="radarChartRef" />
-            </div>
-            <div class="areaItem">
-              <div class="highLevelTitleBar">
-                <span class="chTitle">报警等级分析</span>
+              <div class="areaItem">
+                <div class="highLevelTitleBar">
+                  <span class="chTitle">报警等级分析</span>
+                </div>
+                <pie-chart ref="pieChartRef" />
               </div>
-              <pie-chart ref="pieChartRef" />
             </div>
           </div>
-        </div>
-        <div class="rightArea" style="height: calc(100vh - 244px);">
-          <a-spin :spinning="loading">
+          <div class="rightArea" style="height: calc(100vh - 244px);">
             <a-page-header class="pageHeader" title="数据列表">
               <template #extra> 
                 <a-button :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
@@ -83,19 +83,28 @@
                 @change="handleTableChange"
               >
                 <template #bodyCell="{ column, record }">
-                  <template v-if="column.dataIndex === 'alarmLevel'">
-                    <a-tag :color="`${record.level == 0 ? 'success' : record.level == 1 ? 'error' : 'orange'}`">{{ record.alarmLevel }}</a-tag>
+                  <template v-if="column.dataIndex === 'alarmLevelName'">
+                    <a-tag :color="`${record.alarmLevel == '0' ? 'cyan' : record.alarmLevel == '1' ? 'error' : 'orange'}`">{{ record.alarmLevelName }}</a-tag>
                   </template>
-                  <template v-if="column.dataIndex === 'status'">
-                    <div :class="['status', `status-${record.status}`]" @click.stop="confirmData(record)">{{ record.statusName }}</div>
+                  <template v-if="column.dataIndex === 'statusName'">
+                    <div v-if="record.status == '1'">{{ record.statusName }}</div>
+                    <a-popconfirm
+                      v-else
+                      title="是否确认？"
+                      ok-text="是"
+                      cancel-text="否"
+                      @confirm="() => confirmData(record)"
+                    >
+                      <div :class="['status', `status-${record.status}`]">{{ record.statusName }}</div>
+                    </a-popconfirm>
                   </template>
                 </template>
               </a-table>
             </div>
-          </a-spin>
+          </div>
         </div>
       </div>
-    </div>
+    </a-spin>
   </div>
 </template>
 
@@ -103,9 +112,11 @@
 import { onMounted, ref, computed, h } from "vue"
 import { message } from "ant-design-vue"
 import { FileExcelOutlined } from "@ant-design/icons-vue"
+import { dict_alarms_types, dict_alarms_level, dict_alarms_status } from "_utils/dictionary"
 import RadarChart from "./components/RadarChart.vue"
 import PieChart from "./components/PieChart.vue"
 import ExportXlsx from "_utils/exportXlsx"
+import alarmsApi from "_api/alarms"
 
 const loading = ref(false)
 const activeKey = ref("1")
@@ -114,6 +125,7 @@ const searchForm = ref({})
 const tableList = ref([])
 const selectedRowKeys = ref([])
 const operationKey = ref(undefined)
+const alarmTotal = ref(0)
 const pagination = ref({
   total: 0,
   current: 1,
@@ -127,12 +139,12 @@ const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
   { title: "微站名称", dataIndex: "controllerName", align: "left", width: 200, ellipsis: true, fixed: "left" },    
   { title: "设备名称", dataIndex: "deviceName", align: "left", width: 200, ellipsis: true },
-  { title: "报警分类", dataIndex: "alarmType", align: "left", width: 120, ellipsis: true },
+  { title: "报警分类", dataIndex: "alarmTypeName", align: "left", width: 120, ellipsis: true },
   { title: "事件类型", dataIndex: "eventType", align: "left", width: 120, ellipsis: true },
-  { title: "发生时间", dataIndex: "time", align: "left", width: 150, ellipsis: true },
+  { title: "发生时间", dataIndex: "createAt", align: "left", width: 150, ellipsis: true },
   { title: "报警描述", dataIndex: "description", align: "left", width: 250, ellipsis: true },
-  { title: "报警等级", dataIndex: "alarmLevel", align: "center", width: 150, ellipsis: true },
-  { title: "确认状态", dataIndex: "status", align: "left", width: 100, fixed: "right" },
+  { title: "报警等级", dataIndex: "alarmLevelName", align: "center", width: 150, ellipsis: true },
+  { title: "确认状态", dataIndex: "statusName", align: "left", width: 100, fixed: "right" },
 ])
 
 const radarChartRef = ref()
@@ -142,7 +154,10 @@ const rowSelection = ref({
   columnWidth: 80,
   onChange: keys => {
     selectedRowKeys.value = keys
-  }
+  },
+  getCheckboxProps: record => ({
+    disabled: record.status == "1"
+  }),
 })
 
 const operationDisabled = computed(() => {
@@ -150,58 +165,46 @@ const operationDisabled = computed(() => {
 })
 
 const _getStatistics = async () => {
-  const loading = message.loading("正在加载统计数据...", 0)
+  loading.value = true
   try {
-    radarChartRef.value.setChartData({
-      status: 100, 
-      site: 200, 
-      superlative: 300
-    })
-    pieChartRef.value.setChartData([
-      { value: 10, name: "普通" },
-      { value: 20, name: "严重" },
-      { value: 30, name: "事故" }
-    ])
-  } catch (err) {
-    message.error(`统计数据加载失败:${err}`)
+    const res = await alarmsApi.getAlarmByStatus({ classification: activeKey.value })
+    radarChartRef.value.setChartData(res.genre)
+    pieChartRef.value.setChartData(res.level)
+    alarmTotal.value = res.total
+  } catch(err) {
+    message.error("统计数据加载失败: " + err)
   } finally {
-    setTimeout(loading)
+    loading.value = false
   }
 }
 
 const getTableList = async () => {
   const { current, pageSize } = pagination.value
   const data = { name: searchForm.value.name, page: current, size: pageSize, type: alarmType.value, classification: activeKey.value }
-  console.log(data)
-  tableList.value = [
-    {
-      id: 1,
-      controllerName: "微站101",
-      deviceName: "门禁设备1",
-      alarmType: "现场报警",
-      eventType: "关门报警",
-      time: "2023-12-01 13:20:31",
-      description: "01 标签 1#门 状态变化",
-      level: 0,
-      alarmLevel: "普通",
-      status: 0,
-      statusName: "未确认"
-    },
-    {
-      id: 2,
-      controllerName: "微站102",
-      deviceName: "空调",
-      alarmType: "现场报警",
-      eventType: "无法开机",
-      time: "2023-12-01 11:11:11",
-      description: "01 标签 开机异常",
-      level: 1,
-      alarmLevel: "严重",
-      status: 0,
-      statusName: "未确认"
-    }
-  ]
+
+  loading.value = true
+  try {
+    const res = await alarmsApi.getByPage(data)
+    tableList.value = (res.data?.content || []).map(item => {
+      item.alarmTypeName = dict_alarms_types.find(x => x.key === item.alarmType)?.value
+      item.alarmLevelName = dict_alarms_level.find(x => x.key === item.alarmLevel)?.value
+      item.statusName = dict_alarms_status.find(x => x.key === item.status)?.value
+      return item
+    })
+    pagination.value.total = res.data.totalElements
+    pagination.value.current = res.data.number
+  } catch(err) {
+    message.error("获取报警列表数据失败: " + err)
+  } finally {
+    loading.value = false
+  }
 }
+
+const dataUpdate = async () => {
+  alarmTotal.value = 0
+  await _getStatistics()
+  await getTableList()
+} 
 
 const handleTableChange = pagination => {
   selectedRowKeys.value = []
@@ -229,8 +232,17 @@ const batchConfirm = async () => {
 
 }
 
-const confirmData = async () => {
-
+const confirmData = async row => {
+  try {
+    loading.value = true
+    await alarmsApi.updateById(row.id, { ...row, status: "1" })
+    message.success("确认成功！")
+    dataUpdate()
+  } catch(err) {
+    message.error(`确认失败: ${err}`)
+  } finally {
+    loading.value = false
+  }
 }
 
 const exportExcel = () => {
@@ -242,11 +254,11 @@ const exportExcel = () => {
     id: `报警ID`,
     controllerName: "微站名称",
     deviceName: "设备名称",
-    alarmType: "报警分类",
+    alarmTypeName: "报警分类",
     eventType: "事件类型",
     time: "发生时间",
     description: "报警描述",
-    alarmLevel: "报警等级",
+    alarmLevelName: "报警等级",
     statusName: "确认状态"
   }]
 
@@ -259,7 +271,6 @@ const exportExcel = () => {
 }
 
 onMounted(() => {
-  _getStatistics()
-  getTableList()
+  dataUpdate()
 })
 </script>
