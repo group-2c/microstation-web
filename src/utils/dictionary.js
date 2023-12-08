@@ -51,7 +51,7 @@ export const dict_steady_type = [
     { key: "11", value: "有效值" },
     { key: "12", value: "总谐波畸变率" },
     { key: "13", value: "奇次谐波总畸变率" },
-    { key: "14", value: " " },
+    { key: "14", value: "偶次谐波总畸变率" },
   ], options: [
     { label: "A相", value: "A" },
     { label: "B相", value: "B" },

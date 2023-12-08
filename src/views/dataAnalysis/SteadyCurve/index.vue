@@ -32,6 +32,16 @@
           <a-col />
           <a-col>
             <a-form :model="searchForm" layout="inline" class="complexSearch">
+              <a-form-item label="微 站" name="type">
+                <a-select v-model:value="searchForm.controllerId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择微站" @change="controllerChange">
+                  <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
+                </a-select>
+              </a-form-item>
+              <a-form-item label="多功能电表" name="type">
+                <a-select v-model:value="searchForm.electricitymeterId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择电表">
+                  <a-select-option v-for="item in electricityList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
+                </a-select>
+              </a-form-item>
               <a-form-item label="开始日期" name="startDate">
                 <a-date-picker v-model:value="searchForm.startDate" placeholder="请选择开始日期" />
               </a-form-item>
@@ -93,6 +103,7 @@ import { FileExcelOutlined, LineChartOutlined, BarChartOutlined, SearchOutlined 
 import { dict_steady_type } from "_utils/dictionary"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
+import controllerApi from "_api/controller"
 import LineChart from "./components/LineChart.vue"
 
 const loading = ref(false)
@@ -102,6 +113,8 @@ const pageType = ref("1")
 const currentSteadyType = ref({
   dictionarys: [],
 })
+const controllerList = ref([])
+const electricityList = ref([])
 const statisticsData = ref([])
 const pagination = ref({
   total: 0,
@@ -137,6 +150,33 @@ watch(searchForm.value, () => {
     if(status) _searchPrefix()
   })
 })
+
+const _getControllerList = async () => {
+  try {
+    const res = await controllerApi.getAll()
+    controllerList.value = res.data
+  } catch(err) {
+    message.error(`获取微站列表失败: ${err}`)
+  }
+}
+
+const controllerChange = async () => {
+  electricityList.value = []
+  delete searchForm.value.electricitymeterId
+  loading.value = true
+  try {
+    const res = await controllerApi.getDeviceByDeviceType({
+      deviceType: "electricity_meter",
+      controllerID: searchForm.value.controllerId
+    })
+    electricityList.value = res
+  } catch(err) {
+    console.log(err)
+    message.error(`获取多功能电表列表失败:${err}`)
+  } finally {
+    loading.value = false 
+  }  
+}
 
 const _getStatistics = async () => {
   loading.value = true
@@ -181,8 +221,8 @@ const _getStatistics = async () => {
 }
 
 const _calibration = callback => {
-  const { startDate, endDate, type, parameter } = searchForm.value
-  if(!startDate || !endDate || !type || !parameter) {
+  const { controllerId, electricitymeterId, startDate, endDate, type, parameter } = searchForm.value
+  if(!controllerId || !electricitymeterId || !startDate || !endDate || !type || !parameter) {
     callback(false)
   } else {
     callback(true)
@@ -354,6 +394,7 @@ const exportExcel = () => {
 }
 
 onMounted(() => {
+  _getControllerList()
 })
 </script>
  
