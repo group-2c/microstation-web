@@ -191,8 +191,15 @@ const _calibration = callback => {
 
 const _getTableList = async () => {
   const { current, pageSize } = pagination.value
-  const data = { ...searchForm.value, page: current, size: pageSize }
-
+  const { startDate, endDate } = searchForm.value
+  const data = { 
+    ...searchForm.value,
+    startDate: dayjs(startDate).format("YYYY-MM-DD"),
+    endDate: dayjs(endDate).format("YYYY-MM-DD"),
+    page: current, 
+    size: pageSize 
+  }
+  console.log(data)
   loading.value = true
   try {
     tableList.value = [
