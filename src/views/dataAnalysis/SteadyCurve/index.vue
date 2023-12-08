@@ -5,12 +5,8 @@
  * @filePath: src/views/dataAnalysis/SteadyCurve/index.vue
  * @description: 稳态曲线
  */
-<style lang="less" scoped>
-@import url("./index.less");
-</style>
- 
 <template>
-  <div class="parcel">
+  <div class="parcel dataAnalysisX">
     <a-spin :spinning="loading">
       <a-page-header class="pageHeader">
         <template #tags>
@@ -31,34 +27,34 @@
         <a-row justify="space-between">
           <a-col />
           <a-col>
-            <a-form :model="searchForm" layout="inline" class="complexSearch">
-              <a-form-item label="微 站" name="type">
+            <a-form :model="searchForm" layout="inline" class="complexSearch" ref="formRef">
+              <a-form-item label="微 站" name="controllerId" :rules="[{ required: true }]">
                 <a-select v-model:value="searchForm.controllerId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择微站" @change="controllerChange">
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="多功能电表" name="type">
+              <a-form-item label="多功能电表" name="electricitymeterId" :rules="[{ required: true }]">
                 <a-select v-model:value="searchForm.electricitymeterId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择电表">
                   <a-select-option v-for="item in electricityList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="开始日期" name="startDate">
+              <a-form-item label="开始日期" name="startDate" :rules="[{ required: true }]">
                 <a-date-picker v-model:value="searchForm.startDate" placeholder="请选择开始日期" />
               </a-form-item>
-              <a-form-item label="结束日期" name="endDate">
+              <a-form-item label="结束日期" name="endDate" :rules="[{ required: true }]">
                 <a-date-picker v-model:value="searchForm.endDate" placeholder="请选择结束日期" />
               </a-form-item>
-              <a-form-item label="类 别" name="type">
+              <a-form-item label="类 别" name="type" :rules="[{ required: true }]">
                 <a-select v-model:value="searchForm.type" @change="typeChange" placeholder="请选择类别">
                   <a-select-option v-for="item in dict_steady_type" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="参 数" name="parameter">
+              <a-form-item label="参 数" name="parameter" :rules="[{ required: true }]">
                 <a-select v-model:value="searchForm.parameter" placeholder="请选择参数">
                   <a-select-option v-for="item in currentSteadyType.dictionarys" :value="item.key" :key="item.key">{{ item.value }}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item v-if="currentSteadyType.options" label="" name="phase">
+              <a-form-item v-if="currentSteadyType.options" label="" name="phase" :rules="[{ required: true }]">
                 <a-checkbox-group v-model:value="searchForm.phase" :options="currentSteadyType.options" />
               </a-form-item>
               <a-form-item>
@@ -125,6 +121,7 @@ const pagination = ref({
   showTotal: total => `共有 ${total} 条数据`
 })
 const lineChartRef = ref()
+const formRef = ref()
 
 const columns = computed(() => {
   const _array = [
@@ -221,12 +218,7 @@ const _getStatistics = async () => {
 }
 
 const _calibration = callback => {
-  const { controllerId, electricitymeterId, startDate, endDate, type, parameter } = searchForm.value
-  if(!controllerId || !electricitymeterId || !startDate || !endDate || !type || !parameter) {
-    callback(false)
-  } else {
-    callback(true)
-  }
+  formRef.value.validate().then(() => callback(true)).catch(() => callback(false))
 }
 
 const _getTableList = async () => {
