@@ -220,7 +220,6 @@ const _getStatistics = async () => {
         })
       }
     })
-    console.log(array)
     statisticsData.value = array
 
     nextTick(() => {

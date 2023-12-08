@@ -25,12 +25,13 @@ const _initModeChart = (data, date) => {
       legend: {
         data: data.map(x => x.name),
         itemGap: 30,
-        top: -10,
+        top: 30,
         textStyle: {
           color: "#dff6ff"
         }
       },
       grid: {
+        top: "13%",
         left: "2%",
         right: "3%",
         bottom: "10%",
@@ -63,6 +64,7 @@ const _initModeChart = (data, date) => {
       ],
       toolbox: {
         right: 30,
+        top: -5,
         feature: {
           restore: {
             title: "还原"
