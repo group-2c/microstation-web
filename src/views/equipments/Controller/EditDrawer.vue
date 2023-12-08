@@ -144,7 +144,7 @@ const pickCoordinateCallback = data => {
 const handleOk = async () => {
   _validateForm(async () => {
     const values = Lodash.cloneDeep(dataCenter.value.record)
-    values.installationDate = dayjs(values.installationDate).format("YYYY-MM-DD HH:mm:ss")
+    values.installationDate = (values.installationDate).format("YYYY-MM-DD HH:mm:ss")
     try {
       dataCenter.value.loading = true
  

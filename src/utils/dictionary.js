@@ -46,6 +46,41 @@ export const dict_alarms_status = [
   { key: "1", value: "已确认" }
 ]
 
+export const dict_steady_type = [
+  { key: "1", value: "电压", dictionarys: [
+    { key: "1", value: "有效值" },
+    { key: "2", value: "总谐波畸变率" },
+    { key: "3", value: "奇次谐波总畸变率" },
+    { key: "4", value: "偶次谐波总畸变率" },
+  ], options: [
+    { label: "A相", value: "A" },
+    { label: "B相", value: "B" },
+    { label: "C相", value: "C" }
+  ]},
+  { key: "2", value: "电流", dictionarys: [
+    { key: "21", value: "有效值" },
+    { key: "22", value: "总谐波畸变率" }
+  ], options: [
+    { label: "A相", value: "A" },
+    { label: "B相", value: "B" },
+    { label: "C相", value: "C" }
+  ]},
+  { key: "3", value: "功率", dictionarys: [
+    { key: "31", value: "有功功率" },
+    { key: "32", value: "无功功率" },
+    { key: "33", value: "视在功率和功率因数" }
+  ], options: [
+    { label: "A相", value: "A" },
+    { label: "B相", value: "B" },
+    { label: "C相", value: "C" },
+    { label: "总", value: "D" }
+  ]},
+  { key: "4", value: "频率", dictionarys: [
+    { key: "41", value: "频率" },
+    { key: "42", value: "频率偏差" }
+  ]}
+]
+
 export const dict_unmanned_equipment = {
   access_control_controller: {
     name: "门禁控制器",
