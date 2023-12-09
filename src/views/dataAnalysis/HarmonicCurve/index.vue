@@ -78,7 +78,7 @@
               {{ dayjs(searchForm.startDate).format("YYYY-MM-DD") }} - {{ dayjs(searchForm.endDate).format("YYYY-MM-DD") }} 
               <span>功率 - 功率因数</span>
             </div>
-            <line-chart ref="lineChartRef" />
+            <line-chart ref="lineChartRef" yAxisName="%"/>
           </div>
         </div>
         <div v-if="pageType ==='2'">
@@ -102,11 +102,10 @@
 import { onMounted, ref, computed, h, nextTick, watch } from "vue"
 import { message } from "ant-design-vue"
 import { FileExcelOutlined, LineChartOutlined, BarChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
-import { dict_steady_type } from "_utils/dictionary"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
-import LineChart from "./components/LineChart.vue"
+import LineChart from "../components/LineChart.vue"
 
 const loading = ref(false)
 const searchForm = ref({})
@@ -140,9 +139,12 @@ const columns = computed(() => {
     { title: "设备名称", dataIndex: "deviceName", align: "left", width: 200, ellipsis: true },
     { title: "采集时间", dataIndex: "createAt", align: "left", width: 120, ellipsis: true }
   ]
+
   checkboxOptions.value.forEach(item => {
     if((searchForm.value.phase || []).includes(item.value)) {
-      _array.push({ title: item.label, dataIndex: item.value, align: "left", width: 120, ellipsis: true })
+      searchForm.value.contentRate.forEach(_con => {
+        _array.push({ title: `${item.label}${_con}次谐波`, dataIndex: item.value, align: "left", width: 130, ellipsis: true })
+      })
     }
   })
   return _array
@@ -395,7 +397,7 @@ const exportExcel = () => {
     Object.keys(dataArray[0]).forEach(key => data[key] = item[key])
     dataArray.push(data)
   })
-  ExportXlsx.downloadExcel(dataArray, `稳态曲线数据表_${new Date().toLocaleString()}`)
+  ExportXlsx.downloadExcel(dataArray, `谐波曲线数据表_${new Date().toLocaleString()}`)
 }
 
 onMounted(() => {

@@ -100,7 +100,7 @@ import { dict_steady_type } from "_utils/dictionary"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
-import LineChart from "./components/LineChart.vue"
+import LineChart from "../components/LineChart.vue"
 
 const loading = ref(false)
 const searchForm = ref({})

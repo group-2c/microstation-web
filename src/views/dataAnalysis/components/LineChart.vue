@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-12-08 13:01:28
+ * @date: 2023-12-09 13:40:23
  * @fileName: LineChart.vue
- * @filePath: src/views/dataAnalysis/SteadyCurve/components/LineChart.vue
- * @description: 功率 - 功率因数 分析
+ * @filePath: src/views/dataAnalysis/components/LineChart.vue
+ * @description: 通用折线图表
  */
 <template>
   <div class="chart" ref="chartRef" />
@@ -13,11 +13,18 @@
 import { ref, onMounted, onBeforeUnmount } from "vue"
 import * as echarts from "echarts"
 
-let pieChart = null
+const props = defineProps({
+  yAxisName: {
+    type: String,
+    default: ""
+  }
+})
+
+let lineChart = null
 const chartRef = ref()
 
 const _initModeChart = (data, date) => {
-  pieChart.setOption(
+  lineChart.setOption(
     {
       tooltip: {
         trigger: "axis"
@@ -25,12 +32,13 @@ const _initModeChart = (data, date) => {
       legend: {
         data: data.map(x => x.name),
         itemGap: 30,
-        top: 10,
+        top: 30,
         textStyle: {
           color: "#dff6ff"
         }
       },
       grid: {
+        top: "13%",
         left: "2%",
         right: "3%",
         bottom: "10%",
@@ -63,6 +71,7 @@ const _initModeChart = (data, date) => {
       ],
       toolbox: {
         right: 30,
+        top: -5,
         feature: {
           restore: {
             title: "还原"
@@ -91,6 +100,12 @@ const _initModeChart = (data, date) => {
       },
       yAxis: {
         type: "value",
+        name: props.yAxisName,
+        nameTextStyle: {
+          padding: [0, 20, 0, 0],
+          fontSize: 12,
+          color: "#dff6ff",
+        },
         axisLabel: {
           color: "#dff6ff"
         },
@@ -117,11 +132,11 @@ const setChartData = (data = [], date = []) => {
 }
 
 const _chartResize = () => {
-  pieChart && pieChart.resize()
+  lineChart && lineChart.resize()
 }
 
 onMounted(() => {
-  pieChart = echarts.init(chartRef.value)
+  lineChart = echarts.init(chartRef.value)
   setChartData()
   window.addEventListener("resize", () => {
     _chartResize()
