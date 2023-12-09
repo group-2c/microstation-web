@@ -52,9 +52,18 @@
           :columns="columns" 
           :data-source="tableList" 
           :pagination="pagination"
-          :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }" 
+          :scroll="{ y: 'calc(100vh - 550px)', x: 'max-content' }" 
           @change="handleTableChange"
         >
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.dataIndex === 'parameter'">
+              <div v-if="index === 0" style="text-align: center;">基波电流(A)</div>
+              <div v-else class="spliceCol">
+                <div class="label">{{ Math.floor(tableList.length / 2) === index ? "谐波电流有效值(A)": ""}}</div>
+                <div class="index">{{ index + 1 }}</div>
+              </div>
+            </template>
+          </template>
           <template #summary>
             <a-table-summary fixed>
               <a-table-summary-row>
@@ -94,23 +103,7 @@ const record = ref({})
 const formRef = ref()
 
 const columns = ref([
-  { title: "参 数", dataIndex: "parameter", children: [
-    { 
-      dataIndex: "age", 
-      width: 180, 
-      align: "center", 
-      customRender: data => {
-        if(data.index === 0) return "基波电流(A)"
-          else if(data.renderIndex === 1) return "谐波电流有效值(A)"
-            else return data.index + 1
-      }, 
-      customCell: (_, index) => {
-        if (index === 0) return { colSpan: 2 }
-          else if (index === 1) return { rowSpan: tableList.value.length }
-      } 
-    },
-    { dataIndex: "index", width: 120 },
-  ]},
+  { title: "参 数", dataIndex: "parameter", align: "center", width: 220, fixed: "left" },
   { title: "A组", dataIndex: "A", children: [
     { title: "最大值", dataIndex: "aMax", align: "center", width: 120 },
     { title: "平均值", dataIndex: "aAverage", align: "center", width: 120 },
@@ -132,7 +125,7 @@ const columns = ref([
     { title: "95%值", dataIndex: "c95", align: "center", width: 120 },
     { title: "结论", dataIndex: "cEnding", align: "center", width: 120 },
   ]},
-  { title: "国标值", dataIndex: "national", align: "center", width: 120 }
+  { title: "国标值", dataIndex: "national", align: "center", width: 120, class: "noBorder" }
 ])
 
 const labelAndFields = [
@@ -323,6 +316,25 @@ const _getTableList = async () => {
       "cEnding": 567.9,
       "national": 765.6
     },
+    {
+      "id": 7,
+      "aMax": 567.8,
+      "aAverage": 234.5,
+      "aMin": 789.9,
+      "a95": 876.9,
+      "aEnding": 456.9,
+      "bMax": 876.9,
+      "bAverage": 789.9,
+      "bMin": 234.6,
+      "b95": 567.9,
+      "bEnding": 789.9,
+      "cMax": 789.9,
+      "cAverage": 345.9,
+      "cMin": 654.4,
+      "c95": 432.1,
+      "cEnding": 567.9,
+      "national": 765.6
+    }
     ]
 
     pagination.value.total = 10
