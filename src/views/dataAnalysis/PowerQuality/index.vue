@@ -57,9 +57,11 @@
         >
           <template #bodyCell="{ column, record, index }">
             <template v-if="column.dataIndex === 'parameter'">
-              <div v-if="index === 0" style="text-align: center;">基波电流(A)</div>
+              <div v-if="index === 0" style="text-align: center;">
+                {{ pageType === "1" ? "基波电流(V)" : "基波电压(A)"}}
+              </div>
               <div v-else class="spliceCol">
-                <div class="label">{{ Math.floor(tableList.length / 2) === index ? "谐波电流有效值(A)": ""}}</div>
+                <div class="label">{{ Math.floor(tableList.length / 2) === index ? pageType === "1" ? "谐波电流有效值(A)" : "谐波电压含有率(%)": ""}}</div>
                 <div class="index">{{ index + 1 }}</div>
               </div>
             </template>
