@@ -233,7 +233,7 @@ const exportExcel = () => {
     Object.keys(dataArray[0]).forEach(key => data[key] = item[key])
     dataArray.push(data)
   })
-  ExportXlsx.downloadExcel(dataArray, `SOE事件分析数据表_${new Date().toLocaleString()}`)
+  ExportXlsx.downloadExcel(dataArray, `微站能耗分析数据表_${new Date().toLocaleString()}`)
 }
 
 onMounted(() => {
