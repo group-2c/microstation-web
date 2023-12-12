@@ -28,8 +28,11 @@ const app = createApp(App)
 
 app.config.globalProperties.$routeJump = routeJump
 app.provide("$routeJump", routeJump)
+app.provide("getEnvConfig", key => window.envConfig[key])
 app.component("XDescriptions", XDescriptions)
 app.component("BasicListLayout", BasicListLayout)
+
+window.document.title = window.envConfig.VUE_APP_NAME
 
 pageReload()
 

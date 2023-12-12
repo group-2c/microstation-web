@@ -13,17 +13,17 @@
   <a-layout-footer>
     <div class="left" :style="`width: ${footerWidth}px`" />
     <div class="center">
-      <div class="copyright">版权信息: {{ Constant.appCopyright }}</div>
+      <div class="copyright">版权信息: {{ getEnvConfig("VUE_APP_COPYRIGHT") }}</div>
     </div>
     <div class="right" :style="`width: ${footerWidth}px`" />
   </a-layout-footer>
 </template>
 
 <script setup>
-  import { onMounted, ref } from "vue"
-  import Constant from "_constant"
+  import { onMounted, ref, inject } from "vue"
 
   const footerWidth = ref(0)
+  const getEnvConfig = inject("getEnvConfig")
 
   const _computeEdgeScale = () => {
     const centerWidth = document.body.clientWidth - 660

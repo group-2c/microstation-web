@@ -21,11 +21,13 @@
 </template>
 
 <script setup>
-  import { nextTick, ref } from "vue"
+  import { nextTick, ref, inject } from "vue"
   import Constant from "_constant"
   import L from "leaflet"
   import "leaflet/dist/leaflet.css"
   import Lodash from "lodash"
+
+  const getEnvConfig = inject("getEnvConfig")
 
   const props = defineProps({
     onOk: Function
@@ -42,11 +44,12 @@
 
   const _initMap = () => {
     const { latitude, longitude } = dataCenter.value.record
-    const { mapOptions, mapCenter, mapZoom , mapURL, mapKey } = Constant
-
+    const { mapOptions , mapKey } = Constant
+    const mapCenter = [getEnvConfig("VUE_APP_MAP_CENTER_LAT"), getEnvConfig("VUE_APP_MAP_CENTER_LON")]
+    const mapZoom = getEnvConfig("VUE_APP_MAP_ZOOM")
     map = L.map(mapRef.value, mapOptions).setView([latitude || mapCenter[0], longitude || mapCenter[1]], mapZoom)
-      .addLayer(L.tileLayer(`${mapURL}?T=vec_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
-      .addLayer(L.tileLayer(`${mapURL}?T=cva_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
+      .addLayer(L.tileLayer(`${getEnvConfig("VUE_APP_MAP_URL")}?T=vec_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
+      .addLayer(L.tileLayer(`${getEnvConfig("VUE_APP_MAP_URL")}?T=cva_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
 
     map.on("click", e => {
       if(!marker) {

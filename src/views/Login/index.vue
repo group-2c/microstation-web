@@ -6,7 +6,7 @@
   <div class="loginBox">
     <div class="container">
       <div>
-        <div class="title">{{ Constant.appName }}</div>
+        <div class="title">{{ getEnvConfig("VUE_APP_NAME") }}</div>
         <div v-if="!registerVisible" class="outBodyBox">
           <div class="loginTips">欢迎登录</div>
           <div class="centerContainer">
@@ -51,7 +51,7 @@
             </a-form>
           </div>
         </div>
-        <div class="copyright">版权所有：{{ Constant.appCopyright }} @ {{ year }}</div>
+        <div class="copyright">版权所有：{{ getEnvConfig("VUE_APP_COPYRIGHT") }} @ {{ year }}</div>
       </div>
     </div>
   </div>
@@ -63,11 +63,11 @@ import { useStore } from "vuex"
 import { message } from "ant-design-vue"
 import { CloseOutlined } from "@ant-design/icons-vue"
 import { sendHeartBeat } from "_utils/function"
-import Constant from "_constant"
 import dayjs from "dayjs"
 import AuthApi from "_api/auth"
 
 const routeJump = inject("$routeJump")
+const getEnvConfig = inject("getEnvConfig")
 
 const store = useStore()
 const formState = ref({})

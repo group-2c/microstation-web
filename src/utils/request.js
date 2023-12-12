@@ -1,11 +1,10 @@
 import axios from "axios"
-import Constant from "_constant"
 import { message } from "ant-design-vue"
 import store from "@/store"
 import router from "@/router"
 
 const axiosInstance = axios.create({
-  baseURL: Constant.apiURL,
+  baseURL: window.envConfig.VUE_APP_API_URL,
   timeout: 1000 * 10
 })
 

@@ -11,7 +11,7 @@
         <div class="right" />
       </div>
       <div class="containerBody">
-        <div class="title">{{ Constant.appName }}</div>
+        <div class="title">{{ getEnvConfig("VUE_APP_NAME") }}</div>
         <menu-bar />
         <div class="userInfo">
           <UserOutlined class="userIcon" />
@@ -48,19 +48,19 @@
 </template> 
 
 <script setup>
-  import { onMounted, ref, computed } from "vue"
+  import { onMounted, ref, computed, inject } from "vue"
   import { useStore } from "vuex"
   import { useRoute } from "vue-router"
   import { UserOutlined, DownOutlined } from "@ant-design/icons-vue"
   import { getThreeNameParents } from "_utils/function"
   import Lodash from "lodash"
   import MenuBar from "./MenuBar.vue"
-  import Constant from "_constant"
 
   const route = useRoute()
   const store = useStore()
   const userInfo = store.state.auth.userInfo
   const owns = store.state.auth.owns
+  const getEnvConfig = inject("getEnvConfig")
 
   const topCenterAutoWidth = ref(0)
   const footerWidth = ref(0)

@@ -87,10 +87,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { ref, inject } from "vue"
 import { LayoutFilled } from "@ant-design/icons-vue"
 import { message } from "ant-design-vue"
-import Constant from "_constant"
 
 const props = defineProps({
   deviceItem: {
@@ -110,6 +109,7 @@ const props = defineProps({
 const visible = ref(false)
 const password = ref("")
 const currentType = ref("")
+const getEnvConfig = inject("getEnvConfig")
 
 const columns = [  
   { title: "时 间", dataIndex: "time", align: "left", width: 160, ellipsis: true },    
@@ -127,7 +127,7 @@ const modalConfirm = () => {
   if(!password.value) {
     return message.warning("请输入密码！")
   }
-  if(password.value !== Constant.accessControlPassword) {
+  if(password.value !== getEnvConfig("VUE_ACCESS_CONTROL_PASSWORD")) {
     return message.error("密码错误！")
   }
   accessControl()

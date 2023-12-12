@@ -46,6 +46,8 @@
   import EventInformation from "./components/EventInformation.vue"
   
   const routeJump = inject("$routeJump")
+  const getEnvConfig = inject("getEnvConfig")
+
   let map = null, markerFeatures = []
 
   const equipmentList = ref([])
@@ -55,10 +57,13 @@
   const mapRef = ref()
 
   const _initMap = () => {
-    const { mapOptions, mapCenter, mapZoom , mapURL, mapKey } = Constant
+    const { mapOptions , mapKey } = Constant
+    const mapCenter = [getEnvConfig("VUE_APP_MAP_CENTER_LAT"), getEnvConfig("VUE_APP_MAP_CENTER_LON")]
+    console.log(mapCenter)
+    const mapZoom = getEnvConfig("VUE_APP_MAP_ZOOM")
     map = L.map(mapRef.value, mapOptions).setView(mapCenter, mapZoom)
-      .addLayer(L.tileLayer(`${mapURL}?T=vec_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
-      .addLayer(L.tileLayer(`${mapURL}?T=cva_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
+      .addLayer(L.tileLayer(`${getEnvConfig("VUE_APP_MAP_URL")}?T=vec_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
+      .addLayer(L.tileLayer(`${getEnvConfig("VUE_APP_MAP_URL")}?T=cva_w&x={x}&y={y}&l={z}&tk=${mapKey}`))
   }
 
   const _drawEquipmentMarker = () => {
