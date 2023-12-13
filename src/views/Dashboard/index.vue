@@ -59,7 +59,6 @@
   const _initMap = () => {
     const { mapOptions , mapKey } = Constant
     const mapCenter = [getEnvConfig("VUE_APP_MAP_CENTER_LAT"), getEnvConfig("VUE_APP_MAP_CENTER_LON")]
-    console.log(mapCenter)
     const mapZoom = getEnvConfig("VUE_APP_MAP_ZOOM")
     map = L.map(mapRef.value, mapOptions).setView(mapCenter, mapZoom)
       .addLayer(L.tileLayer(`${getEnvConfig("VUE_APP_MAP_URL")}?T=vec_w&x={x}&y={y}&l={z}&tk=${mapKey}`))

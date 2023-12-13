@@ -17,7 +17,9 @@ const props = defineProps({
   yAxisName: {
     type: String,
     default: ""
-  }
+  },
+  legend: Object,
+  grid: Object
 })
 
 let barChart = null
@@ -35,13 +37,14 @@ const _initModeChart = (date, array) => {
         top: 30,
         textStyle: {
           color: "#dff6ff"
-        }
+        },
+        ...props.legend
       },
-      grid: {
+      grid: props.grid || {
         top: "13%",
         left: "2%",
         right: "3%",
-        bottom: "10%",
+        bottom: "2%",
         containLabel: true
       },
       toolbox: {
@@ -62,7 +65,6 @@ const _initModeChart = (date, array) => {
       },
       xAxis: {
         type: "category",
-        boundaryGap: false,
         axisLine: {
           lineStyle: {
             color: "#44668A"

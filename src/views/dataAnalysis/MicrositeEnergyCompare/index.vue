@@ -39,7 +39,7 @@
                 </a-select>
               </a-form-item>
               <a-form-item label="年份" name="year" :rules="[{ required: true }]">
-                <a-date-picker v-model:value="searchForm.year" placeholder="请选择年份" />
+                <a-date-picker v-model:value="searchForm.year" picker="year" format="YYYY"  placeholder="请选择年份" />
               </a-form-item>
               <a-form-item>
                 <a-button type="primary" :icon="h(SearchOutlined)" @click="handleSearch">查询</a-button>
