@@ -18,7 +18,7 @@
           </a-radio-group>
         </template>
         <template #extra>
-          <a-button :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
+          <!-- <a-button :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button> -->
         </template>
       </a-page-header>
       <div class="searchContainer">
@@ -79,11 +79,12 @@
         <div v-if="tableList.length === 0" class="empty">没有相关统计数据</div>
         <a-table
           v-else
-          row-key="id" 
+          row-key="id"
+          :class="pageType !== 'minute' ? 'groupTable' : ''"
           :columns="columns" 
           :data-source="tableList" 
           :pagination="pagination"
-          :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }" 
+          :scroll="{ y: 'calc(100vh - 550px)', x: 'max-content' }" 
           @change="handleTableChange"
         />       
       </div>
@@ -197,6 +198,7 @@ const handleTableChange = pagination => {
 
 const pageTypeChange = () => {
   searchForm.value = {}
+  tableList.value = []
   pagination.value.current = 1
 }
 
@@ -220,43 +222,29 @@ const _searchPrefix = () => {
 
   if(pageType.value === "minute") {
     columns.value = [
-      { title: "回路名称 / KW.h", dataIndex: "name" },
-      { title: `${data.startTime} 示数`, dataIndex: "startNumber" },
-      { title: `${data.endTime} 示数`, dataIndex: "endNumber" },
-      { title: "用电量", dataIndex: "energy" },
-      { title: "电 费", dataIndex: "cost" }
+      { title: "回路名称 / KW.h", dataIndex: "name", width: 220 },
+      { title: `${data.startTime} 示数`, dataIndex: "number0" },
+      { title: `${data.endTime} 示数`, dataIndex: "number1" },
+      { title: "用电量", dataIndex: "power0" },
+      { title: "电 费", dataIndex: "cost0" }
     ]
   } else {
-    // console.log(dayjs('2021-10-19').diff('2021-10-1', 'day'))
-    // console.log(dayjs('2021-10-19 12:30:10').diff('2021-10-19 09:30:10', 'hour'))
-    // console.log(dayjs('2021-12-31').diff('2021-10-1', 'month'))
+    const _columns = [{ title: "回路名称 / KW.h", dataIndex: "name", width: 220, align: "center", fixed: "left" }]
+    let columnNumber = dayjs(data.endTime).diff(data.startTime, pageType.value) + 1
+    if(pageType.value === "month") columnNumber--
 
-    const number = dayjs('2021-10-19').diff('2021-10-18', 'day')
-    console.log(number)
-    columns.value = [
-      { title: "回路名称 / KW.h", dataIndex: "name", align: "center", width: 220, fixed: "left" },
-      { title: "A组", dataIndex: "A", children: [
-        { title: "最大值", dataIndex: "aMax", align: "center", width: 120 },
-        { title: "平均值", dataIndex: "aAverage", align: "center", width: 120 },
-        { title: "最小值", dataIndex: "aMin", align: "center", width: 120 },
-        { title: "95%值", dataIndex: "a95", align: "center", width: 120 },
-        { title: "结论", dataIndex: "aEnding", align: "center", width: 120 },
-      ]},
-      { title: "B组", dataIndex: "B", children: [
-        { title: "最大值", dataIndex: "bMax", align: "center", width: 120 },
-        { title: "平均值", dataIndex: "bAverage", align: "center", width: 120 },
-        { title: "最小值", dataIndex: "bMin", align: "center", width: 120 },
-        { title: "95%值", dataIndex: "b95", align: "center", width: 120 },
-        { title: "结论", dataIndex: "bEnding", align: "center", width: 120 },
-      ]},
-      { title: "C组", dataIndex: "C", children: [
-        { title: "最大值", dataIndex: "cMax", align: "center", width: 120 },
-        { title: "平均值", dataIndex: "cAverage", align: "center", width: 120 },
-        { title: "最小值", dataIndex: "cMin", align: "center", width: 120 },
-        { title: "95%值", dataIndex: "c95", align: "center", width: 120 },
-        { title: "结论", dataIndex: "cEnding", align: "center", width: 120 },
-      ]}
-    ]
+    new Array(columnNumber).fill("-").forEach((_x, index) => {
+      const _formats = { hour: "YYYY-MM-DD HH:mm", month: "YYYY-MM", day: "YYYY-MM-DD"}
+      const _time = dayjs(data.startTime).add(index, pageType.value)
+      const _title = dayjs(_time).format(_formats[pageType.value])
+      _columns.push({ title: _title, children: [
+        { title: "示 数", dataIndex: `number${index}`, align: "center", width: 120 },
+        { title: "用电量", dataIndex: `power${index}`, align: "center", width: 120 },
+        { title: "电 费", dataIndex: `cost${index}`, align: "center", width: 120 },
+      ]})
+    })
+
+    columns.value = _columns
   }
 
   _getTableList()
@@ -287,31 +275,11 @@ const exportExcel = () => {
     Object.keys(dataArray[0]).forEach(key => data[key] = item[key])
     dataArray.push(data)
   })
-  ExportXlsx.downloadExcel(dataArray, `微站能耗分析数据表_${new Date().toLocaleString()}`)
+  ExportXlsx.downloadExcel(dataArray, `用电集抄分析数据表_${new Date().toLocaleString()}`)
 }
 
 onMounted(() => {
   _getControllerList()
-  // console.log(dayjs('2021-10-19').diff('2021-10-1', 'day'))
-  // console.log(dayjs('2021-10-19 12:30:10').diff('2021-10-19 09:30:10', 'hour'))
-  // console.log(dayjs('2021-12-31').diff('2021-10-1', 'month'))
 })
 </script>
-
-<style lang="less" scoped>
-.barChart {
-  width: 100%;
-  height: 400px;
-}
-
-.chartTitle {
-  margin: 10px 0;
-  color: #a3d4f9;
-  text-align: center;
-  .tItem {
-    display: inline-block;
-    margin-right: 30px;
-  }
-}
-</style>
  
