@@ -65,6 +65,7 @@ import { message } from "ant-design-vue"
 import { DotChartOutlined, LineChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
 import controllerApi from "_api/controller"
 import LineChart from "../components/LineChart.vue"
+import Lodash from "lodash"
 
 const loading = ref(false)
 const searchForm = ref({})
@@ -113,54 +114,48 @@ const controllerChange = async () => {
 const _getStatistics = async () => {
   loading.value = true
   try {
-    const _testData = () => {
-      let base = +new Date(1968, 9, 3)
-      let oneDay = 24 * 3600 * 1000
-      let date = []
-      let data = [Math.random() * 300]
-      for (let i = 1; i < 20000; i++) {
-        var now = new Date((base += oneDay));
-        date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join("/"))
-        const _i = Math.round((Math.random() - 0.5) * 20 + data[i - 1])
-        data.push(_i < 1 ? 10 : _i)
+    const data = [
+      {
+        time: "18:14",
+        Pa: 1,
+        Pb: 2,
+        Pc: 3,
+        P: 4,
+      },
+      {
+        time: "19:14",
+        Pa: 5,
+        Pb: 6,
+        Pc: 7,
+        P: 8,
       }
-      return { date, data }
-    }
+    ]
 
-    let array = [], date = _testData().date
-
+    let array = []
+    
     if(pageType.value === "1") {
-      array = [
-        {
-          name: "Pa",
-          data: _testData().data
-        },
-        {
-          name: "Pb",
-          data: _testData().data
-        },
-        {
-          name: "Pc",
-          data: _testData().data
-        },
-        {
-          name: "P",
-          data: _testData().data
-        }
-      ]
+      new Array(4).fill("-").forEach((_x, index) => {
+        let name = []
+        if(index === 0) name = "Pa"
+        else if(index === 1) name = "Pb"
+        else if(index === 2) name = "Pc"
+        else name = "P"
+        array.push({
+          name,
+          data: data.map(x => x[name])
+        })
+      })
     } else {
-      array = [
-        {
-          name: "P",
-          data: _testData().data
-        }
-      ]
+      array.push({
+        name: "P",
+        data: data.map(x => x.P)
+      })
     }
 
     statisticsData.value = array
 
     nextTick(() => {
-      lineChartRef.value.setChartData(array, date)
+      lineChartRef.value.setChartData(array, data.map(x => x.time))
     })
   } catch (err) {
     message.error("统计数据加载失败: " + err)

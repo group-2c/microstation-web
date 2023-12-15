@@ -138,7 +138,6 @@ const labelAndFields = [
 ]
 
 watch(searchForm.value, () => {
-  statisticsData.value = []
   _calibration(status => {
     if(status) _getTableList()
   })
@@ -181,7 +180,7 @@ const _getTableList = async () => {
     page: current, 
     size: pageSize 
   }
-  console.log(data)
+  console.log(JSON.stringify(data))
   loading.value = true
   try {
     tableList.value = [

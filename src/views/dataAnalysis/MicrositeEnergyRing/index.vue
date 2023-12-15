@@ -93,10 +93,7 @@ import controllerApi from "_api/controller"
 import BarChart from "../components/BarChart.vue"
 
 const loading = ref(false)
-const searchForm = ref({
-  start: 15,
-  end: 20
-})
+const searchForm = ref({})
 const tableList = ref([])
 const pageType = ref("day")
 const controllerList = ref([])
@@ -172,6 +169,8 @@ const _getTableList = async () => {
   if(pageType.value === "day") data.date = dayjs(data.date).format("YYYY-MM-DD")
   if(pageType.value === "month") data.date = dayjs(data.date).format("YYYY-MM")
   if(pageType.value === "week") data.date = dayjs(dayjs(data.date).day(1)).format("YYYY-MM-DD")
+
+  console.log(JSON.stringify(data))
 
   loading.value = true
   try {

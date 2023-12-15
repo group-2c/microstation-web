@@ -172,7 +172,7 @@ const _getTableList = async () => {
     size: pageSize 
   }
 
-  console.log("data", data)
+  console.log("data", JSON.stringify(data))
   tableList.value = [
     {
       id: 1,
@@ -243,7 +243,7 @@ const _searchPrefix = () => {
         { title: "电 费", dataIndex: `cost${index}`, align: "center", width: 120 },
       ]})
     })
-
+    console.log(_columns)
     columns.value = _columns
   }
 

@@ -143,7 +143,8 @@ const columns = computed(() => {
   checkboxOptions.value.forEach(item => {
     if((searchForm.value.phase || []).includes(item.value)) {
       searchForm.value.contentRate.forEach(_con => {
-        _array.push({ title: `${item.label}${_con}次谐波`, dataIndex: item.value, align: "left", width: 130, ellipsis: true })
+        const title = `${item.label}${_con == "999" ? "总谐波" : `${_con}次谐波`}`
+        _array.push({ title, dataIndex: `${item.value}${_con}`, align: "left", width: 130, ellipsis: true })
       })
     }
   })
@@ -194,30 +195,31 @@ const controllerChange = async () => {
 const _getStatistics = async () => {
   loading.value = true
   try {
-    const _testData = () => {
-      let base = +new Date(1968, 9, 3)
-      let oneDay = 24 * 3600 * 1000
-      let date = []
-      let data = [Math.random() * 300]
-      for (let i = 1; i < 20000; i++) {
-        var now = new Date((base += oneDay));
-        date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join("/"))
-        const _i = Math.round((Math.random() - 0.5) * 20 + data[i - 1])
-        data.push(_i < 1 ? 10 : _i)
+    const data = [
+      {
+        time: "10-08 18:14",
+        A2: 100,
+        A4: 200,
+        B2: 300,
+        B4: 400,
+      },
+      {
+        time: "10-08 19:14",
+        A2: 100,
+        A4: 300,
+        B2: 400,
+        B4: 800,
       }
-      return { date, data }
-    }
+    ]
 
-    let array = [], date = []
+    let array = []
 
     checkboxOptions.value.forEach(item => {
       if((searchForm.value.phase || []).includes(item.value)) {
         searchForm.value.contentRate.forEach(_con => {
-          const res = _testData()
-          date = res.date
           array.push({
             name: `${item.label}${_con}次谐波含量`,
-            data: res.data
+            data: data.map(x => x[`${item.value}${_con}`])
           })
         })
       }
@@ -225,7 +227,7 @@ const _getStatistics = async () => {
     statisticsData.value = array
 
     nextTick(() => {
-      lineChartRef.value.setChartData(array, date)
+      lineChartRef.value.setChartData(array, data.map(x => x.time))
     })
   } catch (err) {
     message.error("统计数据加载失败: " + err)
@@ -248,7 +250,7 @@ const _getTableList = async () => {
     page: current, 
     size: pageSize 
   }
-  console.log(data)
+  console.log(JSON.stringify(data))
   loading.value = true
   try {
     tableList.value = [
@@ -404,6 +406,7 @@ onMounted(() => {
   contentRateList.value = new Array(30).fill("-").map((item, x) => ({
     label: `${x+2}次谐波含量`, value: `${x+2}`
   }))
+  contentRateList.value.unshift({ label: "总谐波", value: "999"})
   _getControllerList()
 })
 </script>

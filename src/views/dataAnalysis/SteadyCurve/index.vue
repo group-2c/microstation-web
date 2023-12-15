@@ -128,7 +128,7 @@ const columns = computed(() => {
     { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
     { title: "微站名称", dataIndex: "controllerName", align: "left", width: 200, ellipsis: true, fixed: "left" },
     { title: "设备名称", dataIndex: "deviceName", align: "left", width: 200, ellipsis: true },
-    { title: "采集时间", dataIndex: "createAt", align: "left", width: 120, ellipsis: true }
+    { title: "采集时间", dataIndex: "time", align: "left", width: 120, ellipsis: true }
   ]
   if(currentSteadyType.value.options) {
     currentSteadyType.value.options.forEach(item => {
@@ -178,37 +178,40 @@ const controllerChange = async () => {
 const _getStatistics = async () => {
   loading.value = true
   try {
-    const _testData = () => {
-      let base = +new Date(1968, 9, 3)
-      let oneDay = 24 * 3600 * 1000
-      let date = []
-      let data = [Math.random() * 300]
-      for (let i = 1; i < 20000; i++) {
-        var now = new Date((base += oneDay));
-        date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join("/"))
-        const _i = Math.round((Math.random() - 0.5) * 20 + data[i - 1])
-        data.push(_i < 1 ? 10 : _i)
+    const data = [
+      {
+        time: "10-08 18:14",
+        A: 200,
+        B: 300,
+        C: 400
+      },
+      {
+        time: "10-08 19:14",
+        A: 100,
+        B: 200,
+        C: 300
+      },
+      {
+        time: "10-08 20:14",
+        A: 300,
+        B: 800,
+        C: 100
       }
-      return { date, data }
-    }
+    ]
 
-    let array = [], date = []
+    let array = []
     if(currentSteadyType.value?.options) {
       currentSteadyType.value.options.forEach(item => {
-        if((searchForm.value.phase || []).includes(item.value)) {
-          const res = _testData()
-          date = res.date
-          array.push({
-            name: item.label,
-            data: res.data
-          })
-        }
+        array.push({
+          name: item.label,
+          data: data.map(x => x[item.value])
+        })
       })
       statisticsData.value = array
     }
     
     nextTick(() => {
-      lineChartRef.value.setChartData(array, date)
+      lineChartRef.value.setChartData(array, data.map(x => x.time))
     })
   } catch (err) {
     message.error("统计数据加载失败: " + err)
@@ -238,7 +241,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站1",
     "deviceName": "设备1",
-    "createAt": "2023-10-01 12:01:02",
+    "time": "10-01 12:01",
     "A": 300,
     "B": 500,
     "C": 12,
@@ -247,7 +250,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站2",
     "deviceName": "设备2",
-    "createAt": "2023-10-02 15:30:45",
+    "time": "10-02 15:30",
     "A": 200,
     "B": 550,
     "C": 18,
@@ -256,7 +259,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站3",
     "deviceName": "设备3",
-    "createAt": "2023-10-03 08:45:20",
+    "time": "10-03 08:45",
     "A": 400,
     "B": 450,
     "C": 15,
@@ -265,7 +268,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站4",
     "deviceName": "设备4",
-    "createAt": "2023-10-04 20:12:37",
+    "time": "10-04 20:12",
     "A": 350,
     "B": 520,
     "C": 10,
@@ -274,7 +277,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站5",
     "deviceName": "设备5",
-    "createAt": "2023-10-05 11:05:59",
+    "time": "10-05 11:05",
     "A": 280,
     "B": 580,
     "C": 14,
@@ -283,7 +286,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站6",
     "deviceName": "设备6",
-    "createAt": "2023-10-06 16:40:22",
+    "time": "10-06 16:40",
     "A": 320,
     "B": 510,
     "C": 16,
@@ -292,7 +295,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站7",
     "deviceName": "设备7",
-    "createAt": "2023-10-07 09:28:50",
+    "time": "10-07 09:28",
     "A": 250,
     "B": 530,
     "C": 12,
@@ -301,7 +304,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站8",
     "deviceName": "设备8",
-    "createAt": "2023-10-08 18:14:12",
+    "time": "10-08 18:14",
     "A": 300,
     "B": 480,
     "C": 17,
@@ -310,7 +313,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站9",
     "deviceName": "设备9",
-    "createAt": "2023-10-09 14:55:33",
+    "time": "10-09 14:55",
     "A": 380,
     "B": 540,
     "C": 13,
@@ -319,7 +322,7 @@ const _getTableList = async () => {
   {
     "controllerName": "微站10",
     "deviceName": "设备10",
-    "createAt": "2023-10-10 22:08:05",
+    "time": "10-10 22:08",
     "A": 270,
     "B": 500,
     "C": 11,

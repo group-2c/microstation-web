@@ -70,7 +70,9 @@
         </a-row>
       </div>
       <div class="contentContainer">
+        <div v-if="tableList.length === 0" class="empty">没有相关统计数据</div>
         <a-table
+          v-else
           row-key="id" 
           :columns="columns" 
           :data-source="tableList" 
@@ -92,10 +94,7 @@ import dayjs from "dayjs"
 import controllerApi from "_api/controller"
 
 const loading = ref(false)
-const searchForm = ref({
-  start: 15,
-  end: 20
-})
+const searchForm = ref({})
 const tableList = ref([])
 const pageType = ref("day")
 const controllerList = ref([])
@@ -114,10 +113,7 @@ const pagination = ref({
 
 const formRef = ref()
 
-const columns = ref([
-  { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "回路名称/KW.h", dataIndex: "name", align: "left", width: 200, ellipsis: true, fixed: "left" },
-])
+const columns = ref([])
 
 const _getControllerList = async () => {
   try {
@@ -154,11 +150,17 @@ const _setDynamicColumns = data => {
   const text = pageType.value === "year" ? "月" : pageType.value === "month" ? "日" : "时"
   const count = searchForm.value.end - searchForm.value.start
 
+  const _columns = [
+    { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
+    { title: "回路名称/KW.h", dataIndex: "name", align: "left", width: 200, ellipsis: true, fixed: "left" },
+  ]
   new Array(count+1).fill("-").forEach((_x, index) => {
     const number = searchForm.value.start + index
-    columns.value.push({ title: `${number}${text}`, dataIndex: `${pageType.value}${number}`, align: "center", width: 150 })
+    _columns.push({ title: `${number}${text}`, dataIndex: `${pageType.value}${number}`, align: "center", width: 150 })
   })
-  columns.value.push({ title: "合计", dataIndex: "count", align: "center", width: 150 })
+  _columns.push({ title: "合计", dataIndex: "count", align: "center", width: 150 })
+
+  columns.value = _columns
 
   data.forEach(item => {
     item.values.forEach((value, index) => {
@@ -171,15 +173,30 @@ const _setDynamicColumns = data => {
 
 const _getTableList = async () => {
   const { current, pageSize } = pagination.value
-  const { yearMonthDay, yearMonth, year } = searchForm.value
   const data = { 
     ...searchForm.value,
+    type: pageType.value,
+    date: dayjs(searchForm.value.date).format(pageType.value === 'day' ? 'YYYY-MM-DD' : pageType.value === 'month' ? 'YYYY-MM' : 'YYYY'),
     page: current, 
     size: pageSize 
   }
-  if(yearMonthDay) data.yearMonthDay = dayjs(yearMonthDay).format("YYYY-MM-DD")
-  if(yearMonth) data.yearMonth = dayjs(yearMonth).format("YYYY-MM")
-  if(year) data.year = dayjs(year).format("YYYY")
+
+  console.log(JSON.stringify(data))
+  _setDynamicColumns([
+    {
+      id: 1,
+      name: "回路1",
+      count: 10000,
+      values: [100, 200, 300, 400, 500, 600]
+    },
+    {
+      id: 2,
+      name: "回路2",
+      count: 20000,
+      values: [1000, 2000, 3000, 4000, 5000, 6000]
+    },
+  ])
+
 
   loading.value = true
   try {
@@ -200,7 +217,9 @@ const handleTableChange = pagination => {
 
 const pageTypeChange = () => {
   searchForm.value = {}
+  tableList.value = []
   pagination.value.current = 1
+  handleSearch()
 }
 
 const _searchPrefix = () => {
@@ -237,19 +256,6 @@ const exportExcel = () => {
 }
 
 onMounted(() => {
-  const data = [
-    {
-      id: 1,
-      name: "回路1",
-      values: [100, 200, 300, 400, 500, 600]
-    },
-    {
-      id: 2,
-      name: "回路2",
-      values: [1000, 2000, 3000, 4000, 5000, 6000]
-    },
-  ]
-  _setDynamicColumns(data)
   _getControllerList()
 })
 </script>
