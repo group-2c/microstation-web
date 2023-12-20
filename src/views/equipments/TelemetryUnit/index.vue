@@ -33,7 +33,8 @@
   const permissions = getPermissions()
 
   const columns = ref([  
-    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true, fixed: "left" },    
+    { title: "设备名称", dataIndex: "name", align: "left", width: 250, ellipsis: true, fixed: "left" },
+    { title: "设备编号", dataIndex: "code", align: "left", width: 200, ellipsis: true },    
     { title: "设备地址", dataIndex: "slaveId", align: "left", width: 250 },
     { title: "波特率", dataIndex: "baudRate", align: "left", width: 160 },
     { title: "数据位", dataIndex: "dataBit", align: "left", width: 160 },

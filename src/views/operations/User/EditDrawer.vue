@@ -56,7 +56,7 @@
     </a-form>
     <template #footer>
       <a-button  @click="handleCancel">取消</a-button>
-      <a-button type="primary" @click="handleOk">确定</a-button>
+      <a-button type="primary" @click="handleOk" :loading="dataCenter.loading">确定</a-button>
     </template>
   </a-drawer>
 </template>

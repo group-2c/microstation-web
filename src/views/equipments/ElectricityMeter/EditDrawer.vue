@@ -14,6 +14,11 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
+          <a-form-item label="设备编号" name="code" :rules="[{ required: true }]">
+            <a-input v-model:value="dataCenter.record.code" placeholder="请输入设备编号" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
           <a-form-item label="设备地址" name="slaveId" :rules="[{ required: true }]">
             <a-input-number v-model:value="dataCenter.record.slaveId" placeholder="请输入设备地址" />
           </a-form-item>
@@ -56,7 +61,7 @@
     </a-form>
     <template #footer>
       <a-button  @click="handleCancel">取消</a-button>
-      <a-button type="primary" @click="handleOk">确定</a-button>
+      <a-button type="primary" @click="handleOk" :loading="dataCenter.loading">确定</a-button>
     </template>
   </a-drawer>
 </template>
