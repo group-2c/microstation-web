@@ -11,6 +11,8 @@ import Organization from "@/views/operations/Organization/index.vue"
 import CircuitManage from "@/views/operations/CircuitManage/index.vue"
 import ProjectManage from "@/views/operations/ProjectManage/index.vue"
 import PowerMonitoringModel from "@/views/operations/PowerMonitoringModel/index.vue"
+import TunnelStations from "@/views/operations/TunnelStations/index.vue"
+import Tunnels from "@/views/operations/Tunnels/index.vue"
 
 const route = {
   path: "operations",
@@ -47,6 +49,18 @@ const route = {
       name: "ProjectManage",
       component: ProjectManage,
       meta: { title: "项目管理" }
+    },
+    {
+      path: "tunnelStations",
+      name: "TunnelStations",
+      component: TunnelStations,
+      meta: { title: "隧管站管理" }
+    },
+    {
+      path: "tunnels",
+      name: "Tunnels",
+      component: Tunnels,
+      meta: { title: "隧道管理" }
     },
     {
       path: "powerMonitoringModel",

@@ -48,8 +48,10 @@
           </a-form-item>
         </a-col>
         <a-col :span="24">
-          <a-form-item label="隧管站" name="tunnel" :rules="[{ required: true }]">
-            <a-input v-model:value="dataCenter.record.tunnel" placeholder="请输入隧管站" />
+          <a-form-item label="所属隧管站" name="tunnelStationId"  :rules="[{ required: true }]">
+            <a-select v-model:value="dataCenter.record.tunnelStationId" popupClassName="modalSelect" placeholder="请选择所属隧管站">
+              <a-select-option v-for="item in dataCenter.tunnelStationList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="24">
@@ -90,6 +92,7 @@ import { message } from "ant-design-vue"
 import { dict_manufacturers, dict_controller_equipment_model } from "_utils/dictionary"
 import controllerApi from "_api/controller"
 import projectsApi from "_api/projects"
+import tunnelStationsApi from "_api/tunnelStations"
 import Lodash from "lodash"
 import dayjs from "dayjs"
 import PickCoordinate from "_components/PickCoordinate/index.vue"
@@ -102,7 +105,8 @@ const dataDefault = {
   visible: false,
   loading: false,
   record: {},
-  projectList: []
+  projectList: [],
+  tunnelStationList: []
 }
 
 const dataCenter = ref(Lodash.cloneDeep(dataDefault))
@@ -118,6 +122,15 @@ const _getProjectList = async () => {
   }
 }
 
+const _getTunnelStationList = async () => {
+  try {
+    const res = await tunnelStationsApi.getAll()
+    dataCenter.value.tunnelStationList = res.data
+  } catch(err) {
+    message.error(`获取隧管站列表失败: ${err}`)
+  }
+}
+
 const handleShow = (item = {}) => {
   dataCenter.value.visible = true
   dataCenter.value.record = {
@@ -125,6 +138,7 @@ const handleShow = (item = {}) => {
     installationDate: item.installationDate ? dayjs(item.installationDate) : ""
   }
   _getProjectList()
+  _getTunnelStationList()
 }
 
 const _validateForm = callback => {

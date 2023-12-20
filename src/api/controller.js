@@ -19,7 +19,7 @@ const toSubmitFields = values => {
     "longitude",
     "latitude",
     "projectId",
-    "tunnel",
+    "tunnelStationId",
     "location",
     "manufacturer",
     "installationDate",
