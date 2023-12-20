@@ -394,6 +394,108 @@
   opacity: .95;
 }
 
+.smallTable {
+  margin: 0;
+  &.ant-table-wrapper {
+    .ant-table {
+      background: none !important;
+    }
+    .ant-table-thead {
+      tr {
+        th {
+          background: #073669ae;
+          color: #87D2E9;
+          font-size: 14px;
+          border: none;
+          padding: 8px 16px;
+          border-start-start-radius: 0 !important;
+          border-start-end-radius: 0 !important;
+          &::before {
+            display: none;
+          }
+        }
+      }
+    }
+    .ant-table-tbody {
+      tr {
+        td {
+          background: none !important;
+          color: #ffffff;
+          font-size: 14px;
+          border-radius: 0 !important;
+          border: none !important;
+          padding: 5px 16px;
+          background: #06163180 !important;
+        }
+        &:nth-child(even){
+          td {
+            background: #07366979 !important;
+          }
+        }
+        &:hover {
+          td {
+            border-color: #1675af !important;
+          }
+        }
+        .ant-btn-link {
+          color: #34c4ff;
+        }
+        &.itemActive {
+          td {
+            background: #199cd1;
+            font-weight: bold;
+            .ant-btn {
+              color: #fff !important;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+    .ant-checkbox-wrapper {
+      .ant-checkbox-inner {
+        background: none !important;
+        border: solid 1px #def5fe;
+      }
+      .ant-checkbox-indeterminate {
+        .ant-checkbox-inner {
+          border: solid 1px #a3d4f9;
+          &::after {
+            background-color: #a3d4f9;
+          }
+        }
+      }
+      .ant-checkbox-checked {
+        .ant-checkbox-inner {
+          background: none !important;
+          border: solid 1px #a3d4f9;
+          &::after {
+            content: "";
+            border: 2px solid transparent;
+            border-left: 0;
+            border-top: 0;
+            border-color: #a3d4f9 !important;
+            width: 4px;
+            height: 7px;
+            position: absolute;
+            top: 6px;
+            left: 3px;
+            box-sizing: content-box;
+            transform-origin: center;
+          }
+          &:hover,  &:focus {
+            border: solid 1px #a3d4f9 !important;
+            box-shadow: none;
+          }
+        }
+        &::after {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
 .highLevelTitleBar {
   background: url("@/assets/images/dashboard/icon/title.png") no-repeat center center;
   background-size: 100% 100%;

@@ -3,7 +3,7 @@
  * @date: 2023-09-21 09:36:42
  * @fileName: EventInformation.vue
  * @filePath: src/views/Dashboard/components/EventInformation.vue
- * @description: 事件信息
+ * @description: 报警信息
  */
 <style lang="less" scoped>
  @import url("./index.less");
@@ -13,12 +13,12 @@
   <div class="eventInformation">
     <div class="highLevelTitleBar">
       <i class="informationIcon" />
-      <span class="chTitle">事件信息</span>
+      <span class="chTitle">报警信息</span>
     </div>
     <div class="contentBar">
       <a-table 
         row-key="id"
-        class="smallTable"
+        class="eventTable"
         :data-source="tableList" 
         :showHeader="false"
         :pagination="false"
@@ -63,7 +63,28 @@
         deviceName: "微站2",
         status: 2,
         time: "2023-09-08 13:02:01"
-      }
+      },
+      {
+        id: 3,
+        description: "事件3",
+        deviceName: "微站3",
+        status: 3,
+        time: "2023-09-08 13:02:01"
+      },
+      {
+        id: 4,
+        description: "事件4",
+        deviceName: "微站4",
+        status: 1,
+        time: "2023-09-08 13:02:01"
+      },
+      {
+        id: 5,
+        description: "事件5",
+        deviceName: "微站5",
+        status: 3,
+        time: "2023-09-08 13:02:01"
+      },
     ]
   }
   onMounted(() => {

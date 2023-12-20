@@ -5,309 +5,140 @@
  * @filePath: src/views/Dashboard/components/index.less
  * @description:  
  */
-.equipmentStatus {
-  height: 270px;
-  // background: red;
+.dataStatistics {
+  height: 250px;
   .contentBar {
-    position: relative;
-    .chart {
-      width: 190px;
-      height: 240px;
-      position: relative;
-      top: -20px;
-      left: -5px;
-      z-index: 3;
+    margin-top: 10px;
+    .projectItem {
       display: inline-block;
-    }
-    .chartStyles {
-      position: absolute;
-      top: 51px;
-      left: 41px;
-      pointer-events: none;
-      &::before {
-        content: "";
-        width: 99px;
-        height: 99px;
-        border-radius: 99px;
-        background: #3d7eff36;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        z-index: 1;
-      }
-      &::after {
-        content: "";
-        width: 83px;
-        height: 83px;
-        border-radius: 83px;
-        background: linear-gradient(39deg, #3932FF 0%, #32A6FF 100%);
-        position: absolute;
-        left: 8px;
-        top: 8px;
-        z-index: 2;
-      }
-    }
-    .statusList {
-      background: url("@/assets/images/dashboard/icon/equipmentBag.png") no-repeat center center;
-      background-size: 100% 100%;
-      width: 249px;
-      height: 136px;
-      display: inline-block;
-      position: absolute;
-      right: 0px;
-      top: 35px;
-      .statusItem {
-        width: 100%;
-        height: 33px;
-        line-height: 33px;
-        margin-top: 19px;
-        &:first-child {
-          margin-top: 0;
-        }
-        label {
-          font-size: 16px;
-          color: #F1FDFF;
-          padding-left: 62px;
-        }
-        .statusNumber {
-          color: #53B7F1;
-          font-size: 18px;
-          float: right;
-          margin-right: 20px;
-        }
-      }
-    }
-  }
-} 
-
-.dynamo {
-  height: 355px;
-  .contentBar {
-    margin-top: -5px;
-    .topIcons {
-      padding-left: 107px;
-      .iconItem {
-        width: 100px;
-        text-align: center;
-        display: inline-block;
-        margin-right: 50px;
-        i {
+      margin-bottom: 25px;
+      > div {
+        width: 206px;
+        display: flex;
+        .itemImg {
           width: 66px;
           height: 71px;
-          display: block;
-          margin-left: 16px;
-          &.ark {
+          &[data-name="project"] {
             background: url("@/assets/images/dashboard/icon/equipment1.png") no-repeat center center;
             background-size: 100% 100%;
           }
-          &.namo {
+          &[data-name="controller"] {
+            background: url("@/assets/images/dashboard/icon/equipment4.png") no-repeat center center;
+            background-size: 100% 100%;
+          }
+          &[data-name="equipment"] {
             background: url("@/assets/images/dashboard/icon/equipment2.png") no-repeat center center;
             background-size: 100% 100%;
           }
+          &[data-name="alarm"] {
+            background: url("@/assets/images/dashboard/icon/equipment3.png") no-repeat center center;
+            background-size: 100% 100%;
+          }
         }
-        div {
-          font-size: 14px;
-          color: #bebebe;
-          font-weight: bold;
-          letter-spacing: 2px;
+        .itemData {
+          margin: 10px 0 0 15px;
+          width: 120px;
+          .itemNumber {
+            font-size: 25px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            color: #4ED1FF;
+          }
+          .itemName {
+            font-size: 14px;
+            color: #E4F8FF;
+            margin-top: 5px;
+            letter-spacing: 2px;
+          }
+        }
+      }
+
+    }
+  }
+}
+
+.equipmentStatus {
+  height: 355px;
+  .contentBar {
+    .progressList {
+      margin-top: 10px;
+      .progressItem {
+        margin: 0 20px;
+        display: inline-block;
+        .percentInfo {
+          .scale {
+            font-size: 18px;
+            font-weight: bold;
+          }
+          .label {
+            font-size: 14px;
+            color: #FFFFFF;
+            margin-top: 5px;
+            span {
+              font-size: 12px;
+              color: #d5d5d5;
+              padding-left: 2px;
+            }
+          }
+        }
+        .itemTitle {
+          color: #ffffff;
+          font-size: 16px;
+          display: table;
+          margin: 0 auto;
+          cursor: pointer;
+          &.active, &:hover {
+            &::after {
+              content: "";
+              width: 100%;
+              height: 2px;
+              display: inline-block;
+              background: var(--percent-active-color);
+              position: relative;
+              top: -8px;
+            }
+          }
+          &:hover {
+            opacity: .7;
+          }
         }
       }
     }
-    .contentBody {
-      position: relative;
-      .backImgs {
-        position: absolute;
-        top: -15px;
-        left: 85px;
-        div {
-          background: url("@/assets/images/dashboard/icon/djImg.png") no-repeat center center;
-          background-size: 100% 100%;
-          width: 133px;
-          height: 230px;
-          margin-right: 19px;
-          display: inline-block;
+    .eventTable {
+      height: calc(100vh - 800px);
+      overflow-y: auto;
+      .status {
+        &.status-0 {
+          color: #c1c1c1;
         }
-      }
-      .contentItem {
-        padding-left: 40px;
-        padding-top: 20px;
-        position: relative;
-        margin-bottom: 1px;
-        label {
-          font-size: 14px;
-          color: #bebebe;
-          font-weight: bold;
-          letter-spacing: 2px;
-          padding-right: 37px;
+        &.status-1 {
+          color: #4ED1FC;
         }
-        div {
-          font-weight: bold;
-          color: #FFFFFF;
-          font-size: 25px;
-          display: inline-block;
-          margin-right: 77px;
-          width: 80px;
-          text-align: center;
+        &.status-2 {
+          color: #FF1919;
         }
       }
     }
   }
 }
 
-.equipmentSearch {
-  .contentBar {
-    padding-left: 8px;
-    margin-top: -5px;
-    .searchBox {
-      display: flex;
-      ::v-deep(.ant-input) {
-        width: 320px;
-        height: 32px;
-        background-color: rgba(16, 48, 94, 0.45);
-        border-radius: 2px;
-        border: solid 1px #3669ac;
-        box-shadow: none !important;
-        color: #ffffff;
-      }
-      .searchBtn {
-        background: url("@/assets/images/dashboard/icon/queryEquipmentBtn.png") no-repeat center center;
-        background-size: 100% 100%;
-        width: 108px;
-        height: 32px;
-        margin-left: 8px;
-        font-size: 14px;
-        letter-spacing: 3px;
-        color: #ffffff;
-        line-height: 32px;
-        text-align: center;
-        padding-left: 6px;
-        cursor: pointer;
-        &:hover {
-          opacity: .9;
-        }
-      }
-    }
-    .smallTable {
-      margin-top: 10px;
-      height: calc(100vh - 842px);
-      overflow-y: auto;
-      ::v-deep(.ant-table) {
-        background: none !important;
-        .ant-table-tbody {
-          tr {
-            background: none;
-            border: none;
-            td {
-              background: none;
-              border: none;
-              padding: 0;
-              .customRow {
-                display: flex;
-                .icon {
-                  width: 5px;
-                  height: 42px;
-                  background: red;
-                  margin-right: 5px;
-                }
-                .rowBody {
-                  background: linear-gradient(90deg, #214199c2 0%, rgba(30,84,156,0.1) 100%);
-                  border: 1px solid rgba(130,175,255,0.31);
-                  width: 100%;
-                  height: 42px;
-                  line-height: 42px;
-                  border-bottom: none;
-                  border-right: 1px solid rgb(176 192 220 / 17%);
-                  display: flex;
-                  .eqIcon {
-                    height: 100%;
-                    border-right: 1px solid rgba(130,175,255,0.31);
-                    padding-right: 2px;
-                    &::before {
-                      content: "";
-                      background: url("@/assets/images/dashboard/icon/eqIcon.png") no-repeat center center;
-                      background-size: 100% 100%;
-                      width: 52px;
-                      height: 32px;
-                      display: inline-block;
-                      position: relative;
-                      top: 5px;
-                    }
-                  }
-                  .name {
-                    width: 310px;
-                    padding-left: 15px;
-                    color: #FFFFFF;
-                    font-size: 14px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                  }
-                  .status {
-                    padding-left: 10px;
-                    color: #199CFF;
-                    font-size: 14px;
-                    letter-spacing: 2px;
-                  }
-                }
-                &.customRow-0 {
-                  .icon {
-                    background: #5A5A5A;
-                  }
-                  .status {
-                    color: #55595C;
-                  }
-                }
-                &.customRow-1 {
-                  .icon {
-                    background: #3E9CFF;
-                  }
-                  .status {
-                    color: #199CFF;
-                  }
-                }
-                &.customRow-2 {
-                  .icon {
-                    background: #FF3E3E;
-                  }
-                  .status {
-                    color: #FF1919;
-                  }
-                }
-              }
-            }
-            &:nth-child(even){
-              td {
-                .customRow {
-                  .rowBody {
-                    background: linear-gradient(90deg, #262F46 0%, rgba(5,38,82,0.1) 100%);
-                    border-right: 1px solid rgba(130,175,255,0.31);
-                    border-left: 1px solid rgba(130,175,255,0.31);
-                  }
-                }
-              }
-            }
-            &:last-child {
-              td {
-                .customRow {
-                  .rowBody {
-                    border-bottom: 1px solid rgba(130,175,255,0.31);
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-} 
-
-
-.powerConsumption {
-  height: 290px;
+.alarmStatistics {
+  height: calc(100vh - 730px);
   .contentBar {
     width: 100%;
-    height: 230px;
+    height: calc(100% - 40px);
+    .chart {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.powerConsumption {
+  height: 230px;
+  .contentBar {
+    width: 100%;
+    height: 180px;
     .chart {
       width: 100%;
       height: 100%;
@@ -316,10 +147,10 @@
 }
 
 .lowPressure {
-  height: 260px;
+  height: 220px;
   .contentBar {
     width: 100%;
-    height: 200px;
+    height: 170px;
     .chart {
       width: 100%;
       height: 100%;
@@ -331,8 +162,8 @@
   .contentBar {
     margin-top: -5px;
     overflow-y: auto;
-    .smallTable {
-      height: calc(100vh - 720px);
+    .eventTable {
+      height: calc(100vh - 620px);
       overflow-y: auto;
       ::v-deep(.ant-table) {
         background: none !important;
@@ -384,6 +215,15 @@
                 &.customRow-2 {
                   .icon {
                     background: url("@/assets/images/dashboard/icon/alarm-2.png") no-repeat center center;
+                    background-size: 100% 100%;
+                    width: 98px;
+                    height: 47px;
+                    display: inline-block;
+                  }
+                }
+                &.customRow-3 {
+                  .icon {
+                    background: url("@/assets/images/dashboard/icon/alarm-3.png") no-repeat center center;
                     background-size: 100% 100%;
                     width: 98px;
                     height: 47px;

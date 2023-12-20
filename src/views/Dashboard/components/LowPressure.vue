@@ -3,7 +3,7 @@
  * @date: 2023-09-21 10:13:10
  * @fileName: LowPressure.vue
  * @filePath: src/views/Dashboard/components/LowPressure.vue
- * @description: 低压电线柜
+ * @description: 环境监测
  */
 <style lang="less" scoped>
  @import url("./index.less");
@@ -13,7 +13,7 @@
   <div class="lowPressure">
     <div class="highLevelTitleBar">
       <i class="lowIcon" />
-      <span class="chTitle">低压电线柜电流曲线</span>
+      <span class="chTitle">环境监测</span>
     </div>
     <div class="contentBar">
       <div class="chart" ref="chartRef" />
@@ -60,7 +60,7 @@
           data: [
             {
               icon: "roundRect",
-              name: "数据1",
+              name: "温湿度最大值",
               icon: "roundRect",
               itemStyle: {
                 color: "#29eafd",
@@ -70,7 +70,7 @@
             },
             {
               icon: "roundRect",
-              name: "数据2",
+              name: "温湿度最小值",
               icon: "roundRect",
               itemStyle: {
                 color: "#2944FD",
@@ -107,7 +107,7 @@
           },
         },
         yAxis: {
-          name: "电流",
+          name: "温度",
           nameTextStyle: {
             padding: [0, 20, 0, 0],
             fontSize: 12,
@@ -128,7 +128,7 @@
         },
         series: [
           {
-            name: "数据1",
+            name: "温湿度最大值",
             data: upList.value,
             type: "line",
             symbol: "none",
@@ -151,7 +151,7 @@
             },
           },
           {
-            name: "数据2",
+            name: "温湿度最小值",
             data: downList.value,
             type: "line",
             symbol: "none",

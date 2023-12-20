@@ -15,9 +15,9 @@
     <div id="map" ref="mapRef" />
     <div class="mapContainers">
       <div class="mapContainerLeft">
-        <equipment-status :data="deviceStatus" />
-        <dynamo />
-        <equipment-search />
+        <data-statistics />
+        <equipment-status />
+        <alarm-statistics />
       </div>
       <div class="mapContainerRight">
         <power-consumption />
@@ -38,9 +38,9 @@
   import Constant from "_constant"
   import controllerApi from "_api/controller"
   import LayoutFooter from "_components/LayoutFooter/index.vue"
+  import DataStatistics from "./components/DataStatistics.vue"
   import EquipmentStatus from "./components/EquipmentStatus.vue"
-  import Dynamo from "./components/Dynamo.vue"
-  import EquipmentSearch from "./components/EquipmentSearch.vue"
+  import AlarmStatistics from "./components/AlarmStatistics.vue"
   import PowerConsumption from "./components/PowerConsumption.vue"
   import LowPressure from "./components/LowPressure.vue"
   import EventInformation from "./components/EventInformation.vue"
@@ -51,7 +51,6 @@
   let map = null, markerFeatures = []
 
   const equipmentList = ref([])
-  const deviceStatus = ref({})
   const openPopupId = ref(undefined)
 
   const mapRef = ref()
@@ -142,17 +141,8 @@
     }
   }
 
-  const _getDeviceStatus = async () => {
-    deviceStatus.value = {
-      total: 20,
-      online: 10,
-      offline: 10,
-    }
-  }
-
   onMounted(() => {
     _initMap()
     _getEquipmentlList()
-    _getDeviceStatus()
   })
 </script>

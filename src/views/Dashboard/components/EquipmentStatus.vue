@@ -1,139 +1,98 @@
 /*
  * @author: zzp
- * @date: 2023-09-21 09:36:42
+ * @date: 2023-09-21 15:29:25
  * @fileName: EquipmentStatus.vue
  * @filePath: src/views/Dashboard/components/EquipmentStatus.vue
  * @description: 设备状态
  */
-<style lang="less" scoped>
+ <style lang="less" scoped>
  @import url("./index.less");
 </style>
 
 <template>
   <div class="equipmentStatus">
     <div class="highLevelTitleBar">
-      <i class="equipmentIcon" />
-      <span class="chTitle">微站状态</span>
+      <i class="dynamoIcon" />
+      <span class="chTitle">设备状态</span>
     </div>
     <div class="contentBar">
-      <div class="chart" ref="chartRef" />
-      <div class="chartStyles" />
-      <div class="statusList">
-        <div class="statusItem" data-name="total">
-          <label>微站总数</label>
-          <div class="statusNumber">{{ record.total || 0 }}</div>
+      <div class="progressList">
+        <div class="progressItem" v-for="key, index in Object.keys(record)" :key="index" >
+          <a-progress 
+            type="dashboard" 
+            :stroke-width="10" 
+            :percent="record[key].scale" 
+            :size="[100, 88]" 
+            :strokeColor="progressTypes[key].color" 
+            trailColor="#1f86ba80"
+          >
+            <template #format="percent">
+              <div class="percentInfo">
+                <div class="scale" :style="`color: ${progressTypes[key].color};`">{{ percent }}%</div>
+                <div class="label">{{ record[key].number }}<span>台</span></div>
+              </div>
+            </template>
+          </a-progress>
+          <div 
+            :class="['itemTitle', equipmentType === key ? 'active' : '']" 
+            :style="{'--percent-active-color': progressTypes[key].color}"
+            @click.stop="equipmentTypeClick(key)"
+          >{{ progressTypes[key].title }}</div>
         </div>
-        <div class="statusItem" data-name="onLine">
-          <label>微站在线</label>
-          <div class="statusNumber">{{ record.online || 0 }}%</div>
-        </div>
-        <div class="statusItem" data-name="offLine">
-          <label>微站离线</label>
-          <div class="statusNumber">{{ record.offline || 0 }}%</div>
-        </div>
+      </div>
+      <div class="equipmentList">
+        <a-table 
+          row-key="id"
+          class="smallTable"
+          :data-source="tableList" 
+          :pagination="false"
+        >
+          <a-table-column title="设备名称" data-index="name" align="left" :ellipsis="true" />
+          <a-table-column title="状态" data-index="status" align="right">
+            <template v-slot="obj">
+              <div :class="['status', `status-${obj.record.status}`]">
+                {{ obj.record.statusName }}
+              </div>
+            </template>
+          </a-table-column>
+        </a-table>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { ref, onMounted, onBeforeUnmount, watch } from "vue"
-  import * as echarts from "echarts"
+import { ref, onMounted } from "vue"
 
-  const props = defineProps({
-    data: Object
-  })
+const progressTypes = {
+  online: { title: "在线设备", color: "#78E0FB" },
+  alarm: { title: "报警设备", color: "#4684F1" },
+  offline: { title: "离线设备", color: "#8ED49E" }
+}
 
-  let pieChart = null
-
-  const record = ref({
-    total: 20,
-    online: 10,
-    offline: 10,
-  })
-  const chartRef = ref()
-
-  watch(() => props.data, value => {
-    record.value = value
-    setChartData()
-  })
-
-  const _initModeChart = () => {
-    pieChart.setOption(
-      {
-        tooltip: {
-          trigger: "item",
-          position: ["20%", "0%"],
-          formatter: `{b}: {c}`
-        },
-        color: [ 
-          new echarts.graphic.LinearGradient(0, 0, 0, 1, 
-          [ { offset: 0, color: "#1E4FAA" }, { offset: 1, color: "#22D6FC" } ]), 
-          "#ffffff2b"
-        ],
-        series: [
-          {
-            type: "pie",
-            radius: ["58%", "72%"],
-            label: {
-              show: true,
-              position: "center",
-              formatter: `{number|${record.value.onlinePercent}}\r\n{label|微站总数}`,
-              rich: {
-                number: {
-                  fontSize: 20,
-                  fontFamily: "微软雅黑",
-                  color: "#ffffff",
-                  lineHeight: 30
-                },
-                label: {
-                  fontSize: 10,
-                  fontWeight: "200",
-                  fontFamily: "微软雅黑",
-                  color: "#ffffff"
-                },
-              }
-            },
-            emphasis: {
-              label: {
-                show: false
-              }
-            },
-            labelLine: {
-              show: false 
-            },
-            data: [
-              { value: record.value.online, name: "微站在线" },
-              { value: record.value.offline, name: "微站离线" },
-            ]
-          }
-        ]
-      },
-      true
-    ) 
+const record = ref({
+  online: {
+    scale: 89,
+    number: 287
+  },
+  alarm: {
+    scale: 56,
+    number: 87
+  },
+  offline: {
+    scale: 89,
+    number: 23
   }
+})
+const equipmentType = ref("online")
+const tableList = ref([
+  { id: 1, name: "设备11111", status: 0, statusName: "在线" },
+  { id: 2, name: "设备11111", status: 1, statusName: "在线" },
+  { id: 3, name: "设备11111", status: 2, statusName: "在线" },
+])
 
-  const setChartData = () => {
-    const { online, offline } = record.value
-    const onlinePercentage = (Number(online) / (Number(online) + Number(offline))) * 100
-    const onlinePercent = Math.floor(onlinePercentage)
 
-    record.value.onlinePercent = onlinePercent
-
-    _initModeChart()
-    setTimeout(_chartResize)
-  }
-
-  const _chartResize = () => {
-    pieChart && pieChart.resize()
-  }
-
-  onMounted(() => {
-    pieChart = echarts.init(chartRef.value)
-    setChartData()
-  })
-
-  onBeforeUnmount(() => {
-    _chartResize()
-  })
+const equipmentTypeClick = key => {
+  equipmentType.value = key
+}
 </script>

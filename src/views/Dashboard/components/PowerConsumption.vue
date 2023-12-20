@@ -3,7 +3,7 @@
  * @date: 2023-09-21 10:11:49
  * @fileName: PowerConsumption.vue
  * @filePath: src/views/Dashboard/components/PowerConsumption.vue
- * @description: 耗电量
+ * @description: 能耗统计
  */
 <style lang="less" scoped>
  @import url("./index.less");
@@ -13,7 +13,7 @@
   <div class="powerConsumption">
     <div class="highLevelTitleBar">
       <i class="powerIcon" />
-      <span class="chTitle">耗电量</span>
+      <span class="chTitle">能耗统计</span>
     </div>
     <div class="contentBar">
       <div class="chart" ref="chartRef" />
@@ -95,8 +95,8 @@
         },
         series: [
           {
-            name: "昨天",
-            data: dataValue.yesterday,
+            name: "总能耗",
+            data: dataValue.total,
             itemStyle: { 
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
@@ -110,7 +110,7 @@
               ]),
               borderRadius: [3, 3, 0, 0]
             },
-            barWidth: 13,
+            barWidth: 8,
             barGap: "20%",
             type: "bar",
             showBackground: true,
@@ -120,8 +120,8 @@
             }
           },
           {
-            name: "今天",
-            data: dataValue.today,
+            name: "通风",
+            data: dataValue.ventilation,
             itemStyle: { 
               color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
@@ -139,7 +139,36 @@
               ]),
               borderRadius: [3, 3, 0, 0]
             },
-            barWidth: 13,
+            barWidth: 8,
+            barGap: "20%",
+            type: "bar",
+            showBackground: true,
+            backgroundStyle: {
+              color: "#1036b073",
+              borderRadius: [3, 3, 0, 0]
+            }
+          },
+          {
+            name: "照明能耗",
+            data: dataValue.illumination,
+            itemStyle: { 
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#78E0FB"
+                },
+                {
+                  offset: 0.9,
+                  color: "#79e1fb33"
+                },
+                {
+                  offset: 1,
+                  color: "#1036b078"
+                }
+              ]),
+              borderRadius: [3, 3, 0, 0]
+            },
+            barWidth: 8,
             barGap: "20%",
             type: "bar",
             showBackground: true,
@@ -165,47 +194,31 @@
 
   const _getData = () => {
     const list = [
-      {
-        id: 1,
-        name: "微站设备101",
-        yesterday: 10,
-        today: 20
-      },
-      {
-        id: 2,
-        name: "微站设备201",
-        yesterday: 30,
-        today: 16
-      },
-      {
-        id: 3,
-        name: "微站设备301",
-        yesterday: 20,
-        today: 8
-      },
-      {
-        id: 4,
-        name: "微站设备401",
-        yesterday: 10,
-        today: 30
-      },
-      {
-        id: 5,
-        name: "微站设备501",
-        yesterday: 5,
-        today: 15
-      }
+      { id: 1, month: 1, ventilation: 10, illumination: 25, total: 70 },
+      { id: 2, month: 2, ventilation: 20, illumination: 29, total: 10 },
+      { id: 3, month: 3, ventilation: 15, illumination: 20, total: 30 },
+      { id: 4, month: 4, ventilation: 30, illumination: 15, total: 20 },
+      { id: 5, month: 5, ventilation: 52, illumination: 66, total: 50 },
+      { id: 6, month: 6, ventilation: 33, illumination: 10, total: 40 },
+      { id: 7, month: 7, ventilation: 20, illumination: 47, total: 20 },
+      { id: 8, month: 8, ventilation: 15, illumination: 29, total: 90 },
+      { id: 9, month: 9, ventilation: 46, illumination: 18, total: 25 },
+      { id: 10, month: 10, ventilation: 27, illumination: 55, total: 64 },
+      { id: 11, month: 11, ventilation: 84, illumination: 41, total: 25 },
+      { id: 12, month: 12, ventilation: 62, illumination: 69, total: 19 },
     ]
 
     const array = {
       xData: [],
-      yesterday: [],
-      today: [],
+      ventilation: [],
+      illumination: [],
+      total: []
     }
     list.forEach(item => {
-      array.xData.push(item.name)
-      array.yesterday.push(item.yesterday)
-      array.today.push(item.today)
+      array.xData.push(item.month)
+      array.ventilation.push(item.ventilation)
+      array.illumination.push(item.illumination)
+      array.total.push(item.total)
     })
     setChartData(array)
   }
