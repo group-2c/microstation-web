@@ -12,7 +12,7 @@
 <template>
   <div class="alarmStatistics">
     <div class="highLevelTitleBar">
-      <i class="lowIcon" />
+      <i class="alarmIcon" />
       <span class="chTitle">报警统计信息</span>
     </div>
     <div class="contentBar">

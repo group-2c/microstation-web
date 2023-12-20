@@ -31,8 +31,8 @@
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="多功能电表" name="electricitymeterId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.electricitymeterId" popupClassName="modalSelect" mode="multiple" :maxTagCount="1" showSearch option-filter-prop="name" placeholder="请选择电表">
+              <a-form-item label="多功能电表" name="electricityMeterId" :rules="[{ required: true }]">
+                <a-select v-model:value="searchForm.electricityMeterId" popupClassName="modalSelect" mode="multiple" :maxTagCount="1" showSearch option-filter-prop="name" placeholder="请选择电表">
                   <a-select-option v-for="item in electricityList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -143,7 +143,7 @@ const _getControllerList = async () => {
 
 const controllerChange = async () => {
   electricityList.value = []
-  delete searchForm.value.electricitymeterId
+  delete searchForm.value.electricityMeterId
   loading.value = true
   try {
     const res = await controllerApi.getDeviceByDeviceType({

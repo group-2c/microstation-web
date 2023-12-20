@@ -33,8 +33,8 @@
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="多功能电表" name="electricitymeterId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.electricitymeterId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择电表">
+              <a-form-item label="多功能电表" name="electricityMeterId" :rules="[{ required: true }]">
+                <a-select v-model:value="searchForm.electricityMeterId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择电表">
                   <a-select-option v-for="item in electricityList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -100,6 +100,7 @@ import { dict_steady_type } from "_utils/dictionary"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
+import { steadyCurvesApi } from "_api/dataAnalysis"
 import LineChart from "../components/LineChart.vue"
 
 const loading = ref(false)
@@ -159,7 +160,7 @@ const _getControllerList = async () => {
 
 const controllerChange = async () => {
   electricityList.value = []
-  delete searchForm.value.electricitymeterId
+  delete searchForm.value.electricityMeterId
   loading.value = true
   try {
     const res = await controllerApi.getDeviceByDeviceType({
@@ -178,40 +179,32 @@ const controllerChange = async () => {
 const _getStatistics = async () => {
   loading.value = true
   try {
-    const data = [
-      {
-        time: "10-08 18:14",
-        A: 200,
-        B: 300,
-        C: 400
-      },
-      {
-        time: "10-08 19:14",
-        A: 100,
-        B: 200,
-        C: 300
-      },
-      {
-        time: "10-08 20:14",
-        A: 300,
-        B: 800,
-        C: 100
-      }
-    ]
+    const { startDate, endDate } = searchForm.value
+
+    const data = await steadyCurvesApi.getStatistics({ 
+      ...searchForm.value,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD")
+    })
 
     let array = []
     if(currentSteadyType.value?.options) {
       currentSteadyType.value.options.forEach(item => {
-        array.push({
-          name: item.label,
-          data: data.map(x => x[item.value])
-        })
+        if((searchForm.value.phase || []).includes(item.value)) {
+          array.push({
+            name: item.label,
+            data: data.map(x => x[item.value])
+          })
+        }
       })
       statisticsData.value = array
     }
     
     nextTick(() => {
-      lineChartRef.value.setChartData(array, data.map(x => x.time))
+      lineChartRef.value.setChartData(array, data.map(x => {
+        x.time = dayjs(x.time).format("MM-DD HH:mm")
+        return x.time
+      }))
     })
   } catch (err) {
     message.error("统计数据加载失败: " + err)
