@@ -12,4 +12,7 @@ export const steadyCurvesApi = {
   getStatistics: data => new Promise((resolve, reject) => {
     request.post("/steadyCurves/getStatistics", data).then(res => resolve(res.data), err => reject(err))
   }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/steadyCurves/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
 }

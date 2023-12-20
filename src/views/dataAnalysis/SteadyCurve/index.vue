@@ -220,113 +220,22 @@ const _calibration = callback => {
 const _getTableList = async () => {
   const { current, pageSize } = pagination.value
   const { startDate, endDate } = searchForm.value
-  const data = { 
-    ...searchForm.value,
-    startDate: dayjs(startDate).format("YYYY-MM-DD"),
-    endDate: dayjs(endDate).format("YYYY-MM-DD"),
-    page: current, 
-    size: pageSize 
-  }
-  console.log(data)
-  loading.value = true
-  try {
-    tableList.value = [
-  {
-    "controllerName": "微站1",
-    "deviceName": "设备1",
-    "time": "10-01 12:01",
-    "A": 300,
-    "B": 500,
-    "C": 12,
-    "D": 13
-  },
-  {
-    "controllerName": "微站2",
-    "deviceName": "设备2",
-    "time": "10-02 15:30",
-    "A": 200,
-    "B": 550,
-    "C": 18,
-    "D": 10
-  },
-  {
-    "controllerName": "微站3",
-    "deviceName": "设备3",
-    "time": "10-03 08:45",
-    "A": 400,
-    "B": 450,
-    "C": 15,
-    "D": 12
-  },
-  {
-    "controllerName": "微站4",
-    "deviceName": "设备4",
-    "time": "10-04 20:12",
-    "A": 350,
-    "B": 520,
-    "C": 10,
-    "D": 14
-  },
-  {
-    "controllerName": "微站5",
-    "deviceName": "设备5",
-    "time": "10-05 11:05",
-    "A": 280,
-    "B": 580,
-    "C": 14,
-    "D": 11
-  },
-  {
-    "controllerName": "微站6",
-    "deviceName": "设备6",
-    "time": "10-06 16:40",
-    "A": 320,
-    "B": 510,
-    "C": 16,
-    "D": 13
-  },
-  {
-    "controllerName": "微站7",
-    "deviceName": "设备7",
-    "time": "10-07 09:28",
-    "A": 250,
-    "B": 530,
-    "C": 12,
-    "D": 15
-  },
-  {
-    "controllerName": "微站8",
-    "deviceName": "设备8",
-    "time": "10-08 18:14",
-    "A": 300,
-    "B": 480,
-    "C": 17,
-    "D": 11
-  },
-  {
-    "controllerName": "微站9",
-    "deviceName": "设备9",
-    "time": "10-09 14:55",
-    "A": 380,
-    "B": 540,
-    "C": 13,
-    "D": 12
-  },
-  {
-    "controllerName": "微站10",
-    "deviceName": "设备10",
-    "time": "10-10 22:08",
-    "A": 270,
-    "B": 500,
-    "C": 11,
-    "D": 14
-  }
-]
 
-    pagination.value.total = 10
-    pagination.value.current = 1
+  try {
+    loading.value = true
+
+    const data = await steadyCurvesApi.pageBySheet({ 
+      ...searchForm.value,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
+      page: current, 
+      size: pageSize 
+    })
+    tableList.value = data.content
+    pagination.value.total = data.totalElements
+    pagination.value.current = data.pageNumber
   } catch (err) {
-    message.error("获取报警列表数据失败: " + err)
+    message.error("获取统计列表数据失败: " + err)
   } finally {
     loading.value = false
   }
