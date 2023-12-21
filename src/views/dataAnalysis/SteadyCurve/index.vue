@@ -125,18 +125,26 @@ const lineChartRef = ref()
 const formRef = ref()
 
 const columns = computed(() => {
+  const { options } = currentSteadyType.value
+  const { parameter } = searchForm.value
+
   const _array = [
     { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
     { title: "微站名称", dataIndex: "controllerName", align: "left", width: 200, ellipsis: true, fixed: "left" },
     { title: "设备名称", dataIndex: "deviceName", align: "left", width: 200, ellipsis: true },
     { title: "采集时间", dataIndex: "time", align: "left", width: 120, ellipsis: true }
   ]
-  if(currentSteadyType.value.options) {
-    currentSteadyType.value.options.forEach(item => {
+  if(options) {
+    options.forEach(item => {
       if((searchForm.value.phase || []).includes(item.value)) {
         _array.push({ title: item.label, dataIndex: item.value, align: "left", width: 120, ellipsis: true })
       }
     })
+  } else {
+    const _res = currentSteadyType.value
+    if(_res.key === "4" && parameter) {
+      _array.push({ title: _res.dictionarys.find(x => x.key === parameter).value, dataIndex: "Z", align: "left", width: 120, ellipsis: true })
+    }
   }
   return _array
 })
@@ -178,27 +186,36 @@ const controllerChange = async () => {
 
 const _getStatistics = async () => {
   loading.value = true
+
   try {
-    const { startDate, endDate } = searchForm.value
+    const { startDate, endDate, phase, parameter } = searchForm.value
+    const { options } = currentSteadyType.value
 
     const data = await steadyCurvesApi.getStatistics({ 
       ...searchForm.value,
       startDate: dayjs(startDate).format("YYYY-MM-DD"),
-      endDate: dayjs(endDate).format("YYYY-MM-DD")
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
+      phase: phase || ["Z"]
     })
 
     let array = []
-    if(currentSteadyType.value?.options) {
-      currentSteadyType.value.options.forEach(item => {
-        if((searchForm.value.phase || []).includes(item.value)) {
+    if(options) {
+      options.forEach(item => {
+        if((phase || []).includes(item.value)) {
           array.push({
             name: item.label,
             data: data.map(x => x[item.value])
           })
         }
       })
-      statisticsData.value = array
+    } else {
+      const _res = currentSteadyType.value
+      array.push({
+        name: _res.dictionarys.find(x => x.key === parameter).value,
+        data: data.map(x => x.Z)
+      })
     }
+    statisticsData.value = array
     
     nextTick(() => {
       lineChartRef.value.setChartData(array, data.map(x => {
