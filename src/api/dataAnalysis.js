@@ -16,3 +16,13 @@ export const steadyCurvesApi = {
     request.post("/steadyCurves/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// 谐波曲线
+export const harmonicCurveApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/harmonicCurves/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/harmonicCurves/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}

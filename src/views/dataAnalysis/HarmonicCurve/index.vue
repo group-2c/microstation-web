@@ -50,10 +50,10 @@
                   <a-select-option value="2">电流谐波</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item v-if="searchForm.type" label="" name="phase" :rules="[{ required: true }]">
+              <a-form-item v-show="searchForm.type" label="" name="phase" :rules="[{ required: true }]">
                 <a-checkbox-group v-model:value="searchForm.phase" :options="checkboxOptions" @change="phaseChange"/>
               </a-form-item>
-              <a-form-item v-if="searchForm.type" label="含有率" name="contentRate" :rules="[{ required: true }]">
+              <a-form-item v-show="searchForm.type" label="含有率" name="contentRate" :rules="[{ required: true }]">
                 <a-select v-model:value="searchForm.contentRate" mode="multiple" :maxTagCount="1" placeholder="请选择含有率">
                   <a-select-option 
                     v-for="item in contentRateList" 
@@ -105,6 +105,7 @@ import { FileExcelOutlined, LineChartOutlined, BarChartOutlined, SearchOutlined 
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
+import { harmonicCurveApi } from "_api/dataAnalysis"
 import LineChart from "../components/LineChart.vue"
 
 const loading = ref(false)
@@ -137,7 +138,7 @@ const columns = computed(() => {
     { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
     { title: "微站名称", dataIndex: "controllerName", align: "left", width: 200, ellipsis: true, fixed: "left" },
     { title: "设备名称", dataIndex: "deviceName", align: "left", width: 200, ellipsis: true },
-    { title: "采集时间", dataIndex: "createAt", align: "left", width: 120, ellipsis: true }
+    { title: "采集时间", dataIndex: "time", align: "left", width: 120, ellipsis: true }
   ]
 
   checkboxOptions.value.forEach(item => {
@@ -195,22 +196,13 @@ const controllerChange = async () => {
 const _getStatistics = async () => {
   loading.value = true
   try {
-    const data = [
-      {
-        time: "10-08 18:14",
-        A2: 100,
-        A4: 200,
-        B2: 300,
-        B4: 400,
-      },
-      {
-        time: "10-08 19:14",
-        A2: 100,
-        A4: 300,
-        B2: 400,
-        B4: 800,
-      }
-    ]
+    const { startDate, endDate } = searchForm.value
+
+    const data = await harmonicCurveApi.getStatistics({ 
+      ...searchForm.value,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
+    })
 
     let array = []
 
@@ -218,7 +210,7 @@ const _getStatistics = async () => {
       if((searchForm.value.phase || []).includes(item.value)) {
         searchForm.value.contentRate.forEach(_con => {
           array.push({
-            name: `${item.label}${_con}次谐波含量`,
+            name: `${item.label}${_con == "999" ? "总谐波" : `${_con}次谐波`}`,
             data: data.map(x => x[`${item.value}${_con}`])
           })
         })
@@ -227,7 +219,10 @@ const _getStatistics = async () => {
     statisticsData.value = array
 
     nextTick(() => {
-      lineChartRef.value.setChartData(array, data.map(x => x.time))
+      lineChartRef.value.setChartData(array, data.map(x => {
+        x.time = dayjs(x.time).format("MM-DD HH:mm")
+        return x.time
+      }))
     })
   } catch (err) {
     message.error("统计数据加载失败: " + err)
@@ -243,113 +238,21 @@ const _calibration = callback => {
 const _getTableList = async () => {
   const { current, pageSize } = pagination.value
   const { startDate, endDate } = searchForm.value
-  const data = { 
-    ...searchForm.value,
-    startDate: dayjs(startDate).format("YYYY-MM-DD"),
-    endDate: dayjs(endDate).format("YYYY-MM-DD"),
-    page: current, 
-    size: pageSize 
-  }
-  console.log(JSON.stringify(data))
-  loading.value = true
   try {
-    tableList.value = [
-  {
-    "controllerName": "微站1",
-    "deviceName": "设备1",
-    "createAt": "2023-10-01 12:01:02",
-    "A": 300,
-    "B": 500,
-    "C": 12,
-    "D": 13
-  },
-  {
-    "controllerName": "微站2",
-    "deviceName": "设备2",
-    "createAt": "2023-10-02 15:30:45",
-    "A": 200,
-    "B": 550,
-    "C": 18,
-    "D": 10
-  },
-  {
-    "controllerName": "微站3",
-    "deviceName": "设备3",
-    "createAt": "2023-10-03 08:45:20",
-    "A": 400,
-    "B": 450,
-    "C": 15,
-    "D": 12
-  },
-  {
-    "controllerName": "微站4",
-    "deviceName": "设备4",
-    "createAt": "2023-10-04 20:12:37",
-    "A": 350,
-    "B": 520,
-    "C": 10,
-    "D": 14
-  },
-  {
-    "controllerName": "微站5",
-    "deviceName": "设备5",
-    "createAt": "2023-10-05 11:05:59",
-    "A": 280,
-    "B": 580,
-    "C": 14,
-    "D": 11
-  },
-  {
-    "controllerName": "微站6",
-    "deviceName": "设备6",
-    "createAt": "2023-10-06 16:40:22",
-    "A": 320,
-    "B": 510,
-    "C": 16,
-    "D": 13
-  },
-  {
-    "controllerName": "微站7",
-    "deviceName": "设备7",
-    "createAt": "2023-10-07 09:28:50",
-    "A": 250,
-    "B": 530,
-    "C": 12,
-    "D": 15
-  },
-  {
-    "controllerName": "微站8",
-    "deviceName": "设备8",
-    "createAt": "2023-10-08 18:14:12",
-    "A": 300,
-    "B": 480,
-    "C": 17,
-    "D": 11
-  },
-  {
-    "controllerName": "微站9",
-    "deviceName": "设备9",
-    "createAt": "2023-10-09 14:55:33",
-    "A": 380,
-    "B": 540,
-    "C": 13,
-    "D": 12
-  },
-  {
-    "controllerName": "微站10",
-    "deviceName": "设备10",
-    "createAt": "2023-10-10 22:08:05",
-    "A": 270,
-    "B": 500,
-    "C": 11,
-    "D": 14
-  }
-]
+    loading.value = true
 
-    pagination.value.total = 10
-    pagination.value.current = 1
+    const data = await harmonicCurveApi.pageBySheet({ 
+      ...searchForm.value,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
+      page: current, 
+      size: pageSize
+    })
+    tableList.value = data.content
+    pagination.value.total = data.totalElements
+    pagination.value.current = data.pageNumber
   } catch (err) {
-    message.error("获取报警列表数据失败: " + err)
+    message.error("获取统计列表数据失败: " + err)
   } finally {
     loading.value = false
   }
