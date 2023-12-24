@@ -33,6 +33,7 @@
 
   const columns = ref([  
     { title: "项目名称", dataIndex: "name", align: "left", width: 250, ellipsis: true, fixed: "left" },    
+    { title: "项目编号", dataIndex: "code", align: "left", width: 150, ellipsis: true },
     { title: "开始日期", dataIndex: "startDate", align: "left", width: 150, ellipsis: true },
     { title: "结束日期", dataIndex: "endDate", align: "left", width: 150, ellipsis: true },
     { title: "负责人", dataIndex: "leader", align: "left", width: 150 },

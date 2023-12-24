@@ -13,6 +13,11 @@
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入项目名称" />
           </a-form-item>
         </a-col>
+        <a-col :span="24">
+          <a-form-item label="项目编号" name="code" :rules="[{ required: true }]" :label-col="{ span: 3 }" style="margin-left: -5px;">
+            <a-input v-model:value="dataCenter.record.code" placeholder="请输入项目编号" />
+          </a-form-item>
+        </a-col>
         <a-col :span="12">
           <a-form-item label="开始日期" name="startDate" :rules="[{ required: true }]">
             <a-date-picker v-model:value="dataCenter.record.startDate" placeholder="请选择开始日期" />
