@@ -63,9 +63,10 @@
 import { onMounted, ref, h, nextTick, watch } from "vue"
 import { message } from "ant-design-vue"
 import { DotChartOutlined, LineChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
+import { loadCurvesApi } from "_api/dataAnalysis"
 import controllerApi from "_api/controller"
 import LineChart from "../components/LineChart.vue"
-import Lodash from "lodash"
+import dayjs from "dayjs"
 
 const loading = ref(false)
 const searchForm = ref({})
@@ -114,22 +115,14 @@ const controllerChange = async () => {
 const _getStatistics = async () => {
   loading.value = true
   try {
-    const data = [
-      {
-        time: "18:14",
-        Pa: 1,
-        Pb: 2,
-        Pc: 3,
-        P: 4,
-      },
-      {
-        time: "19:14",
-        Pa: 5,
-        Pb: 6,
-        Pc: 7,
-        P: 8,
-      }
-    ]
+    const { startDate, endDate } = searchForm.value
+
+    const request = pageType.value === "1" ? loadCurvesApi.realTimeLoad : loadCurvesApi.dayLoad
+    const data = await request({ 
+      ...searchForm.value,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
+    })
 
     let array = []
     
@@ -140,22 +133,19 @@ const _getStatistics = async () => {
         else if(index === 1) name = "Pb"
         else if(index === 2) name = "Pc"
         else name = "P"
-        array.push({
-          name,
-          data: data.map(x => x[name])
-        })
+        array.push({ name, data: data.map(x => x[name]) })
       })
     } else {
-      array.push({
-        name: "P",
-        data: data.map(x => x.P)
-      })
+      array.push({ name: "P", data: data.map(x => x.P) })
     }
 
     statisticsData.value = array
 
     nextTick(() => {
-      lineChartRef.value.setChartData(array, data.map(x => x.time))
+      lineChartRef.value.setChartData(array, data.map(x => {
+        x.time = dayjs(x.time).format("MM-DD HH:mm")
+        return x.time
+      }))
     })
   } catch (err) {
     message.error("统计数据加载失败: " + err)

@@ -26,3 +26,21 @@ export const harmonicCurveApi = {
     request.post("/harmonicCurves/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// 负荷曲线
+export const loadCurvesApi = {
+  realTimeLoad: data => new Promise((resolve, reject) => {
+    request.post("/loadCurves/realTimeLoad", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  dayLoad: data => new Promise((resolve, reject) => {
+    request.post("/harmonicCurves/dayLoad", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+
+// SOE事件
+export const soeEventsApi = {
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/soeEvents/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+

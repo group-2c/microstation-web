@@ -44,9 +44,6 @@
               <a-form-item label="结束日期" name="endDate" :rules="[{ required: true }]">
                 <a-date-picker v-model:value="searchForm.endDate" placeholder="请选择结束日期" />
               </a-form-item>
-              <a-form-item label="仪 表" name="meter">
-                <a-input v-model:value="searchForm.meter" autocomplete="off" placeholder="输入仪表编号或名称" />
-              </a-form-item>
               <a-form-item label="事 件" name="event">
                 <a-input v-model:value="searchForm.event" autocomplete="off" placeholder="输入事件代码或名称" />
               </a-form-item>
@@ -76,6 +73,7 @@ import { onMounted, ref, h } from "vue"
 import { message } from "ant-design-vue"
 import { FileExcelOutlined, BarChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
 import { dict_svg_device_types } from "_utils/dictionary"
+import { soeEventsApi } from "_api/dataAnalysis"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
@@ -104,8 +102,7 @@ const columns = ref([
   { title: "仪表编号", dataIndex: "code", align: "left", width: 200, ellipsis: true },
   { title: "仪表名称", dataIndex: "name", align: "left", width: 200, ellipsis: true },
   { title: "事件名称", dataIndex: "eventName", align: "left", width: 200, ellipsis: true },
-  { title: "事件属性", dataIndex: "attributes", align: "left", width: 200, ellipsis: true },
-  { title: "事件参数值", dataIndex: "values", align: "left", ellipsis: true }
+  { title: "事件属性", dataIndex: "attributesName", align: "left", width: 200, ellipsis: true }
 ])
 
 const _getControllerList = async () => {
@@ -140,45 +137,28 @@ const _calibration = callback => {
 }
 
 const _getTableList = async () => {
+  const attributesObj = { "0": "复归", "1": "动作" }
   const { current, pageSize } = pagination.value
   const { startDate, endDate } = searchForm.value
-  const data = { 
-    ...searchForm.value,
-    startDate: dayjs(startDate).format("YYYY-MM-DD"),
-    endDate: dayjs(endDate).format("YYYY-MM-DD"),
-    page: current, 
-    size: pageSize 
-  }
-  console.log(JSON.stringify(data))
-  loading.value = true
-  try {
-    tableList.value = [
-      {
-        "id": 1,
-        "controllerName": "微站1",
-        "code": "编号1",
-        "name": "1111",
-        "eventName": "111",
-        "attributes": "2323",
-        "values": "1111",
-        "createAt": "2023-10-01 12:01:02",
-      },
-      {
-        "id": 2,
-        "controllerName": "微站1",
-        "code": "编号1",
-        "name": "1111",
-        "eventName": "111",
-        "attributes": "2323",
-        "values": "1111",
-        "createAt": "2023-10-01 12:01:02",
-      },
-    ]
 
-    pagination.value.total = 10
-    pagination.value.current = 1
+  try {
+    loading.value = true
+
+    const data = await soeEventsApi.pageBySheet({ 
+      ...searchForm.value,
+      startDate: dayjs(startDate).format("YYYY-MM-DD"),
+      endDate: dayjs(endDate).format("YYYY-MM-DD"),
+      page: current, 
+      size: pageSize 
+    })
+    tableList.value = data.content.map(item => {
+      item.attributesName = attributesObj[item.attributes]
+      return item
+    })
+    pagination.value.total = data.totalElements
+    pagination.value.current = data.pageNumber
   } catch (err) {
-    message.error("列表数据失败: " + err)
+    message.error("获取统计列表数据失败: " + err)
   } finally {
     loading.value = false
   }
