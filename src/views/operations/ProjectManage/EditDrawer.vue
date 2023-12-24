@@ -8,13 +8,13 @@
   > 
     <a-form ref="formRef" :model="dataCenter.record" :label-col="{ span: 6 }">
       <a-row :gutter="30"> 
-        <a-col :span="24">
-          <a-form-item label="项目名称" name="name" :rules="[{ required: true }]" :label-col="{ span: 3 }" style="margin-left: -5px;">
+        <a-col :span="12">
+          <a-form-item label="项目名称" name="name" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.name" placeholder="请输入项目名称" />
           </a-form-item>
         </a-col>
-        <a-col :span="24">
-          <a-form-item label="项目编号" name="code" :rules="[{ required: true }]" :label-col="{ span: 3 }" style="margin-left: -5px;">
+        <a-col :span="12">
+          <a-form-item label="项目编号" name="code" :rules="[{ required: true }]">
             <a-input v-model:value="dataCenter.record.code" placeholder="请输入项目编号" />
           </a-form-item>
         </a-col>
