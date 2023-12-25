@@ -90,7 +90,7 @@
           <div>微站IP：${item.ip}</div>
           <div>安装日期：${item.installationDate}</div>
           <div>所属项目：${item.projectName}</div>
-          <div>隧 管 站：${item.tunnelStationName}</div>
+          <div>所属隧道：${item.tunnelName}</div>
         </div>
       `, { closeButton: false, closeOnClick: false, offset: [8, -40] })
 

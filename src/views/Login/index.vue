@@ -101,7 +101,7 @@ const handleClickLogin = async () => {
     loading.value = true
     const res = await AuthApi.login(formState.value)
     store.dispatch("auth/login", { 
-      userInfo: { name: res.real_name, id: 1 }, 
+      userInfo: { name: res.real_name, id: res.user_id }, 
       token: res.token, 
       owns: JSON.parse(res.owns) 
     })
