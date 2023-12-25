@@ -1,3 +1,5 @@
+import { dataDecrypt } from "_utils/crypto"
+
 /**
  * 设置浏览器Storage存储
  * @param {*} data // 对象
@@ -86,10 +88,21 @@ const dispatchEventStroage = ({
   return storage.setItem(key, valueData)
 }
 
+/**
+ * 从Stroage中获取解密数据并解密 
+ * @param {*} param0 
+ * @returns 
+ */
+const decryptStroage = ({ storageKey, cryptoKey, type = "session", isJson = true }) => {
+  const storageData = getStorageItem({ key: storageKey, type, isJson: false })
+  const defaultText = isJson ? "{}" : ""
+  return storageData ? dataDecrypt({ data: storageData, key: cryptoKey }) : defaultText
+}
 
 export {
   setStorageItem,
   getStorageItem,
   removeStorageItem,
-  dispatchEventStroage
+  dispatchEventStroage,
+  decryptStroage
 }

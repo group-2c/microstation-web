@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router"
 import { getStorageItem, setStorageItem, removeStorageItem } from "_utils/storage"
-import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS, AUTH_OWNS } from "@/store/mutation-types"
+import { AUTH_TOKEN, MENU_OPEN_KYES, MENU_SELECTED_KEYS } from "@/store/mutation-types"
 import { getThreeNameParents, sendHeartBeat } from "_utils/function"
 import { message } from "ant-design-vue"
+import store from "@/store"
 import Lodash from "lodash"
 import Layout from "@/views/Layout/index.vue"
 import Login from "@/views/Login/index.vue"
@@ -77,9 +78,7 @@ export const routeJump = ({
   query = undefined,
 }) => {
   const data = { name }
-  let parentName = ""
   if(query) data.query = query
-
   const routeList = getThreeNameParents(Lodash.cloneDeep(routes), name)
 
   removeStorageItem({ key: MENU_OPEN_KYES })
@@ -88,7 +87,7 @@ export const routeJump = ({
   if(!routeList || routeList.length === 0) {
     return message.error("路由错误！")
   } else {
-    const owns = getStorageItem({ key: AUTH_OWNS, isJson: true })
+    const owns = store.state.auth.owns
     if(!owns.find(x => x.name === name)) {
       return message.error("没有页面访问权限！")
     }
@@ -127,7 +126,7 @@ export const pageReload = () => {
  */
 export const getPermissions = () => {
   const name = router.currentRoute.value.name
-  const owns = getStorageItem({ key: AUTH_OWNS, isJson: true })
+  const owns = store.state.auth.owns
   const item = owns.find(x => x.name === name)
   if(!item) {
     message.error("没有页面访问权限！")

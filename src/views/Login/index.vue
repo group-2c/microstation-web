@@ -100,7 +100,11 @@ const handleClickLogin = async () => {
   try {
     loading.value = true
     const res = await AuthApi.login(formState.value)
-    store.dispatch("auth/login", { userInfo: { name: res.real_name, id: 1 }, token: res.token, owns: JSON.parse(res.owns) })
+    store.dispatch("auth/login", { 
+      userInfo: { name: res.real_name, id: 1 }, 
+      token: res.token, 
+      owns: JSON.parse(res.owns) 
+    })
     message.success("登录成功！")
     document.body.removeEventListener("keydown", _handleKeyDown)
     routeJump({ name: "Dashboard" })

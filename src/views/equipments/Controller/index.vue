@@ -37,6 +37,7 @@
     { title: "设备编号", dataIndex: "code", align: "left", width: 200, ellipsis: true },
     { title: "设备IP地址", dataIndex: "ip", align: "left", width: 200 },
     { title: "设备型号", dataIndex: "modelName", align: "left", width: 200 },
+    { title: "隧道名称", dataIndex: "tunnelName", align: "left", width: 200 },
     { title: "经度", dataIndex: "longitude", align: "left", width: 200 },
     { title: "纬度", dataIndex: "latitude", align: "left", width: 200 },
     { title: "安装位置", dataIndex: "location", align: "left", width: 200, ellipsis: true },

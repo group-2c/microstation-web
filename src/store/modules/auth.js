@@ -1,4 +1,5 @@
-import { getStorageItem, setStorageItem, removeStorageItem } from "_utils/storage"
+import { getStorageItem, setStorageItem, removeStorageItem, decryptStroage } from "_utils/storage"
+import { dataEncryption } from "_utils/crypto"
 import { 
   AUTH_TOKEN, 
   AUTH_USER, 
@@ -9,25 +10,26 @@ import {
  } from "../mutation-types"
 
 const storageToken = getStorageItem({ key: AUTH_TOKEN, isJson: false })
-const storageAuthUser = getStorageItem({ key: AUTH_USER })
-const storageAuthOwns = getStorageItem({ key: AUTH_OWNS })
+const defaultUser = decryptStroage({ storageKey: AUTH_USER, cryptoKey: "userKey" })
+const defaultOwns = decryptStroage({ storageKey: AUTH_OWNS, cryptoKey: "permissionsKey" })
 
 export default {
   namespaced: true,
   state: {
     token: storageToken || "",
-    userInfo: storageAuthUser || {},
-    owns: storageAuthOwns || {},
+    userInfo: JSON.parse(defaultUser),
+    owns: JSON.parse(defaultOwns)
   },
   mutations: {
     [SET_AUTHINFO](state, { token, userInfo, owns }) { 
       state.token = token
       state.userInfo = userInfo
       state.owns = owns
+
       if (token) {
         setStorageItem({ key: AUTH_TOKEN, value: token, isJson: false })
-        setStorageItem({ key: AUTH_USER, value: userInfo })
-        setStorageItem({ key: AUTH_OWNS, value: owns })
+        setStorageItem({ key: AUTH_USER, value: dataEncryption({ data: JSON.stringify(userInfo), key: "userKey" }), isJson: false })
+        setStorageItem({ key: AUTH_OWNS, value: dataEncryption({ data: JSON.stringify(owns), key: "permissionsKey" }), isJson: false })
       } else {
         removeStorageItem({ key: AUTH_TOKEN })
         removeStorageItem({ key: AUTH_USER })
