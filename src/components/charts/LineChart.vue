@@ -20,7 +20,11 @@ const props = defineProps({
   },
   legend: Object,
   grid: Object,
-  colors: Array
+  colors: Array,
+  dataZoom: {
+    type: Boolean,
+    default: true
+  },
 })
 
 let lineChart = null
@@ -47,31 +51,6 @@ const _initModeChart = (data, date) => {
       bottom: "10%",
       containLabel: true
     },
-    dataZoom: [
-      {
-        type: "slider",
-        start: 0,
-        end: 100,
-        xAxisIndex: [0],
-        textStyle: {
-          color: "#dff6ff"
-        }
-      },
-      {
-        type: "slider",
-        start: 0,
-        end: 100,
-        yAxisIndex: [0],
-        textStyle: {
-          color: "#dff6ff"
-        }
-      },
-      {
-        type: "inside",
-        start: 0,
-        end: 100
-      }
-    ],
     toolbox: {
       right: 30,
       top: -5,
@@ -128,6 +107,33 @@ const _initModeChart = (data, date) => {
 
   if(props.colors) {
     options.color = props.colors
+  }
+  if(props.dataZoom) {
+    options.dataZoom = [
+      {
+        type: "slider",
+        start: 0,
+        end: 100,
+        xAxisIndex: [0],
+        textStyle: {
+          color: "#dff6ff"
+        }
+      },
+      {
+        type: "slider",
+        start: 0,
+        end: 100,
+        yAxisIndex: [0],
+        textStyle: {
+          color: "#dff6ff"
+        }
+      },
+      {
+        type: "inside",
+        start: 0,
+        end: 100
+      }
+    ]
   }
 
   lineChart.setOption(

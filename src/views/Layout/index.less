@@ -44,20 +44,33 @@
       left: 0;
       width: 100%;
       height: 60px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      // display: flex;
+      // justify-content: space-between;
+      // align-items: center;
       .title {
         padding: 22px 0 0 20px;
         font-size: 28px;
         color: #F1FDFF;
         font-weight: bold;
         letter-spacing: 6px;
+        width: 430px;
+        display: inline-block;
+        position: relative;
+        top: -15px;
+        padding-left: 20px;
+      }
+      .menuLayer {
+        width: calc(100vw - 430px - 120px);
+        display: inline-block;
+        text-align: center;
+        position: relative;
+        top: -28px;
       }
       :deep(.menu) {
-        flex-grow: 1;
+        // flex-grow: 1;
         text-align: center; 
         background: none !important;
+        display: block;
         .ant-menu-title-content {
           color: #F1FDFF;
           font-size: 16px;
@@ -97,6 +110,10 @@
       
       .userInfo {
         width: 120px;
+        display: inline-block;
+        position: relative;
+        top: -28px;
+        text-align: center;
         .userIcon {
           color: #fff;
           font-size: 18px;

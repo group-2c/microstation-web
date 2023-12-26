@@ -14,7 +14,6 @@ import MicrositeEnergy from "@/views/dataAnalysis/MicrositeEnergy/index.vue"
 import MicrositeEnergyCompare from "@/views/dataAnalysis/MicrositeEnergyCompare/index.vue"
 import MicrositeEnergyRing from "@/views/dataAnalysis/MicrositeEnergyRing/index.vue"
 import ElectricityCollection from "@/views/dataAnalysis/ElectricityCollection/index.vue"
-import TemperatureMonitoring from "@/views/dataAnalysis/TemperatureMonitoring/index.vue"
 
 const route = {
   path: "dataAnalysis",
@@ -75,13 +74,7 @@ const route = {
       name: "ElectricityCollection",
       component: ElectricityCollection,
       meta: { title: "用电集抄" },
-    },
-    {
-      path: "temperatureMonitoring",
-      name: "TemperatureMonitoring",
-      component: TemperatureMonitoring,
-      meta: { title: "温湿度监测分析" },
-    },
+    }
   ]
 }
 

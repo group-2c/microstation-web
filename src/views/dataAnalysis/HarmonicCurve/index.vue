@@ -106,7 +106,7 @@ import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
 import { harmonicCurveApi } from "_api/dataAnalysis"
-import LineChart from "../components/LineChart.vue"
+import LineChart from "_components/charts/LineChart.vue"
 
 const loading = ref(false)
 const searchForm = ref({})

@@ -43,13 +43,3 @@ export const soeEventsApi = {
     request.post("/soeEvents/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
-
-// 温湿度监测分析
-export const temperatureHumidityEquipmentDataApi = {
-  getStatistics: data => new Promise((resolve, reject) => {
-    request.post("/temperatureHumidityEquipmentData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
-  }),
-  pageBySheet: data => new Promise((resolve, reject) => {
-    request.post("/temperatureHumidityEquipmentData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
-  })
-}

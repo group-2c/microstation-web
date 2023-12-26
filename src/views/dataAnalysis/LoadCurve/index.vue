@@ -65,7 +65,7 @@ import { message } from "ant-design-vue"
 import { DotChartOutlined, LineChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
 import { loadCurvesApi } from "_api/dataAnalysis"
 import controllerApi from "_api/controller"
-import LineChart from "../components/LineChart.vue"
+import LineChart from "_components/charts/LineChart.vue"
 import dayjs from "dayjs"
 
 const loading = ref(false)

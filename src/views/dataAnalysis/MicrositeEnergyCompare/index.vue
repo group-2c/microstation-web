@@ -77,7 +77,7 @@ import { LineChartOutlined, BarChartOutlined, FileExcelOutlined, SearchOutlined 
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
-import BarChart from "../components/BarChart.vue"
+import BarChart from "_components/charts/BarChart.vue"
 
 const loading = ref(false)
 const searchForm = ref({})

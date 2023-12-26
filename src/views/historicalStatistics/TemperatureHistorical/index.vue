@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-12-26 08:47:47
+ * @date: 2023-12-26 10:56:10
  * @fileName: index.vue
- * @filePath: src/views/dataAnalysis/TemperatureMonitoring/index.vue
- * @description: 温湿度监测分析
+ * @filePath: src/views/historicalStatistics/TemperatureHistorical/index.vue
+ * @description: 温湿度历史数据统计
  */
 <template>
   <div class="parcel dataAnalysisX">
@@ -27,9 +27,9 @@
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="温湿度设备" name="temperatureId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.temperatureId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择温湿度设备">
-                  <a-select-option v-for="item in temperatureDataList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
+              <a-form-item label="温湿度设备" name="deviceId" :rules="[{ required: true }]">
+                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择温湿度设备">
+                  <a-select-option v-for="item in deviceList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
               <a-form-item label="日期" name="time" :rules="[{ required: true }]">
@@ -51,7 +51,7 @@
               :columns="columns" 
               :data-source="tableList" 
               :pagination="pagination"
-              :scroll="{ y: 'calc(100vh - 370px)', x: 'max-content' }" 
+              :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }" 
               @change="handleTableChange"
             />
           </a-col>
@@ -76,8 +76,8 @@ import { LineChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
 import temperatureEquipmentApi from "_api/temperatureEquipment"
-import { temperatureHumidityEquipmentDataApi } from "_api/dataAnalysis"
-import LineChart from "../components/LineChart.vue"
+import { temperatureHumidityHistoricalApi } from "_api/historicalStatistics"
+import LineChart from "_components/charts/LineChart.vue"
 
 const loading = ref(false)
 const searchForm = ref({})
@@ -115,8 +115,8 @@ const columns = ref([
   { title: "采集时间", dataIndex: "time" }
 ])
 
-const temperatureDataList = computed(() => {
-  delete searchForm.value.temperatureId
+const deviceList = computed(() => {
+  delete searchForm.value.deviceId
   return temperatureList.value.filter(x => x.controllerId === searchForm.value.controllerId)
 })
 
@@ -146,11 +146,11 @@ const _getStatistics = async () => {
   loading.value = true
 
   try {
-    const data = await temperatureHumidityEquipmentDataApi.getStatistics({ 
+    const data = await temperatureHumidityHistoricalApi.getStatistics({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
     })
-
+    
     const temperatures = data.map(x => x.temperature)
     const humiditys = data.map(x => x.humidity)
     const times = data.map(x => {
@@ -159,11 +159,11 @@ const _getStatistics = async () => {
     })
 
     nextTick(() => {
-      temperatureChartRef.value.setChartData([{
+      temperatureChartRef.value && temperatureChartRef.value.setChartData([{
         name: "温度",
         data: temperatures
       }], times)
-      humidityChartRef.value.setChartData([{
+      humidityChartRef.value && humidityChartRef.value.setChartData([{
         name: "湿度",
         data: humiditys
       }], times)
@@ -184,7 +184,7 @@ const _getTableList = async () => {
 
   try {
     loading.value = true
-    const data = await temperatureHumidityEquipmentDataApi.pageBySheet({ 
+    const data = await temperatureHumidityHistoricalApi.pageBySheet({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
       page: current, 

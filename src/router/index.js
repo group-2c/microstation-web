@@ -13,6 +13,7 @@ import equipments from "./modules/equipments"
 import dataAnalysis from "./modules/dataAnalysis"
 import systems from "./modules/systems"
 import siteMonitoring from "./modules/siteMonitoring"
+import historical from "./modules/historical"
 import others from "./modules/others"
 
 export const routes = [
@@ -36,6 +37,7 @@ export const routes = [
       },
       ...others,
       dataAnalysis,
+      historical,
       operations,
       equipments,
       siteMonitoring,
