@@ -77,7 +77,7 @@
         />
       </div>
     </div>
-    <a-modal v-model:open="visible" title="密码验证" ok-text="确认" cancel-text="取消" @ok="modalConfirm" @cancel="closureModal">
+    <a-modal class="editModal" v-model:open="visible" title="密码验证" ok-text="确认" cancel-text="取消" @ok="modalConfirm" @cancel="closureModal">
       <div style="margin: 20px 0;">
         <a-input v-model:value="password" placeholder="请输入密码..." />
       </div>

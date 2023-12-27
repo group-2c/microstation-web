@@ -85,7 +85,7 @@
         </div>
       </div>
     </a-spin>
-    <a-modal width="900px" v-model:open="visible" title="单体电池电压数据" cancel-text="取消" @cancel="closureModal" :footer="null" >
+    <a-modal width="900px" class="editModal" v-model:open="visible" title="单体电池电压数据" cancel-text="取消" @cancel="closureModal" :footer="null" >
       <div style="margin: 40px 0;">
         <x-descriptions :list="labelAndFields" :record="currentItem" :column="4" :minWidth="120" />
       </div>

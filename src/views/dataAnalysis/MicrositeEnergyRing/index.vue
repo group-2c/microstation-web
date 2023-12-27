@@ -71,7 +71,7 @@
         </a-table>
       </div>
     </a-spin>
-    <a-modal v-model:open="visible" :title="currentItem.name" :footer="null" width="500px" cancel-text="取消" @cancel="closureModal">
+    <a-modal class="editModal" v-model:open="visible" :title="currentItem.name" :footer="null" width="500px" cancel-text="取消" @cancel="closureModal">
       <div style="margin: 20px 0;">
         <div class="chartTitle">
           <div class="tItem">增长值：{{ currentItem.added }}KW.h</div>
