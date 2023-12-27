@@ -26,3 +26,13 @@ export const waterImmersionHistoricalApi = {
     request.post("/waterImmersionSensorData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// 干变温控器分析
+export const dryTemperatureApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/dryTemperatureControllerData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/dryTemperatureControllerData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
