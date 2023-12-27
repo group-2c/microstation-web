@@ -57,15 +57,15 @@
           </a-col>
           <a-col v-if="chartNumber === 2" :span="16">
             <div style="width: 100%; height: 40%; margin-top: 2%;">
-              <line-chart ref="chart1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors"/>
+              <line-chart ref="chart1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors" :dataZoom="chartDataZoom"/>
             </div>
             <div style="width: 100%; height: 40%; margin-top: 5%;">
-              <line-chart ref="chart2" :grid="chartGrid" :legend="chartLegend" :colors="chart2Colors"/>
+              <line-chart ref="chart2" :grid="chartGrid" :legend="chartLegend" :colors="chart2Colors" :dataZoom="chartDataZoom"/>
             </div>
           </a-col>
           <a-col v-else :span="16">
             <div style="width: 100%; height: 90%; margin-top: 2%;">
-              <line-chart ref="chart1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors"/>
+              <line-chart ref="chart1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors" :dataZoom="chartDataZoom"/>
             </div>
           </a-col>
         </a-row>
@@ -98,6 +98,10 @@ const props = defineProps({
   chartNumber: {
     type: Number,
     dafule: 2
+  },
+  chartDataZoom: {
+    type: Boolean,
+    dafule: false
   },
   chartDataProcess: Function,
   tableDataProcess: Function,
