@@ -128,9 +128,9 @@ const chart2 = ref()
 const formRef = ref()
 const chartGrid = props.chartGrid || {
   top: "13%",
-  left: "2%",
-  right: "4%",
-  bottom: "20%",
+  left: "10%",
+  right: "10%",
+  bottom: "15%",
   containLabel: true
 }
 const chartLegend = props.chartLegend || {
@@ -178,8 +178,8 @@ const _getStatistics = async () => {
       return x.time
     })
 
-    props.chartDataProcess(data, (chart1Data, chart2Data) => {
-      nextTick(() => {
+    nextTick(() => {
+      props.chartDataProcess(data, (chart1Data, chart2Data) => {
         chart1.value && chart1.value.setChartData(chart1Data, times)
         chart2.value && chart2.value.setChartData(chart2Data, times)
       })
@@ -228,11 +228,11 @@ const handleTableChange = pagination => {
   _getTableList()
 }
 
-const _searchPrefix = () => {
+const _searchPrefix = async () => {
   pagination.value.current = 1
   tableList.value = []
-  _getStatistics()
-  _getTableList()
+  await _getTableList()
+  await _getStatistics()
 }
 
 const handleSearch = () => {

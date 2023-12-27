@@ -8,6 +8,7 @@
 import TemperatureHistorical from "@/views/historicalStatistics/TemperatureHistorical/index.vue"
 import WaterImmersionHistorical from "@/views/historicalStatistics/WaterImmersionHistorical/index.vue"
 import DryTemperatureHistorical from "@/views/historicalStatistics/DryTemperatureHistorical/index.vue"
+import ScreenHistorical from "@/views/historicalStatistics/ScreenHistorical/index.vue"
 
 const route = {
   path: "historicalAnalysis",
@@ -32,6 +33,12 @@ const route = {
       name: "DryTemperatureHistorical",
       component: DryTemperatureHistorical,
       meta: { title: "干变温控器数据" },
+    },
+    {
+      path: "screenHistorical",
+      name: "ScreenHistorical",
+      component: ScreenHistorical,
+      meta: { title: "直流屏数据" },
     },
   ]
 }

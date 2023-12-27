@@ -39,7 +39,7 @@ const chartDataProcess = (data, callback) => {
   callback(
     [
       { name: "工作电流", data: data.map(x => x.workCurrent) },
-      { name: "泄漏电流", data: data.map(x => x.leakCurrent) },
+      { name: "泄漏电流", data: data.map(x => x.leakCurrent) }
     ],
     [{ name: "泄漏阻抗", data: data.map(x => x.leakImpedance) }]
   )

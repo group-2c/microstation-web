@@ -15,6 +15,7 @@
     :tableDataProcess="tableDataProcess"
     :chartNumber="1"
     :chartGrid="chartGrid"
+    :chart1Colors="['#ebc039', '#bb2d0f', '#23f0f8']"
   />
 </template>
  
@@ -38,16 +39,18 @@ const columns = ref([
 const chartGrid = {
   top: "12%",
   left: "2%",
-  right: "4%",
-  bottom: "10%",
+  right: "3%",
+  bottom: "3%",
   containLabel: true
 }
 
 const chartDataProcess = (data, callback) => {
   callback(
-    [{ name: "A相温度", data: data.map(x => x.a) }],
-    [{ name: "B相温度", data: data.map(x => x.b) }],
-    [{ name: "C相温度", data: data.map(x => x.c) }],
+    [
+      { name: "A相温度", data: data.map(x => x.a) }, 
+      { name: "B相温度", data: data.map(x => x.b) },
+      { name: "C相温度", data: data.map(x => x.c) }
+    ]
   )
 }
 

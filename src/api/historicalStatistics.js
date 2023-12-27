@@ -36,3 +36,14 @@ export const dryTemperatureApi = {
     request.post("/dryTemperatureControllerData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// 直流屏分析
+export const screenHistoricalApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/dcScreenData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/dcScreenData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+

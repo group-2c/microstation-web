@@ -45,10 +45,10 @@ const _initModeChart = (data, date) => {
       ...props.legend
     },
     grid: props.grid || {
-      top: "13%",
+      top: "12%",
       left: "2%",
-      right: "3%",
-      bottom: "10%",
+      right: "4%",
+      bottom: "7%",
       containLabel: true
     },
     toolbox: {
@@ -60,7 +60,7 @@ const _initModeChart = (data, date) => {
         },
         saveAsImage: {
           title: "保存为图片",
-          backgroundColor: "#081A2A" 
+          backgroundColor: "#081A2A"
         }
       },
       iconStyle: {
@@ -105,33 +105,52 @@ const _initModeChart = (data, date) => {
     }))
   }
 
-  if(props.colors) {
+  if (props.colors) {
     options.color = props.colors
   }
-  if(props.dataZoom) {
+  if (props.dataZoom) {
+    const zoomStyles = {
+      type: "slider",
+      show: true,
+      borderColor: "transparent",
+      backgroundColor: "#1e3b58",
+      handleIcon: "M512 512m-208 0a6.5 6.5 0 1 0 416 0 6.5 6.5 0 1 0-416 0Z M512 192C335.264 192 192 335.264 192 512c0 176.736 143.264 320 320 320s320-143.264 320-320C832 335.264 688.736 192 512 192zM512 800c-159.072 0-288-128.928-288-288 0-159.072 128.928-288 288-288s288 128.928 288 288C800 671.072 671.072 800 512 800z",
+      handleColor: "#3f5c79",
+      handleSize: 20,
+      moveHandleSize: 0,
+      moveHandleStyle: {},
+      handleStyle: {
+        borderColor: "#3f5c79",
+        shadowBlur: 4,
+        shadowOffsetX: 1,
+        shadowOffsetY: 1,
+        shadowColor: "#1e3b58"
+      },
+      textStyle: {
+        color: "#bbbbbb"
+      },
+      start: 0,
+      end: 100
+    }
     options.dataZoom = [
       {
-        type: "slider",
-        start: 0,
-        end: 100,
         xAxisIndex: [0],
-        textStyle: {
-          color: "#dff6ff"
-        }
+        height: 10,
+        bottom: 15,
+        left: 85,
+        right: 85,
+        ...zoomStyles
       },
       {
-        type: "slider",
-        start: 0,
-        end: 100,
         yAxisIndex: [0],
-        textStyle: {
-          color: "#dff6ff"
-        }
+        width: 10,
+        top: 100,
+        bottom: 100,
+        right: 30,
+        ...zoomStyles
       },
       {
-        type: "inside",
-        start: 0,
-        end: 100
+        type: "inside"
       }
     ]
   }
