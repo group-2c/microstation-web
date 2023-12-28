@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-12-27 14:32:01
+ * @date: 2023-12-28 08:34:07
  * @fileName: index.vue
- * @filePath: src/views/historicalStatistics/ScreenHistorical/index.vue
- * @description: 直流屏历史数据统计
+ * @filePath: src/views/historicalStatistics/InverterHistorical/index.vue
+ * @description: 逆变器历史数据统计
  */
 <template>
   <div class="parcel dataAnalysisX">
@@ -30,8 +30,8 @@
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="直流屏" name="deviceId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择直流屏">
+              <a-form-item label="逆变器" name="deviceId" :rules="[{ required: true }]">
+                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择逆变器">
                   <a-select-option v-for="item in deviceList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -75,21 +75,10 @@
             :pagination="pagination"
             :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }" 
             @change="handleTableChange"
-          >
-            <template #bodyCell="{ column, record }">
-              <template v-if="column.dataIndex === 'operation'">
-                <a-button type="link" @click.stop="handleViewModal(record)">单体电池电压</a-button>
-              </template>
-            </template>
-          </a-table>
+          />
         </div>
       </div>
     </a-spin>
-    <a-modal width="900px" class="editModal" v-model:open="visible" title="单体电池电压数据" cancel-text="取消" @cancel="closureModal" :footer="null" >
-      <div style="margin: 40px 0;">
-        <x-descriptions :list="labelAndFields" :record="currentItem" :column="4" :minWidth="120" />
-      </div>
-    </a-modal>
   </div>
 </template>
  
@@ -97,14 +86,13 @@
 import { onMounted, ref, computed, h, nextTick, watch } from "vue"
 import { message } from "ant-design-vue"
 import { LineChartOutlined, BarChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
-import { screenHistoricalApi } from "_api/historicalStatistics"
+import { inverterDataApi } from "_api/historicalStatistics"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
-import screenApi from "_api/screen"
+import inverterApi from "_api/inverter"
 import LineChart from "_components/charts/LineChart.vue"
 
 const loading = ref(false)
-const visible = ref(false)
 const searchForm = ref({})
 const tableList = ref([])
 const pageType = ref("1")
@@ -129,7 +117,6 @@ const chartGrid = {
 const chartLegend = {
   top: 10
 }
-const currentItem = ref({})
 
 const chartRef1 = ref()
 const chartRef2 = ref()
@@ -138,20 +125,14 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "电池电压", dataIndex: "batteryVoltage", align: "center",width: 120, ellipsis: true },
-  { title: "控母电压", dataIndex: "busbarVoltage", align: "center",width: 100, ellipsis: true },
-  { title: "电池电流", dataIndex: "batteryCurrent", align: "center", width: 100, ellipsis: true },
-  { title: "负载电流", dataIndex: "loadCurrent", align: "center", width: 100, ellipsis: true },
-  { title: "正地电阻", dataIndex: "positiveGroundResistance", align: "center", width: 100, ellipsis: true },
-  { title: "负地电阻", dataIndex: "negativeGroundResistance", align: "center", width: 100, ellipsis: true },
-  { title: "正地电压", dataIndex: "positiveGroundVoltage", align: "center", width: 100, ellipsis: true },
-  { title: "负地电压", dataIndex: "negativeGroundVoltage", align: "center", width: 100, ellipsis: true },
-  { title: "环境温度", dataIndex: "ambientTemperature", align: "center", width: 100, ellipsis: true },
-  { title: "硅链温度", dataIndex: "siliconTemperature", align: "center", width: 100, ellipsis: true },
-  { title: "采集时间", dataIndex: "time", width: 120, ellipsis: true },
-  { title: "查 看", dataIndex: "operation", align: "center", width: 120, fixed: "right" }
+  { title: "直流电压", dataIndex: "dcVoltage", align: "center",width: 120, ellipsis: true },
+  { title: "市电电压", dataIndex: "mainsVoltage", align: "center",width: 100, ellipsis: true },
+  { title: "市电频率", dataIndex: "mainsFrequency", align: "center", width: 100, ellipsis: true },
+  { title: "工作频率", dataIndex: "workingFrequency", align: "center", width: 100, ellipsis: true },
+  { title: "输出电压", dataIndex: "outputVoltage", align: "center", width: 100, ellipsis: true },
+  { title: "输出电流", dataIndex: "outputCurrent", align: "center", width: 100, ellipsis: true },
+  { title: "温 度", dataIndex: "temperature", align: "center", width: 100, ellipsis: true }
 ])
-const labelAndFields = ref([])
 
 const deviceList = computed(() => {
   delete searchForm.value.deviceId
@@ -177,10 +158,10 @@ const _getControllerList = async () => {
 
 const _getDeviceList = async () => {
   try {
-    const res = await screenApi.getAll()
+    const res = await inverterApi.getAll()
     oldDeviceList.value = res.data
   } catch(err) {
-    message.error(`获取直流屏列表失败: ${err}`)
+    message.error(`获取逆变器列表失败: ${err}`)
   }
 }
 
@@ -188,7 +169,7 @@ const _getStatistics = async () => {
   loading.value = true
 
   try {
-    const data = await screenHistoricalApi.getStatistics({ 
+    const data = await inverterDataApi.getStatistics({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
     })
@@ -202,20 +183,17 @@ const _getStatistics = async () => {
 
     nextTick(() => {
       chartRef1.value && chartRef1.value.setChartData([
-        { name: "电池电压", data: data.map(x => x.batteryVoltage) },
-        { name: "控母电压", data: data.map(x => x.busbarVoltage) },
-        { name: "正地电压", data: data.map(x => x.positiveGroundVoltage) },
-        { name: "负地电压", data: data.map(x => x.negativeGroundVoltage) },
+        { name: "直流电压", data: data.map(x => x.dcVoltage) },
+        { name: "市电电压", data: data.map(x => x.mainsVoltage) },
+        { name: "输出电压", data: data.map(x => x.outputVoltage) }
       ], times)
 
       chartRef2.value && chartRef2.value.setChartData([
-        { name: "电池电流", data: data.map(x => x.batteryCurrent) },
-        { name: "负载电流", data: data.map(x => x.loadCurrent) },
+        { name: "输出电流", data: data.map(x => x.outputCurrent) }
       ], times)
 
       chartRef3.value && chartRef3.value.setChartData([
-        { name: "环境温度", data: data.map(x => x.ambientTemperature) },
-        { name: "硅链温度", data: data.map(x => x.siliconTemperature) },
+        { name: "温度", data: data.map(x => x.temperature) }
       ], times)
     })
   } catch (err) {
@@ -235,7 +213,7 @@ const _getTableList = async () => {
   try {
     loading.value = true
 
-    const data = await screenHistoricalApi.pageBySheet({ 
+    const data = await inverterDataApi.pageBySheet({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
       page: current, 
@@ -273,23 +251,7 @@ const handleSearch = () => {
   })
 }
 
-const closureModal = () => {
-  visible.value = false
-}
-
-const handleViewModal = row => {
-  const obj = {}
-  JSON.parse(row.singleCellBatteryVoltage).forEach((item, index) => {
-    obj[`voltageObj${index}`] = item
-  })
-  currentItem.value = obj
-  visible.value = true
-}
-
 onMounted(() => {
-  new Array(18).fill("-").forEach((_x, index) => {
-    labelAndFields.value.push({ label: `电池${index+1}`, field: `voltageObj${index}`, unit: "V" })
-  })
   _getControllerList()
   _getDeviceList()
 })

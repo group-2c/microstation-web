@@ -29,9 +29,9 @@ import LayoutList from "../components/LayoutList.vue"
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
   { title: "设备名称", dataIndex: "deviceName", width: 120, ellipsis: true },
-  { title: "A相温度", dataIndex: "a", width: 100, ellipsis: true },
-  { title: "B相温度", dataIndex: "b", width: 100, ellipsis: true },
-  { title: "C相温度", dataIndex: "c", width: 100, ellipsis: true },
+  { title: "A相温度", dataIndex: "a", align: "center", width: 100, ellipsis: true },
+  { title: "B相温度", dataIndex: "b", align: "center", width: 100, ellipsis: true },
+  { title: "C相温度", dataIndex: "c", align: "center", width: 100, ellipsis: true },
   { title: "状态", dataIndex: "statusName", width: 100, ellipsis: true },
   { title: "采集时间", dataIndex: "time", width: 120, ellipsis: true }
 ])

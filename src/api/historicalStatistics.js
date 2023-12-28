@@ -47,3 +47,23 @@ export const screenHistoricalApi = {
   })
 }
 
+// 逆变器分析
+export const inverterDataApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/inverterData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/inverterData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+
+// 逆变器分析
+export const rvbDataApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/rvbData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/rvbData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+

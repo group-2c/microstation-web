@@ -9,6 +9,8 @@ import TemperatureHistorical from "@/views/historicalStatistics/TemperatureHisto
 import WaterImmersionHistorical from "@/views/historicalStatistics/WaterImmersionHistorical/index.vue"
 import DryTemperatureHistorical from "@/views/historicalStatistics/DryTemperatureHistorical/index.vue"
 import ScreenHistorical from "@/views/historicalStatistics/ScreenHistorical/index.vue"
+import InverterHistorical from "@/views/historicalStatistics/InverterHistorical/index.vue"
+import RvbHistorical from "@/views/historicalStatistics/RvbHistorical/index.vue"
 
 const route = {
   path: "historicalAnalysis",
@@ -40,7 +42,20 @@ const route = {
       component: ScreenHistorical,
       meta: { title: "直流屏数据" },
     },
+    {
+      path: "inverterHistorical",
+      name: "InverterHistorical",
+      component: InverterHistorical,
+      meta: { title: "逆变器数据" },
+    },
+    {
+      path: "rvbHistorical",
+      name: "RvbHistorical",
+      component: RvbHistorical,
+      meta: { title: "RVB数据" },
+    },
   ]
 }
 
 export default route
+

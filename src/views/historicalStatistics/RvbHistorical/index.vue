@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-12-27 14:32:01
+ * @date: 2023-12-28 08:51:31
  * @fileName: index.vue
- * @filePath: src/views/historicalStatistics/ScreenHistorical/index.vue
- * @description: 直流屏历史数据统计
+ * @filePath: src/views/historicalStatistics/RvbHistorical/index.vue
+ * @description: RVB历史数据统计
  */
 <template>
   <div class="parcel dataAnalysisX">
@@ -30,8 +30,8 @@
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="直流屏" name="deviceId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择直流屏">
+              <a-form-item label="RVB设备" name="deviceId" :rules="[{ required: true }]">
+                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择RVB设备">
                   <a-select-option v-for="item in deviceList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -49,18 +49,28 @@
         <div class="chartArea" v-if="pageType ==='1'">
           <div v-if="statisticsData.length === 0" class="empty">没有相关统计数据</div>
           <div v-else>
-            <a-row :gutter="10">
+            <a-radio-group class="chartSwitch" v-model:value="chartFunKey">
+              <a-radio-button value="1">频 度</a-radio-button>
+              <a-radio-button value="2">温 度</a-radio-button>
+            </a-radio-group>
+            <a-row v-if="chartFunKey==='1'" :gutter="10" style="height: 80%;">
               <a-col :span="8">
-                <div class="title">电压数据</div>
+                <div class="title">局部放电频度</div>
                 <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
-                <div class="title">电流数据</div>
+                <div class="title">局部放电概率强度</div>
                 <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
-                <div class="title">温度数据</div>
+                <div class="title">局部放电平均强度</div>
                 <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+              </a-col>
+            </a-row>
+            <a-row v-else :gutter="10">
+              <a-col :span="24">
+                <div class="title">温 度</div>
+                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -70,26 +80,16 @@
           <a-table
             v-else
             row-key="id" 
+            class="groupTable"
             :columns="columns" 
             :data-source="tableList" 
             :pagination="pagination"
             :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }" 
             @change="handleTableChange"
-          >
-            <template #bodyCell="{ column, record }">
-              <template v-if="column.dataIndex === 'operation'">
-                <a-button type="link" @click.stop="handleViewModal(record)">单体电池电压</a-button>
-              </template>
-            </template>
-          </a-table>
+          />
         </div>
       </div>
     </a-spin>
-    <a-modal width="900px" class="editModal" v-model:open="visible" title="单体电池电压数据" cancel-text="取消" @cancel="closureModal" :footer="null" >
-      <div style="margin: 40px 0;">
-        <x-descriptions :list="labelAndFields" :record="currentItem" :column="4" :minWidth="120" />
-      </div>
-    </a-modal>
   </div>
 </template>
  
@@ -97,17 +97,17 @@
 import { onMounted, ref, computed, h, nextTick, watch } from "vue"
 import { message } from "ant-design-vue"
 import { LineChartOutlined, BarChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
-import { screenHistoricalApi } from "_api/historicalStatistics"
+import { rvbDataApi } from "_api/historicalStatistics"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
-import screenApi from "_api/screen"
+import fourInOneDeviceApi from "_api/fourInOneDevice"
 import LineChart from "_components/charts/LineChart.vue"
 
 const loading = ref(false)
-const visible = ref(false)
 const searchForm = ref({})
 const tableList = ref([])
 const pageType = ref("1")
+const chartFunKey = ref("1")
 const controllerList = ref([])
 const oldDeviceList = ref([])
 const statisticsData = ref([])
@@ -129,7 +129,6 @@ const chartGrid = {
 const chartLegend = {
   top: 10
 }
-const currentItem = ref({})
 
 const chartRef1 = ref()
 const chartRef2 = ref()
@@ -138,20 +137,30 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "电池电压", dataIndex: "batteryVoltage", align: "center",width: 120, ellipsis: true },
-  { title: "控母电压", dataIndex: "busbarVoltage", align: "center",width: 100, ellipsis: true },
-  { title: "电池电流", dataIndex: "batteryCurrent", align: "center", width: 100, ellipsis: true },
-  { title: "负载电流", dataIndex: "loadCurrent", align: "center", width: 100, ellipsis: true },
-  { title: "正地电阻", dataIndex: "positiveGroundResistance", align: "center", width: 100, ellipsis: true },
-  { title: "负地电阻", dataIndex: "negativeGroundResistance", align: "center", width: 100, ellipsis: true },
-  { title: "正地电压", dataIndex: "positiveGroundVoltage", align: "center", width: 100, ellipsis: true },
-  { title: "负地电压", dataIndex: "negativeGroundVoltage", align: "center", width: 100, ellipsis: true },
-  { title: "环境温度", dataIndex: "ambientTemperature", align: "center", width: 100, ellipsis: true },
-  { title: "硅链温度", dataIndex: "siliconTemperature", align: "center", width: 100, ellipsis: true },
-  { title: "采集时间", dataIndex: "time", width: 120, ellipsis: true },
-  { title: "查 看", dataIndex: "operation", align: "center", width: 120, fixed: "right" }
+  { title: "A相", dataIndex: "A", children: [
+    { title: "局放概率强度", dataIndex: "aPhasePartialDischargeProbabilityIntensity", align: "center", width: 120 },
+    { title: "局放平均强度", dataIndex: "aPhasePartialDischargeAverageIntensity", align: "center", width: 120 },
+    { title: "局放频度", dataIndex: "aPhasePartialDischargeFrequency", align: "center", width: 120 },
+    { title: "温 度", dataIndex: "aPhaseTemperature", align: "center", width: 120 },
+  ]},
+  { title: "B相", dataIndex: "B", children: [
+    { title: "局放概率强度", dataIndex: "bPhasePartialDischargeProbabilityIntensity", align: "center", width: 120 },
+    { title: "局放平均强度", dataIndex: "bPhasePartialDischargeAverageIntensity", align: "center", width: 120 },
+    { title: "局放频度", dataIndex: "bPhasePartialDischargeFrequency", align: "center", width: 120 },
+    { title: "温 度", dataIndex: "bPhaseTemperature", align: "center", width: 120 },
+  ]},
+  { title: "C相", dataIndex: "C", children: [
+    { title: "局放概率强度", dataIndex: "cPhasePartialDischargeProbabilityIntensity", align: "center", width: 120 },
+    { title: "局放平均强度", dataIndex: "cPhasePartialDischargeAverageIntensity", align: "center", width: 120 },
+    { title: "局放频度", dataIndex: "cPhasePartialDischargeFrequency", align: "center", width: 120 },
+    { title: "温 度", dataIndex: "cPhaseTemperature", align: "center", width: 120 },
+  ]},
+  { title: "综合局放概率强度", dataIndex: "comprehensivePartialDischargeProbabilityIntensity", align: "center", width: 150 },
+  { title: "综合局放平均强度", dataIndex: "comprehensivePartialDischargeAverageIntensity", align: "center", width: 150 },
+  { title: "综合局放频度", dataIndex: "comprehensivePartialDischargeFrequency", align: "center", width: 120 },
+  { title: "总温度", dataIndex: "totalTemperature", align: "center", width: 120 },
+  { title: "局放噪声", dataIndex: "partialDischargeNoise", align: "center", width: 120 },
 ])
-const labelAndFields = ref([])
 
 const deviceList = computed(() => {
   delete searchForm.value.deviceId
@@ -166,6 +175,13 @@ watch(searchForm.value, () => {
   })
 })
 
+watch(() => chartFunKey.value, () => {
+  console.log(1)
+  _calibration(status => {
+    if(status) _setChartData()
+  })
+})
+
 const _getControllerList = async () => {
   try {
     const res = await controllerApi.getAll()
@@ -177,10 +193,10 @@ const _getControllerList = async () => {
 
 const _getDeviceList = async () => {
   try {
-    const res = await screenApi.getAll()
+    const res = await fourInOneDeviceApi.getAll()
     oldDeviceList.value = res.data
   } catch(err) {
-    message.error(`获取直流屏列表失败: ${err}`)
+    message.error(`获取RVB设备列表失败: ${err}`)
   }
 }
 
@@ -188,41 +204,58 @@ const _getStatistics = async () => {
   loading.value = true
 
   try {
-    const data = await screenHistoricalApi.getStatistics({ 
+    const data = await rvbDataApi.getStatistics({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
     })
-
-    const times = data.map(x => {
-      x.time = dayjs(x.time).format("MM-DD HH:mm")
-      return x.time
-    })
-
     statisticsData.value = data
-
-    nextTick(() => {
-      chartRef1.value && chartRef1.value.setChartData([
-        { name: "电池电压", data: data.map(x => x.batteryVoltage) },
-        { name: "控母电压", data: data.map(x => x.busbarVoltage) },
-        { name: "正地电压", data: data.map(x => x.positiveGroundVoltage) },
-        { name: "负地电压", data: data.map(x => x.negativeGroundVoltage) },
-      ], times)
-
-      chartRef2.value && chartRef2.value.setChartData([
-        { name: "电池电流", data: data.map(x => x.batteryCurrent) },
-        { name: "负载电流", data: data.map(x => x.loadCurrent) },
-      ], times)
-
-      chartRef3.value && chartRef3.value.setChartData([
-        { name: "环境温度", data: data.map(x => x.ambientTemperature) },
-        { name: "硅链温度", data: data.map(x => x.siliconTemperature) },
-      ], times)
-    })
+    _setChartData()
   } catch (err) {
     message.error("统计数据加载失败: " + err)
   } finally {
     loading.value = false
   }
+}
+
+const _setChartData = () => {
+  const data = statisticsData.value
+
+  const times = data.map(x => {
+    x.time = dayjs(x.time).format("MM-DD HH:mm")
+    return x.time
+  })
+
+  nextTick(() => {
+    if(chartFunKey.value === "1") {
+      chartRef1.value && chartRef1.value.setChartData([
+        { name: "A相", data: data.map(x => x.aPhasePartialDischargeProbabilityIntensity) },
+        { name: "B相", data: data.map(x => x.bPhasePartialDischargeProbabilityIntensity) },
+        { name: "C相", data: data.map(x => x.cPhasePartialDischargeProbabilityIntensity) },
+        { name: "综合", data: data.map(x => x.comprehensivePartialDischargeProbabilityIntensity) }
+      ], times)
+
+      chartRef2.value && chartRef2.value.setChartData([
+        { name: "A相", data: data.map(x => x.aPhasePartialDischargeAverageIntensity) },
+        { name: "B相", data: data.map(x => x.bPhasePartialDischargeAverageIntensity) },
+        { name: "C相", data: data.map(x => x.cPhasePartialDischargeAverageIntensity) },
+        { name: "综合", data: data.map(x => x.comprehensivePartialDischargeAverageIntensity) }
+      ], times)
+
+      chartRef3.value && chartRef3.value.setChartData([
+        { name: "A相", data: data.map(x => x.aPhasePartialDischargeFrequency) },
+        { name: "B相", data: data.map(x => x.bPhasePartialDischargeFrequency) },
+        { name: "C相", data: data.map(x => x.cPhasePartialDischargeFrequency) },
+        { name: "综合", data: data.map(x => x.comprehensivePartialDischargeFrequency) }
+      ], times)
+    } else {
+      chartRef1.value && chartRef1.value.setChartData([
+        { name: "A相", data: data.map(x => x.aPhaseTemperature) },
+        { name: "B相", data: data.map(x => x.bPhaseTemperature) },
+        { name: "C相", data: data.map(x => x.cPhaseTemperature) },
+        { name: "综合", data: data.map(x => x.totalTemperature) }
+      ], times)
+    }
+  })
 }
 
 const _calibration = callback => {
@@ -235,7 +268,7 @@ const _getTableList = async () => {
   try {
     loading.value = true
 
-    const data = await screenHistoricalApi.pageBySheet({ 
+    const data = await rvbDataApi.pageBySheet({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
       page: current, 
@@ -273,25 +306,36 @@ const handleSearch = () => {
   })
 }
 
-const closureModal = () => {
-  visible.value = false
-}
-
-const handleViewModal = row => {
-  const obj = {}
-  JSON.parse(row.singleCellBatteryVoltage).forEach((item, index) => {
-    obj[`voltageObj${index}`] = item
-  })
-  currentItem.value = obj
-  visible.value = true
-}
-
 onMounted(() => {
-  new Array(18).fill("-").forEach((_x, index) => {
-    labelAndFields.value.push({ label: `电池${index+1}`, field: `voltageObj${index}`, unit: "V" })
-  })
   _getControllerList()
   _getDeviceList()
 })
 </script>
+
+<style lang="less" scoped>
+  .chartSwitch {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  ::v-deep(.ant-radio-button-wrapper) {
+    background: none;
+    border-color: #44668A !important;
+    &::before {
+      background: none !important;
+    }
+    &:hover {
+      color: #ffffff; 
+      opacity: .8;
+    }
+  }
+  ::v-deep(.ant-radio-button-wrapper-checked) {
+    background: linear-gradient(180deg, #0552B6 0%, #01294C 100%) !important;
+    border-color: #44668A !important;
+    color: #ffffff;
+  }
+  ::v-deep(.chart) {
+    height: calc(100vh - 410px) !important;
+  }
+</style>
  
