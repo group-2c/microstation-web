@@ -33,7 +33,7 @@ const columns = ref([
   { title: "B相温度", dataIndex: "b", align: "center", width: 100, ellipsis: true },
   { title: "C相温度", dataIndex: "c", align: "center", width: 100, ellipsis: true },
   { title: "状态", dataIndex: "statusName", width: 100, ellipsis: true },
-  { title: "采集时间", dataIndex: "time", width: 120, ellipsis: true }
+  { title: "采集时间", dataIndex: "time", width: 180, ellipsis: true }
 ])
 
 const chartGrid = {

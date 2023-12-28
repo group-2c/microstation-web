@@ -32,7 +32,7 @@ const columns = ref([
   { title: "工作电流", dataIndex: "workCurrent", width: 100, align: "center", ellipsis: true },
   { title: "泄漏电流", dataIndex: "leakCurrent", width: 100, align: "center", ellipsis: true },
   { title: "泄漏阻抗", dataIndex: "leakImpedance", width: 100, align: "center", ellipsis: true },
-  { title: "采集时间", dataIndex: "time", width: 120, ellipsis: true }
+  { title: "采集时间", dataIndex: "time", width: 180, ellipsis: true }
 ])
 
 const chartDataProcess = (data, callback) => {

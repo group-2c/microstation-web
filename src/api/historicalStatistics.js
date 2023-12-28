@@ -76,3 +76,13 @@ export const upsDataApi = {
     request.post("/upsData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// 空调分析
+export const airConditioningDataApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/airConditioningData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/airConditioningData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}

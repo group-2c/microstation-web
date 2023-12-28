@@ -148,7 +148,7 @@ const columns = ref([
   { title: "负地电压", dataIndex: "negativeGroundVoltage", align: "center", width: 100, ellipsis: true },
   { title: "环境温度", dataIndex: "ambientTemperature", align: "center", width: 100, ellipsis: true },
   { title: "硅链温度", dataIndex: "siliconTemperature", align: "center", width: 100, ellipsis: true },
-  { title: "采集时间", dataIndex: "time", width: 120, ellipsis: true },
+  { title: "采集时间", dataIndex: "time", width: 180, ellipsis: true },
   { title: "查 看", dataIndex: "operation", align: "center", width: 120, fixed: "right" }
 ])
 const labelAndFields = ref([])

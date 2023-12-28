@@ -12,6 +12,7 @@ import ScreenHistorical from "@/views/historicalStatistics/ScreenHistorical/inde
 import InverterHistorical from "@/views/historicalStatistics/InverterHistorical/index.vue"
 import RvbHistorical from "@/views/historicalStatistics/RvbHistorical/index.vue"
 import UpsHistorical from "@/views/historicalStatistics/UpsHistorical/index.vue"
+import AirHistorical from "@/views/historicalStatistics/AirHistorical/index.vue"
 
 const route = {
   path: "historicalAnalysis",
@@ -60,6 +61,12 @@ const route = {
       name: "UpsHistorical",
       component: UpsHistorical,
       meta: { title: "UPS数据" },
+    },
+    {
+      path: "airHistorical",
+      name: "AirHistorical",
+      component: AirHistorical,
+      meta: { title: "空调数据" },
     },
   ]
 }

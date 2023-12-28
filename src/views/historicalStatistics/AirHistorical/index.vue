@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-12-28 08:34:07
+ * @date: 2023-12-28 15:23:06
  * @fileName: index.vue
- * @filePath: src/views/historicalStatistics/InverterHistorical/index.vue
- * @description: 逆变器历史数据统计
+ * @filePath: src/views/historicalStatistics/AirHistorical/index.vue
+ * @description: 空调历史数据统计
  */
 <template>
   <div class="parcel dataAnalysisX">
@@ -30,8 +30,8 @@
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="逆变器" name="deviceId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择逆变器">
+              <a-form-item label="空调设备" name="deviceId" :rules="[{ required: true }]">
+                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择空调设备">
                   <a-select-option v-for="item in deviceList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -49,19 +49,8 @@
         <div class="chartArea" v-if="pageType ==='1'">
           <div v-if="statisticsData.length === 0" class="empty">没有相关统计数据</div>
           <div v-else>
-            <a-row :gutter="10">
-              <a-col :span="8">
-                <div class="title">电压数据</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
-              </a-col>
-              <a-col :span="8">
-                <div class="title">电流数据</div>
-                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
-              </a-col>
-              <a-col :span="8">
-                <div class="title">温度数据</div>
-                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
-              </a-col>
+            <a-row :gutter="10" style="height: 80%;">
+              <line-chart ref="chartRef" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
             </a-row>
           </div>
         </div>
@@ -70,6 +59,7 @@
           <a-table
             v-else
             row-key="id" 
+            class="groupTable noIndex"
             :columns="columns" 
             :data-source="tableList" 
             :pagination="pagination"
@@ -86,10 +76,10 @@
 import { onMounted, ref, computed, h, nextTick, watch } from "vue"
 import { message } from "ant-design-vue"
 import { LineChartOutlined, BarChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
-import { inverterDataApi } from "_api/historicalStatistics"
+import { airConditioningDataApi } from "_api/historicalStatistics"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
-import inverterApi from "_api/inverter"
+import airConditioningApi from "_api/airConditioning"
 import LineChart from "_components/charts/LineChart.vue"
 
 const loading = ref(false)
@@ -118,21 +108,22 @@ const chartLegend = {
   top: 10
 }
 
-const chartRef1 = ref()
-const chartRef2 = ref()
-const chartRef3 = ref()
+const chartRef = ref()
 const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
+  { title: "柜内温度", dataIndex: "cabinetTemperature", align: "center", width: 120 },
+  { title: "柜内湿度", dataIndex: "cabinetHumidity", align: "center", width: 120 },
   { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
-  { title: "直流电压", dataIndex: "dcVoltage", align: "center",width: 120, ellipsis: true },
-  { title: "市电电压", dataIndex: "mainsVoltage", align: "center",width: 100, ellipsis: true },
-  { title: "市电频率", dataIndex: "mainsFrequency", align: "center", width: 100, ellipsis: true },
-  { title: "工作频率", dataIndex: "workingFrequency", align: "center", width: 100, ellipsis: true },
-  { title: "输出电压", dataIndex: "outputVoltage", align: "center", width: 100, ellipsis: true },
-  { title: "输出电流", dataIndex: "outputCurrent", align: "center", width: 100, ellipsis: true },
-  { title: "温 度", dataIndex: "temperature", align: "center", width: 100, ellipsis: true }
+  { title: "告警故障", dataIndex: "A", children: [
+    { title: "柜内温湿度传感器", dataIndex: "cabinetTemperatureAndHumiditySensorFailureText", align: "center", className: "warningColor", width: 180 },
+    { title: "高湿告警", dataIndex: "highHumidityAlarmText", align: "center", className: "warningColor", width: 120 },
+    { title: "低湿告警", dataIndex: "lowHumidityAlarmText", align: "center", className: "warningColor", width: 120 },
+    { title: "高温告警", dataIndex: "highTemperatureAlarmText", align: "center", className: "warningColor", width: 120 },
+    { title: "低温告警", dataIndex: "lowTemperatureAlarmText", align: "center", className: "warningColor", width: 120 },
+    { title: "水流报警", dataIndex: "waterFlowAlarmText", align: "center", className: "warningColor", width: 120 },
+  ]}
 ])
 
 const deviceList = computed(() => {
@@ -159,10 +150,10 @@ const _getControllerList = async () => {
 
 const _getDeviceList = async () => {
   try {
-    const res = await inverterApi.getAll()
+    const res = await airConditioningApi.getAll()
     oldDeviceList.value = res.data
   } catch(err) {
-    message.error(`获取逆变器列表失败: ${err}`)
+    message.error(`获取空调设备列表失败: ${err}`)
   }
 }
 
@@ -170,7 +161,7 @@ const _getStatistics = async () => {
   loading.value = true
 
   try {
-    const data = await inverterDataApi.getStatistics({ 
+    const data = await airConditioningDataApi.getStatistics({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
     })
@@ -183,18 +174,9 @@ const _getStatistics = async () => {
     statisticsData.value = data
 
     nextTick(() => {
-      chartRef1.value && chartRef1.value.setChartData([
-        { name: "直流电压", data: data.map(x => x.dcVoltage) },
-        { name: "市电电压", data: data.map(x => x.mainsVoltage) },
-        { name: "输出电压", data: data.map(x => x.outputVoltage) }
-      ], times)
-
-      chartRef2.value && chartRef2.value.setChartData([
-        { name: "输出电流", data: data.map(x => x.outputCurrent) }
-      ], times)
-
-      chartRef3.value && chartRef3.value.setChartData([
-        { name: "温度", data: data.map(x => x.temperature) }
+      chartRef.value && chartRef.value.setChartData([
+        { name: "柜内温度", data: data.map(x => x.cabinetTemperature) },
+        { name: "柜内湿度", data: data.map(x => x.cabinetHumidity) },
       ], times)
     })
   } catch (err) {
@@ -211,16 +193,30 @@ const _calibration = callback => {
 const _getTableList = async () => {
   const { current, pageSize } = pagination.value
 
+  const _array = [
+    { name: "cabinetTemperatureAndHumiditySensorFailure", text: "故障" },
+    { name: "highHumidityAlarm", text: "告警" },
+    { name: "lowHumidityAlarm", text: "告警" },
+    { name: "highTemperatureAlarm", text: "告警" },
+    { name: "lowTemperatureAlarm", text: "告警" },
+    { name: "waterFlowAlarm", text: "告警" },
+  ]
+
   try {
     loading.value = true
 
-    const data = await inverterDataApi.pageBySheet({ 
+    const data = await airConditioningDataApi.pageBySheet({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
       page: current, 
       size: pageSize
     })
-    tableList.value = data.content
+    tableList.value = data.content.map(item => {
+      _array.forEach(_ary => {
+        item[`${_ary.name}Text`] = item[_ary.name] === "1" ? _ary.text : ""
+      })
+      return item
+    })
     pagination.value.total = data.totalElements
     pagination.value.current = data.pageNumber
   } catch (err) {
@@ -257,4 +253,4 @@ onMounted(() => {
   _getDeviceList()
 })
 </script>
- 
+
