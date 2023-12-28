@@ -11,6 +11,7 @@ import DryTemperatureHistorical from "@/views/historicalStatistics/DryTemperatur
 import ScreenHistorical from "@/views/historicalStatistics/ScreenHistorical/index.vue"
 import InverterHistorical from "@/views/historicalStatistics/InverterHistorical/index.vue"
 import RvbHistorical from "@/views/historicalStatistics/RvbHistorical/index.vue"
+import UpsHistorical from "@/views/historicalStatistics/UpsHistorical/index.vue"
 
 const route = {
   path: "historicalAnalysis",
@@ -53,6 +54,12 @@ const route = {
       name: "RvbHistorical",
       component: RvbHistorical,
       meta: { title: "RVB数据" },
+    },
+    {
+      path: "upsHistorical",
+      name: "UpsHistorical",
+      component: UpsHistorical,
+      meta: { title: "UPS数据" },
     },
   ]
 }

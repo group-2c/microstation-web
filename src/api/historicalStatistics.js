@@ -67,3 +67,12 @@ export const rvbDataApi = {
   })
 }
 
+// UPS分析
+export const upsDataApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/upsData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/upsData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}

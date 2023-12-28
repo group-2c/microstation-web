@@ -1,9 +1,9 @@
 /*
  * @author: zzp
- * @date: 2023-12-28 08:51:31
+ * @date: 2023-12-28 11:27:21
  * @fileName: index.vue
- * @filePath: src/views/historicalStatistics/RvbHistorical/index.vue
- * @description: RVB历史数据统计
+ * @filePath: src/views/historicalStatistics/UpsHistorical/index.vue
+ * @description: UPS历史数据统计
  */
 <template>
   <div class="parcel dataAnalysisX">
@@ -30,8 +30,8 @@
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
-              <a-form-item label="RVB设备" name="deviceId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择RVB设备">
+              <a-form-item label="UPS设备" name="deviceId" :rules="[{ required: true }]">
+                <a-select v-model:value="searchForm.deviceId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择UPS设备">
                   <a-select-option v-for="item in deviceList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
@@ -49,28 +49,18 @@
         <div class="chartArea" v-if="pageType ==='1'">
           <div v-if="statisticsData.length === 0" class="empty">没有相关统计数据</div>
           <div v-else>
-            <a-radio-group class="chartSwitch" v-model:value="chartFunKey">
-              <a-radio-button value="1">频 度</a-radio-button>
-              <a-radio-button value="2">温 度</a-radio-button>
-            </a-radio-group>
             <a-row v-if="chartFunKey==='1'" :gutter="10" style="height: 80%;">
               <a-col :span="8">
-                <div class="title">局部放电频度</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <div class="title">电 压</div>
+                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
-                <div class="title">局部放电概率强度</div>
-                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <div class="title">电 流</div>
+                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
-                <div class="title">局部放电平均强度</div>
-                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
-              </a-col>
-            </a-row>
-            <a-row v-else :gutter="10">
-              <a-col :span="24">
-                <div class="title">温 度</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <div class="title">功 率</div>
+                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -97,17 +87,16 @@
 import { onMounted, ref, computed, h, nextTick, watch } from "vue"
 import { message } from "ant-design-vue"
 import { LineChartOutlined, BarChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
-import { rvbDataApi } from "_api/historicalStatistics"
+import { upsDataApi } from "_api/historicalStatistics"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
-import fourInOneDeviceApi from "_api/fourInOneDevice"
+import upsApi from "_api/ups"
 import LineChart from "_components/charts/LineChart.vue"
 
 const loading = ref(false)
 const searchForm = ref({})
 const tableList = ref([])
 const pageType = ref("1")
-const chartFunKey = ref("1")
 const controllerList = ref([])
 const oldDeviceList = ref([])
 const statisticsData = ref([])
@@ -137,29 +126,41 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
+  { title: "输入线电压", dataIndex: "Z", children: [
+    { title: "AB", dataIndex: "inputLineVoltageAb", align: "center", width: 120 },
+    { title: "BC", dataIndex: "inputLineVoltageBc", align: "center", width: 120 },
+    { title: "CA", dataIndex: "inputLineVoltageCa", align: "center", width: 120 },
+  ]},
   { title: "A相", dataIndex: "A", children: [
-    { title: "局放概率强度", dataIndex: "aPhasePartialDischargeProbabilityIntensity", align: "center", width: 120 },
-    { title: "局放平均强度", dataIndex: "aPhasePartialDischargeAverageIntensity", align: "center", width: 120 },
-    { title: "局放频度", dataIndex: "aPhasePartialDischargeFrequency", align: "center", width: 120 },
-    { title: "温 度", dataIndex: "aPhaseTemperature", align: "center", width: 120 },
+    { title: "旁路相电压", dataIndex: "bypassPhaseVoltageA", align: "center", width: 120 },
+    { title: "输出相电压", dataIndex: "outputPhaseVoltageA", align: "center", width: 120 },
+    { title: "主路输入电流", dataIndex: "mainInputCurrentA", align: "center", width: 120 },
+    { title: "输出电流", dataIndex: "outputCurrentA", align: "center", width: 120 },
+    { title: "输出有功功率", dataIndex: "outputActivePowerA", align: "center", width: 120 },
+    { title: "输出视在功率", dataIndex: "outputApparentPowerA", align: "center", width: 120 },
+    { title: "输出负载率", dataIndex: "outputLoadRateA", align: "center", width: 120 },
   ]},
   { title: "B相", dataIndex: "B", children: [
-    { title: "局放概率强度", dataIndex: "bPhasePartialDischargeProbabilityIntensity", align: "center", width: 120 },
-    { title: "局放平均强度", dataIndex: "bPhasePartialDischargeAverageIntensity", align: "center", width: 120 },
-    { title: "局放频度", dataIndex: "bPhasePartialDischargeFrequency", align: "center", width: 120 },
-    { title: "温 度", dataIndex: "bPhaseTemperature", align: "center", width: 120 },
+    { title: "旁路相电压", dataIndex: "bypassPhaseVoltageB", align: "center", width: 120 },
+    { title: "输出相电压", dataIndex: "outputPhaseVoltageB", align: "center", width: 120 },
+    { title: "主路输入电流", dataIndex: "mainInputCurrentB", align: "center", width: 120 },
+    { title: "输出电流", dataIndex: "outputCurrentB", align: "center", width: 120 },
+    { title: "输出有功功率", dataIndex: "outputActivePowerB", align: "center", width: 120 },
+    { title: "输出视在功率", dataIndex: "outputApparentPowerB", align: "center", width: 120 },
+    { title: "输出负载率", dataIndex: "outputLoadRateB", align: "center", width: 120 },
   ]},
   { title: "C相", dataIndex: "C", children: [
-    { title: "局放概率强度", dataIndex: "cPhasePartialDischargeProbabilityIntensity", align: "center", width: 120 },
-    { title: "局放平均强度", dataIndex: "cPhasePartialDischargeAverageIntensity", align: "center", width: 120 },
-    { title: "局放频度", dataIndex: "cPhasePartialDischargeFrequency", align: "center", width: 120 },
-    { title: "温 度", dataIndex: "cPhaseTemperature", align: "center", width: 120 },
+    { title: "旁路相电压", dataIndex: "bypassPhaseVoltageC", align: "center", width: 120 },
+    { title: "输出相电压", dataIndex: "outputPhaseVoltageC", align: "center", width: 120 },
+    { title: "主路输入电流", dataIndex: "mainInputCurrentC", align: "center", width: 120 },
+    { title: "输出电流", dataIndex: "outputCurrentC", align: "center", width: 120 },
+    { title: "输出有功功率", dataIndex: "outputActivePowerC", align: "center", width: 120 },
+    { title: "输出视在功率", dataIndex: "outputApparentPowerC", align: "center", width: 120 },
+    { title: "输出负载率", dataIndex: "outputLoadRateC", align: "center", width: 120 },
   ]},
-  { title: "综合局放概率强度", dataIndex: "comprehensivePartialDischargeProbabilityIntensity", align: "center", width: 150 },
-  { title: "综合局放平均强度", dataIndex: "comprehensivePartialDischargeAverageIntensity", align: "center", width: 150 },
-  { title: "综合局放频度", dataIndex: "comprehensivePartialDischargeFrequency", align: "center", width: 120 },
-  { title: "总温度", dataIndex: "totalTemperature", align: "center", width: 120 },
-  { title: "局放噪声", dataIndex: "partialDischargeNoise", align: "center", width: 120 },
+  { title: "电池电压", dataIndex: "batteryVoltage", align: "center", width: 120 },
+  { title: "电池电流", dataIndex: "batteryCurrent", align: "center", width: 120 },
+  { title: "BUS电压", dataIndex: "busVoltage", align: "center", width: 120 }
 ])
 
 const deviceList = computed(() => {
@@ -175,12 +176,6 @@ watch(searchForm.value, () => {
   })
 })
 
-watch(() => chartFunKey.value, () => {
-  _calibration(status => {
-    if(status) _setChartData()
-  })
-})
-
 const _getControllerList = async () => {
   try {
     const res = await controllerApi.getAll()
@@ -192,7 +187,7 @@ const _getControllerList = async () => {
 
 const _getDeviceList = async () => {
   try {
-    const res = await fourInOneDeviceApi.getAll()
+    const res = await upsApi.getAll()
     oldDeviceList.value = res.data
   } catch(err) {
     message.error(`获取RVB设备列表失败: ${err}`)
@@ -203,7 +198,7 @@ const _getStatistics = async () => {
   loading.value = true
 
   try {
-    const data = await rvbDataApi.getStatistics({ 
+    const data = await upsDataApi.getStatistics({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
     })
@@ -225,35 +220,35 @@ const _setChartData = () => {
   })
 
   nextTick(() => {
-    if(chartFunKey.value === "1") {
-      chartRef1.value && chartRef1.value.setChartData([
-        { name: "A相", data: data.map(x => x.aPhasePartialDischargeProbabilityIntensity) },
-        { name: "B相", data: data.map(x => x.bPhasePartialDischargeProbabilityIntensity) },
-        { name: "C相", data: data.map(x => x.cPhasePartialDischargeProbabilityIntensity) },
-        { name: "综合", data: data.map(x => x.comprehensivePartialDischargeProbabilityIntensity) }
-      ], times)
+    chartRef1.value && chartRef1.value.setChartData([
+      { name: "A相旁路相电压", data: data.map(x => x.bypassPhaseVoltageA) },
+      { name: "A相输出相电压", data: data.map(x => x.outputPhaseVoltageA) },
+      { name: "B相旁路相电压", data: data.map(x => x.bypassPhaseVoltageB) },
+      { name: "B相输出相电压", data: data.map(x => x.outputPhaseVoltageB) },
+      { name: "C相旁路相电压", data: data.map(x => x.bypassPhaseVoltageC) },
+      { name: "C相输出相电压", data: data.map(x => x.outputPhaseVoltageC) },
+    ], times)
 
-      chartRef2.value && chartRef2.value.setChartData([
-        { name: "A相", data: data.map(x => x.aPhasePartialDischargeAverageIntensity) },
-        { name: "B相", data: data.map(x => x.bPhasePartialDischargeAverageIntensity) },
-        { name: "C相", data: data.map(x => x.cPhasePartialDischargeAverageIntensity) },
-        { name: "综合", data: data.map(x => x.comprehensivePartialDischargeAverageIntensity) }
-      ], times)
+    chartRef2.value && chartRef2.value.setChartData([
+      { name: "A相主路输入电流", data: data.map(x => x.mainInputCurrentA) },
+      { name: "A相输出电流", data: data.map(x => x.outputCurrentA) },
+      { name: "B相主路输入电流", data: data.map(x => x.mainInputCurrentB) },
+      { name: "B相输出电流", data: data.map(x => x.outputCurrentB) },
+      { name: "C相主路输入电流", data: data.map(x => x.mainInputCurrentC) },
+      { name: "C相输出电流", data: data.map(x => x.outputCurrentC) },
+    ], times)
 
-      chartRef3.value && chartRef3.value.setChartData([
-        { name: "A相", data: data.map(x => x.aPhasePartialDischargeFrequency) },
-        { name: "B相", data: data.map(x => x.bPhasePartialDischargeFrequency) },
-        { name: "C相", data: data.map(x => x.cPhasePartialDischargeFrequency) },
-        { name: "综合", data: data.map(x => x.comprehensivePartialDischargeFrequency) }
-      ], times)
-    } else {
-      chartRef1.value && chartRef1.value.setChartData([
-        { name: "A相", data: data.map(x => x.aPhaseTemperature) },
-        { name: "B相", data: data.map(x => x.bPhaseTemperature) },
-        { name: "C相", data: data.map(x => x.cPhaseTemperature) },
-        { name: "综合", data: data.map(x => x.totalTemperature) }
-      ], times)
-    }
+    chartRef3.value && chartRef3.value.setChartData([
+      { name: "A相输出有功功率", data: data.map(x => x.outputActivePowerA) },
+      { name: "A相输出视在功率", data: data.map(x => x.outputApparentPowerA) },
+      { name: "A相输出负载率", data: data.map(x => x.outputLoadRateA) },
+      { name: "B相输出有功功率", data: data.map(x => x.outputActivePowerB) },
+      { name: "B相输出视在功率", data: data.map(x => x.outputApparentPowerB) },
+      { name: "B相输出负载率", data: data.map(x => x.outputLoadRateB) },
+      { name: "C相输出有功功率", data: data.map(x => x.outputActivePowerC) },
+      { name: "C相输出视在功率", data: data.map(x => x.outputApparentPowerC) },
+      { name: "C相输出负载率", data: data.map(x => x.outputLoadRateC) },
+    ], times)
   })
 }
 
@@ -267,7 +262,7 @@ const _getTableList = async () => {
   try {
     loading.value = true
 
-    const data = await rvbDataApi.pageBySheet({ 
+    const data = await upsDataApi.pageBySheet({ 
       ...searchForm.value,
       time: dayjs(searchForm.value.time).format("YYYY-MM-DD"),
       page: current, 
@@ -310,31 +305,4 @@ onMounted(() => {
   _getDeviceList()
 })
 </script>
-
-<style lang="less" scoped>
-  .chartSwitch {
-    text-align: center;
-    width: 100%;
-    margin-bottom: 30px;
-  }
-  ::v-deep(.ant-radio-button-wrapper) {
-    background: none;
-    border-color: #44668A !important;
-    &::before {
-      background: none !important;
-    }
-    &:hover {
-      color: #ffffff; 
-      opacity: .8;
-    }
-  }
-  ::v-deep(.ant-radio-button-wrapper-checked) {
-    background: linear-gradient(180deg, #0552B6 0%, #01294C 100%) !important;
-    border-color: #44668A !important;
-    color: #ffffff;
-  }
-  ::v-deep(.chart) {
-    height: calc(100vh - 410px) !important;
-  }
-</style>
  
