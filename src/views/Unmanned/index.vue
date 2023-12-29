@@ -25,7 +25,7 @@
           </a-select>
         </div>
         <div class="unTitle">微站设备占比</div>
-        <div class="chart" ref="chartRef" />
+        <!-- <div class="chart" ref="chartRef" /> -->
         <div class="chartImg" />
         <div class="equipmentStatistics">
           <div v-for="item, index in deviceList" :key="index" 
@@ -163,6 +163,9 @@
     try {
       const res = await controllerApi.getAll()
       controllerList.value = res.data
+      if(controllerList.value.length !== 0) {
+        controllerList.value.unshift({ id: "0", name: "全部" })
+      }
       callback()
     } catch(err) {
       message.error(`获取微站列表失败: ${err}`)
@@ -196,7 +199,7 @@
         handleSearch()
       }
       deviceCount.value = Lodash.sumBy(deviceList.value, x => x.count)
-      setChartData(deviceList.value)
+      // setChartData(deviceList.value)
     } catch(err) {
       message.error(`获取设备统计数据失败: ${err}`)
     }
@@ -417,7 +420,7 @@
     window.addEventListener("resize", () => {
       _computeEdgeScale()
     })
-    pieChart = echarts.init(chartRef.value)
+    // pieChart = echarts.init(chartRef.value)
     _initData()
     _interfacePolling()
   })
