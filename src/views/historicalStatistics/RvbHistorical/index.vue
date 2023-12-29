@@ -56,21 +56,21 @@
             <a-row v-if="chartFunKey==='1'" :gutter="10" style="height: 80%;">
               <a-col :span="8">
                 <div class="title">局部放电频度</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef1" :grid="chartGrid" yAxisName="次" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">局部放电概率强度</div>
-                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef2" :grid="chartGrid" yAxisName="次" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">局部放电平均强度</div>
-                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef3" :grid="chartGrid" yAxisName="次" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
             </a-row>
             <a-row v-else :gutter="10">
               <a-col :span="24">
                 <div class="title">温 度</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef1" :grid="chartGrid" yAxisName="°C" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>

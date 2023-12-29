@@ -48,24 +48,32 @@
           <a-col :span="8">
             <a-table
               row-key="id" 
-              :columns="columns" 
+              :columns="columns"
               :data-source="tableList" 
               :pagination="pagination"
-              :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }" 
+              :scroll="{ x: 'max-content' }" 
               @change="handleTableChange"
-            />
+            >
+              <template #bodyCell="{ column, record }">
+                <template v-if="column.dataIndex === 'statusName'">
+                  <div :class="['status', `status-${record.status}`]">
+                    {{ record.statusName }}
+                  </div>
+                </template>
+              </template>            
+            </a-table>
           </a-col>
           <a-col v-if="chartNumber === 2" :span="16">
             <div style="width: 100%; height: 40%; margin-top: 2%;">
-              <line-chart ref="chart1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors" :dataZoom="chartDataZoom"/>
+              <line-chart ref="chart1" :yAxisName="yAxisName1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors" :dataZoom="chartDataZoom"/>
             </div>
             <div style="width: 100%; height: 40%; margin-top: 5%;">
-              <line-chart ref="chart2" :grid="chartGrid" :legend="chartLegend" :colors="chart2Colors" :dataZoom="chartDataZoom"/>
+              <line-chart ref="chart2" :yAxisName="yAxisName2" :grid="chartGrid" :legend="chartLegend" :colors="chart2Colors" :dataZoom="chartDataZoom"/>
             </div>
           </a-col>
           <a-col v-else :span="16">
             <div style="width: 100%; height: 90%; margin-top: 2%;">
-              <line-chart ref="chart1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors" :dataZoom="chartDataZoom"/>
+              <line-chart ref="chart1" :yAxisName="yAxisName1" :grid="chartGrid" :legend="chartLegend" :colors="chart1Colors" :dataZoom="chartDataZoom"/>
             </div>
           </a-col>
         </a-row>
@@ -103,6 +111,8 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  yAxisName1: String,
+  yAxisName2: String,
   chartDataProcess: Function,
   tableDataProcess: Function,
   chartGrid: Object,
@@ -222,9 +232,9 @@ const _getTableList = async () => {
   }
 }
 
-const handleTableChange = pagination => {
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
+const handleTableChange = _pagination => {
+  pagination.value.current = _pagination.current
+  pagination.value.pageSize = _pagination.pageSize
   _getTableList()
 }
 

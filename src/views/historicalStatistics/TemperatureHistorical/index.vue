@@ -11,6 +11,8 @@
     :columns="columns"
     :deviceOApi="temperatureEquipmentApi"
     :oApi="temperatureHumidityHistoricalApi"
+    yAxisName1="°C"
+    yAxisName2="%RH"
     :chartDataProcess="chartDataProcess"
   />
 </template>

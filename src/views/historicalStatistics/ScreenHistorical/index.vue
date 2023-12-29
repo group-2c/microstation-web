@@ -52,15 +52,15 @@
             <a-row :gutter="10">
               <a-col :span="8">
                 <div class="title">电压数据</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" yAxisName="V" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">电流数据</div>
-                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" yAxisName="A" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">温度数据</div>
-                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" yAxisName="°C" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -251,9 +251,9 @@ const _getTableList = async () => {
   }
 }
 
-const handleTableChange = pagination => {
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
+const handleTableChange = _pagination => {
+  pagination.value.current = _pagination.current
+  pagination.value.pageSize = _pagination.pageSize
   _getTableList()
 }
 

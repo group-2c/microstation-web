@@ -50,7 +50,7 @@
           <div v-if="statisticsData.length === 0" class="empty">没有相关统计数据</div>
           <div v-else>
             <a-row :gutter="10" style="height: 80%;">
-              <line-chart ref="chartRef" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+              <line-chart ref="chartRef" :grid="chartGrid" yAxisName="°C" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
             </a-row>
           </div>
         </div>
@@ -114,8 +114,8 @@ const formRef = ref()
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
   { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
-  { title: "柜内温度", dataIndex: "cabinetTemperature", align: "center", width: 120 },
-  { title: "柜内湿度", dataIndex: "cabinetHumidity", align: "center", width: 120 },
+  { title: "柜内温度(°C)", dataIndex: "cabinetTemperature", align: "center", width: 130 },
+  { title: "柜内湿度(°C)", dataIndex: "cabinetHumidity", align: "center", width: 130 },
   { title: "告警故障", dataIndex: "A", children: [
     { title: "柜内温湿度传感器", dataIndex: "cabinetTemperatureAndHumiditySensorFailureText", align: "center", className: "warningColor", width: 180 },
     { title: "高湿告警", dataIndex: "highHumidityAlarmText", align: "center", className: "warningColor", width: 120 },
@@ -226,9 +226,9 @@ const _getTableList = async () => {
   }
 }
 
-const handleTableChange = pagination => {
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
+const handleTableChange = _pagination => {
+  pagination.value.current = _pagination.current
+  pagination.value.pageSize = _pagination.pageSize
   _getTableList()
 }
 

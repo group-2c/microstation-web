@@ -56,7 +56,7 @@
                   <a-radio-button value="1">旁路相电压</a-radio-button>
                   <a-radio-button value="2">输出相电压</a-radio-button>
                 </a-radio-group>
-                <line-chart :ref="x => (chartRefs['1'] = x)" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
+                <line-chart :ref="x => (chartRefs['1'] = x)" yAxisName="V" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">电 流</div>
@@ -64,7 +64,7 @@
                   <a-radio-button value="1">主路输入电流</a-radio-button>
                   <a-radio-button value="2">输出电流</a-radio-button>
                 </a-radio-group>
-                <line-chart :ref="x => (chartRefs['2'] = x)" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
+                <line-chart :ref="x => (chartRefs['2'] = x)" yAxisName="A" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">功 率</div>
@@ -73,7 +73,7 @@
                   <a-radio-button value="2">输出视在功率</a-radio-button>
                   <a-radio-button value="3">输出负载率</a-radio-button>
                 </a-radio-group>
-                <line-chart :ref="x => (chartRefs['3'] = x)" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
+                <line-chart :ref="x => (chartRefs['3'] = x)" yAxisName="kVA" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -279,9 +279,9 @@ const _getTableList = async () => {
   }
 }
 
-const handleTableChange = pagination => {
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
+const handleTableChange = _pagination => {
+  pagination.value.current = _pagination.current
+  pagination.value.pageSize = _pagination.pageSize
   _getTableList()
 }
 

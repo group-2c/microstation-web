@@ -76,6 +76,7 @@ const _initModeChart = (data, date) => {
         }
       },
       axisLabel: {
+        padding: [5, 0, 0, 0],
         color: "#dff6ff"
       },
       data: date

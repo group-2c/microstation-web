@@ -13,6 +13,8 @@
     :oApi="waterImmersionHistoricalApi"
     :chart1Colors="['#ebc039', '#bb2d0f']"
     :chart2Colors="['#23f0f8']"
+    yAxisName1="A"
+    yAxisName2="Z"
     :chartDataProcess="chartDataProcess"
     :tableDataProcess="tableDataProcess"
   />

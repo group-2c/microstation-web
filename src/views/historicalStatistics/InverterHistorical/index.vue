@@ -52,15 +52,15 @@
             <a-row :gutter="10">
               <a-col :span="8">
                 <div class="title">电压数据</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef1" :grid="chartGrid" yAxisName="V" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">电流数据</div>
-                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef2" :grid="chartGrid" yAxisName="A" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">温度数据</div>
-                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef3" :grid="chartGrid" yAxisName="°C" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -126,13 +126,13 @@ const formRef = ref()
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
   { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
-  { title: "直流电压", dataIndex: "dcVoltage", align: "center",width: 120, ellipsis: true },
-  { title: "市电电压", dataIndex: "mainsVoltage", align: "center",width: 100, ellipsis: true },
-  { title: "市电频率", dataIndex: "mainsFrequency", align: "center", width: 100, ellipsis: true },
-  { title: "工作频率", dataIndex: "workingFrequency", align: "center", width: 100, ellipsis: true },
-  { title: "输出电压", dataIndex: "outputVoltage", align: "center", width: 100, ellipsis: true },
-  { title: "输出电流", dataIndex: "outputCurrent", align: "center", width: 100, ellipsis: true },
-  { title: "温 度", dataIndex: "temperature", align: "center", width: 100, ellipsis: true }
+  { title: "直流电压(V)", dataIndex: "dcVoltage", align: "center",width: 130, ellipsis: true },
+  { title: "市电电压(V)", dataIndex: "mainsVoltage", align: "center",width: 120, ellipsis: true },
+  { title: "市电频率(次)", dataIndex: "mainsFrequency", align: "center", width: 120, ellipsis: true },
+  { title: "工作频率(次)", dataIndex: "workingFrequency", align: "center", width: 120, ellipsis: true },
+  { title: "输出电压(V)", dataIndex: "outputVoltage", align: "center", width: 120, ellipsis: true },
+  { title: "输出电流(A)", dataIndex: "outputCurrent", align: "center", width: 120, ellipsis: true },
+  { title: "温度(°C)", dataIndex: "temperature", align: "center", width: 110, ellipsis: true }
 ])
 
 const deviceList = computed(() => {
@@ -230,9 +230,9 @@ const _getTableList = async () => {
   }
 }
 
-const handleTableChange = pagination => {
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
+const handleTableChange = _pagination => {
+  pagination.value.current = _pagination.current
+  pagination.value.pageSize = _pagination.pageSize
   _getTableList()
 }
 

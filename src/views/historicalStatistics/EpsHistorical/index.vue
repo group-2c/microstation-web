@@ -52,15 +52,15 @@
             <a-row :gutter="10" style="height: 80%;">
               <a-col :span="8">
                 <div class="title">交流输出相电压</div>
-                <line-chart ref="chartRef1" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef1" :grid="chartGrid" yAxisName="V" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">充电输入线电压</div>
-                <line-chart ref="chartRef2" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef2" :grid="chartGrid" yAxisName="V" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
               <a-col :span="8">
                 <div class="title">交流输出电流</div>
-                <line-chart ref="chartRef3" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef3" :grid="chartGrid" yAxisName="A" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -127,25 +127,25 @@ const formRef = ref()
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
   { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
-  { title: "A相", dataIndex: "A", children: [
+  { title: "A相(V)", dataIndex: "A", children: [
     { title: "交流输出相电压", dataIndex: "acOutputPhaseVoltageA", align: "center", width: 120 },
     { title: "交流输出电流", dataIndex: "acOutputCurrentA", align: "center", width: 120 }
   ]},
-  { title: "B相", dataIndex: "B", children: [
+  { title: "B相(V)", dataIndex: "B", children: [
     { title: "交流输出相电压", dataIndex: "acOutputPhaseVoltageB", align: "center", width: 120 },
     { title: "交流输出电流", dataIndex: "acOutputCurrentB", align: "center", width: 120 }
   ]},
-  { title: "C相", dataIndex: "C", children: [
+  { title: "C相(V)", dataIndex: "C", children: [
     { title: "交流输出相电压", dataIndex: "acOutputPhaseVoltageC", align: "center", width: 120 },
     { title: "交流输出电流", dataIndex: "acOutputCurrentC", align: "center", width: 120 }
   ]},
-  { title: "充电输入线电压", dataIndex: "D", children: [
+  { title: "充电输入线电压(V)", dataIndex: "D", children: [
     { title: "AB", dataIndex: "chargingInputLineVoltageAb", align: "center", width: 100 },
     { title: "BC", dataIndex: "chargingInputLineVoltageBc", align: "center", width: 100 },
     { title: "CA", dataIndex: "chargingInputLineVoltageC", align: "center", width: 100 }
   ]},
-  { title: "直流输入电压", dataIndex: "inputVoltage", align: "center", width: 120 },
-  { title: "输出频率", dataIndex: "frequency", align: "center", width: 120 }
+  { title: "直流输入电压(V)", dataIndex: "inputVoltage", align: "center", width: 140 },
+  { title: "输出频率(次)", dataIndex: "frequency", align: "center", width: 140 }
 ])
 
 const deviceList = computed(() => {

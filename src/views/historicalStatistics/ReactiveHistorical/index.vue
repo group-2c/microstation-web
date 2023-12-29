@@ -58,7 +58,7 @@
             </a-radio-group>
             <a-row :gutter="10" style="height: 80%;">
               <a-col :span="24">
-                <line-chart ref="chartRef" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef" :grid="chartGrid" :yAxisName="yAxisName" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -150,6 +150,11 @@ const columns = ref([
 const deviceList = computed(() => {
   delete searchForm.value.deviceId
   return oldDeviceList.value.filter(x => x.controllerId === searchForm.value.controllerId)
+})
+
+const yAxisName = computed(() => {
+  const _obj = {"1": "V", "2": "A", "3": "KW", "4": "KW", "5": "KW"}
+  return _obj[chartFunKey.value]
 })
 
 watch(searchForm.value, () => {
@@ -254,9 +259,9 @@ const _getTableList = async () => {
   }
 }
 
-const handleTableChange = pagination => {
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
+const handleTableChange = _pagination => {
+  pagination.value.current = _pagination.current
+  pagination.value.pageSize = _pagination.pageSize
   _getTableList()
 }
 

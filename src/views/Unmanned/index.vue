@@ -264,8 +264,8 @@
     }
   }
 
-  const handleTableChange = pagination => {
-    pagination.value.current = pagination.current
+  const handleTableChange = _pagination => {
+    pagination.value.current = _pagination.current
     _getTableList()
   }
 

@@ -204,10 +204,10 @@ const dataUpdate = async () => {
   await getTableList()
 } 
 
-const handleTableChange = pagination => {
+const handleTableChange = _pagination => {
   selectedRowKeys.value = []
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
+  pagination.value.current = _pagination.current
+  pagination.value.pageSize = _pagination.pageSize
   getTableList()
 }
 
