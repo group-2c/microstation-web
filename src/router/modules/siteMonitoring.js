@@ -18,13 +18,13 @@ const route = {
       path: "distributionMonitoring", 
       name: "DistributionMonitoring",
       component: DistributionMonitoring,
-      meta: { title: "配电监控" },
+      meta: { title: "配电监控", effects: [] },
     },
     {
       path: "powerMonitoring",
       name: "PowerMonitoring",
       component: PowerMonitoring,
-      meta: { title: "电力监控" },
+      meta: { title: "电力监控", effects: [] },
     },
   ]
 }

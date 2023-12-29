@@ -20,7 +20,7 @@
           </a-radio-group>
         </template>
         <template #extra>
-          <a-button v-if="pageType ==='2'" :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
+          <a-button v-if="permissions.export && pageType === '2'" :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
         </template>
       </a-page-header>
       <div class="searchContainer">
@@ -94,6 +94,7 @@
  
 <script setup>
 import { onMounted, ref, computed, h, nextTick, watch } from "vue"
+import { getPermissions } from "@/router"
 import { message } from "ant-design-vue"
 import { FileExcelOutlined, LineChartOutlined, BarChartOutlined, SearchOutlined } from "@ant-design/icons-vue"
 import { dict_steady_type } from "_utils/dictionary"
@@ -102,6 +103,8 @@ import dayjs from "dayjs"
 import controllerApi from "_api/controller"
 import { steadyCurvesApi } from "_api/dataAnalysis"
 import LineChart from "_components/charts/LineChart.vue"
+
+const permissions = getPermissions()
 
 const loading = ref(false)
 const searchForm = ref({})

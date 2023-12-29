@@ -51,29 +51,29 @@
                       <template #bodyCell="{ column, record }">
                         <template v-if="column.dataIndex === 'add'">
                           <div class="permissionChange" @click.stop="permissionChange(record, 'add')">
-                            <MinusOutlined class="disabled" v-if="!record.permissions" />
+                            <MinusOutlined class="disabled" v-if="!record.permissions || (record.meta.effects && (record.meta.effects.length === 0 || !record.meta.effects.includes('add')))" />
                             <CheckOutlined v-else-if="record.permissions.add" /> 
                             <CloseOutlined v-else class="noPers" /> 
                           </div>
                         </template>
                         <template v-if="column.dataIndex === 'edit'">
                           <div class="permissionChange" @click.stop="permissionChange(record, 'edit')">
-                            <MinusOutlined class="disabled" v-if="!record.permissions" />
+                            <MinusOutlined class="disabled" v-if="!record.permissions || (record.meta.effects && (record.meta.effects.length === 0 || !record.meta.effects.includes('edit')))" />
                             <CheckOutlined v-else-if="record.permissions.edit" /> 
                             <CloseOutlined v-else class="noPers" /> 
                           </div>
                         </template>
                         <template v-if="column.dataIndex === 'delete'">
                           <div class="permissionChange" @click.stop="permissionChange(record, 'delete')">
-                            <MinusOutlined class="disabled" v-if="!record.permissions" />
-                            <CheckOutlined v-else-if="record.permissions.delete" /> 
+                            <MinusOutlined class="disabled" v-if="!record.permissions || (record.meta.effects && (record.meta.effects.length === 0 || !record.meta.effects.includes('delete')))" />
+                            <CheckOutlined v-else-if="record.permissions.delete" />  
                             <CloseOutlined v-else class="noPers" /> 
                           </div>
                         </template>
                         <template v-if="column.dataIndex === 'export'">
                           <div class="permissionChange" @click.stop="permissionChange(record, 'export')">
-                            <MinusOutlined class="disabled" v-if="!record.permissions" />
-                            <CheckOutlined v-else-if="record.permissions.export" /> 
+                            <MinusOutlined class="disabled" v-if="!record.permissions || (record.meta.effects && (record.meta.effects.length === 0 || !record.meta.effects.includes('export')))" />
+                            <CheckOutlined v-else-if="record.permissions.export" />  
                             <CloseOutlined v-else class="noPers" /> 
                           </div>
                         </template>
@@ -147,12 +147,22 @@ const _setThreeData = (owns = []) => {
         child.title = child.meta.title
         const _x = owns.find(x => x.name === child.name)
         const _per = _x?.permissions
-        child.permissions = { 
-          add: _per?.add === undefined ? true : _per.add,
-          edit: _per?.edit === undefined ? true : _per.edit,
-          delete: _per?.delete === undefined ? true : _per.delete,
-          export: _per?.export === undefined ? true : _per.export,
+
+        if(!child.meta.effects || (child.meta.effects.length !== 0)) {
+          child.permissions = { 
+            add: _per?.add === undefined ? true : _per.add,
+            edit: _per?.edit === undefined ? true : _per.edit,
+            delete: _per?.delete === undefined ? true : _per.delete,
+            export: _per?.export === undefined ? true : _per.export,
+          }
+          if(child.meta.effects) {
+            if(!child.meta.effects.includes("add")) delete child.permissions.add
+            if(!child.meta.effects.includes("edit")) delete child.permissions.edit
+            if(!child.meta.effects.includes("delete")) delete child.permissions.delete
+            if(!child.meta.effects.includes("export")) delete child.permissions.export
+          }
         }
+
         if(!_x) {
           const _index = dataCenter.value.checkedKeys.findIndex(x => x === item.name)
           if(_index !== -1) {
@@ -197,7 +207,7 @@ const tableData = computed(() => {
 })
 
 const permissionChange = (item, type) => {
-  if(item.permissions) {
+  if(item.permissions && item.permissions[type] !== undefined) {
     item.permissions[type] = !item.permissions[type]
   }
 }
@@ -213,7 +223,7 @@ const handleOk = async () => {
       if(item.children) {
         item.children.forEach(child => {
           if(checkedKeys.includes(child.name)) {
-            array.push({ name: child.name, permissions: child.permissions })
+            array.push({ name: child.name, permissions: child.permissions || {} })
           }
         })
       }

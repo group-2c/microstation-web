@@ -20,25 +20,25 @@ const route = {
       path: "operationLog",
       name: "OperationLog",
       component: OperationLog,
-      meta: { title: "操作日志" }
+      meta: { title: "操作日志", effects: ["delete", "export"] }
     },
     {
       path: "controlLog",
       name: "ControlLog",
       component: ControlLog,
-      meta: { title: "控制日志" }
+      meta: { title: "控制日志", effects: ["delete", "export"] }
     },
     {
       path: "loginLog",
       name: "LoginLog",
       component: LoginLog,
-      meta: { title: "登录日志" }
+      meta: { title: "登录日志", effects: ["delete", "export"] }
     },
     {
       path: "userOnline",
       name: "UserOnline",
       component: UserOnline,
-      meta: { title: "用户在线" }
+      meta: { title: "用户在线", effects: ["delete", "export"] }
     },
   ]
 }

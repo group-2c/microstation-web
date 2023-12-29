@@ -17,7 +17,7 @@
           </a-radio-group>
         </template>
         <template #extra>
-          <a-button :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
+          <a-button v-if="permissions.export" :icon="h(FileExcelOutlined)" @click.stop="exportExcel">导出Excel</a-button>
         </template>
       </a-page-header>
       <div class="searchContainer">
@@ -85,12 +85,15 @@
  
 <script setup>
 import { onMounted, ref, h, computed, nextTick } from "vue"
+import { getPermissions } from "@/router"
 import { message } from "ant-design-vue"
 import { ClockCircleOutlined, InsertRowBelowOutlined, FileExcelOutlined, ExperimentOutlined, SearchOutlined, BarChartOutlined } from "@ant-design/icons-vue"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
 import BarChart from "_components/charts/BarChart.vue"
+
+const permissions = getPermissions()
 
 const loading = ref(false)
 const searchForm = ref({})
