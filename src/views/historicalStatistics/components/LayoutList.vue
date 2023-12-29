@@ -89,19 +89,19 @@ const props = defineProps({
   oApi: Object,
   chart1Colors: {
     type: Array,
-    default: ["FD2929"]
+    default: ["#FD2929"]
   },
   chart2Colors: {
     type: Array,
-    default: ["FD7E29"]
+    default: ["#FD7E29"]
   },
   chartNumber: {
     type: Number,
-    dafule: 2
+    default: 2
   },
   chartDataZoom: {
     type: Boolean,
-    dafule: false
+    default: false
   },
   chartDataProcess: Function,
   tableDataProcess: Function,

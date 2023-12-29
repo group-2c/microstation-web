@@ -13,6 +13,10 @@ import InverterHistorical from "@/views/historicalStatistics/InverterHistorical/
 import RvbHistorical from "@/views/historicalStatistics/RvbHistorical/index.vue"
 import UpsHistorical from "@/views/historicalStatistics/UpsHistorical/index.vue"
 import AirHistorical from "@/views/historicalStatistics/AirHistorical/index.vue"
+import EpsHistorical from "@/views/historicalStatistics/EpsHistorical/index.vue"
+import ReactiveHistorical from "@/views/historicalStatistics/ReactiveHistorical/index.vue"
+import TransformerHistorical from "@/views/historicalStatistics/TransformerHistorical/index.vue"
+import LineHistorical from "@/views/historicalStatistics/LineHistorical/index.vue"
 
 const route = {
   path: "historicalAnalysis",
@@ -67,6 +71,30 @@ const route = {
       name: "AirHistorical",
       component: AirHistorical,
       meta: { title: "空调数据" },
+    },
+    {
+      path: "epsHistorical",
+      name: "EpsHistorical",
+      component: EpsHistorical,
+      meta: { title: "EPS数据" },
+    },
+    {
+      path: "reactiveHistorical",
+      name: "ReactiveHistorical",
+      component: ReactiveHistorical,
+      meta: { title: "无功补偿器数据" },
+    },
+    {
+      path: "transformerHistorical",
+      name: "TransformerHistorical",
+      component: TransformerHistorical,
+      meta: { title: "变压保护装置数据" },
+    },
+    {
+      path: "lineHistorical",
+      name: "LineHistorical",
+      component: LineHistorical,
+      meta: { title: "线路保护装置数据" },
     },
   ]
 }

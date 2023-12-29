@@ -23,7 +23,7 @@ import LayoutList from "../components/LayoutList.vue"
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "设备名称", dataIndex: "deviceName" },
+  { title: "设备名称", dataIndex: "deviceName", width: 150 },
   { title: "温度", dataIndex: "temperature" },
   { title: "湿度", dataIndex: "humidity" },
   { title: "采集时间", dataIndex: "time" }

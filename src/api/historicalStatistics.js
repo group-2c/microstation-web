@@ -86,3 +86,43 @@ export const airConditioningDataApi = {
     request.post("/airConditioningData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// EPS分析
+export const epsDataApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/epsData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/epsData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+
+// 无功补偿器
+export const reactivePowerApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/reactivePowerCompensatorData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/reactivePowerCompensatorData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+
+// 变压保护装置
+export const transformerApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/transformerProtectionDeviceData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/transformerProtectionDeviceData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+
+// 线路保护装置
+export const lineProtectiveApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/lineProtectiveDeviceData/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/lineProtectiveDeviceData/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
