@@ -138,7 +138,7 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
+  { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
   { title: "输入线电压", dataIndex: "Z", children: [
     { title: "AB", dataIndex: "inputLineVoltageAb", align: "center", width: 120 },
     { title: "BC", dataIndex: "inputLineVoltageBc", align: "center", width: 120 },

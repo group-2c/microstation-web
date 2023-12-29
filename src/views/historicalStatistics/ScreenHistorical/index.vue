@@ -138,6 +138,7 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
+  { title: "采集时间", dataIndex: "time", width: 180, ellipsis: true, fixed: "left" },
   { title: "电池电压", dataIndex: "batteryVoltage", align: "center",width: 120, ellipsis: true },
   { title: "控母电压", dataIndex: "busbarVoltage", align: "center",width: 100, ellipsis: true },
   { title: "电池电流", dataIndex: "batteryCurrent", align: "center", width: 100, ellipsis: true },
@@ -148,7 +149,6 @@ const columns = ref([
   { title: "负地电压", dataIndex: "negativeGroundVoltage", align: "center", width: 100, ellipsis: true },
   { title: "环境温度", dataIndex: "ambientTemperature", align: "center", width: 100, ellipsis: true },
   { title: "硅链温度", dataIndex: "siliconTemperature", align: "center", width: 100, ellipsis: true },
-  { title: "采集时间", dataIndex: "time", width: 180, ellipsis: true },
   { title: "查 看", dataIndex: "operation", align: "center", width: 120, fixed: "right" }
 ])
 const labelAndFields = ref([])

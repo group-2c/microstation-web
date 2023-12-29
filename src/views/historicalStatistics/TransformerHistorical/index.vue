@@ -55,7 +55,7 @@
             </a-radio-group>
             <a-row :gutter="10" style="height: 80%;">
               <a-col :span="24">
-                <line-chart ref="chartRef" :grid="chartGrid" :legend="chartLegend" :colors="['#ebc039', '#bb2d0f', '#23f0f8']" :dataZoom="false"/>
+                <line-chart ref="chartRef" :grid="chartGrid" :legend="chartLegend" :dataZoom="false"/>
               </a-col>
             </a-row>
           </div>
@@ -120,8 +120,8 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "频 率", dataIndex: "frequency", align: "left", width: 120 },
-  { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
+  { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
+  { title: "频 率", dataIndex: "frequency", align: "center", width: 120 },
   { title: "电压", dataIndex: "A", children: [
     { title: "UA", dataIndex: "uaVoltage", align: "center", width: 120 },
     { title: "UB", dataIndex: "ubVoltage", align: "center", width: 120 },
@@ -140,9 +140,9 @@ const columns = ref([
     { title: "Ic", dataIndex: "icCurrent", align: "center", width: 120 },
     { title: "I2负序电流", dataIndex: "i2NegativeSequenceCurrent", align: "center", width: 120 },
   ]},
-  { title: "有功功率", dataIndex: "activePower", align: "left", width: 120 },
-  { title: "无功功率", dataIndex: "reactivePower", align: "left", width: 120 },
-  { title: "功率因数", dataIndex: "powerFactor", align: "left", width: 120 }
+  { title: "有功功率", dataIndex: "activePower", align: "center", width: 120 },
+  { title: "无功功率", dataIndex: "reactivePower", align: "center", width: 120 },
+  { title: "功率因数", dataIndex: "powerFactor", align: "center", width: 120 }
 ])
 
 const deviceList = computed(() => {
@@ -208,9 +208,12 @@ const _setChartData = () => {
       const phases = chartFunKey.value === "1" ? ["ua", "ub", "uc", "u0", "uab", "ubc", "uca", "u1PositiveSequence", "u2NegativeSequence"] :
         ["i0", "ia", "ib", "ic", "i2NegativeSequence"]
 
+      const labels = chartFunKey.value === "1" ? ["UA", "UB", "UC", "U0", "Uab线", "Ubc线", "Uca线", "U1正序", "U2负序"] :
+        ["I0", "Ia", "Ib", "Ic", "I2负序电流"]
+
       chartRef.value && chartRef.value.setChartData(
-        phases.map(phase => ({
-          name: `${phase}`,
+        phases.map((phase, index) => ({
+          name: `${labels[index]}`,
           data: data.map(x => x[`${phase}${chartSwitchData[chartFunKey.value]}`])
         })),
         times

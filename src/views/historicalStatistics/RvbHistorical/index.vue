@@ -137,7 +137,7 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
+  { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
   { title: "A相", dataIndex: "A", children: [
     { title: "局放概率强度", dataIndex: "aPhasePartialDischargeProbabilityIntensity", align: "center", width: 120 },
     { title: "局放平均强度", dataIndex: "aPhasePartialDischargeAverageIntensity", align: "center", width: 120 },

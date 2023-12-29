@@ -126,7 +126,7 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
+  { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
   { title: "A相", dataIndex: "A", children: [
     { title: "交流输出相电压", dataIndex: "acOutputPhaseVoltageA", align: "center", width: 120 },
     { title: "交流输出电流", dataIndex: "acOutputCurrentA", align: "center", width: 120 }

@@ -125,7 +125,7 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
+  { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
   { title: "直流电压", dataIndex: "dcVoltage", align: "center",width: 120, ellipsis: true },
   { title: "市电电压", dataIndex: "mainsVoltage", align: "center",width: 100, ellipsis: true },
   { title: "市电频率", dataIndex: "mainsFrequency", align: "center", width: 100, ellipsis: true },

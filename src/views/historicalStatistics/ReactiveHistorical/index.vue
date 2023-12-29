@@ -123,7 +123,7 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
-  { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
+  { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
   { title: "A相", dataIndex: "A", children: [
     { title: "电压", dataIndex: "aphaseVoltage", align: "center", width: 120 },
     { title: "电流", dataIndex: "aphaseCurrent", align: "center", width: 120 },

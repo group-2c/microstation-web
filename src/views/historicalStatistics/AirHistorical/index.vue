@@ -113,9 +113,9 @@ const formRef = ref()
 
 const columns = ref([
   { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
+  { title: "采集时间", dataIndex: "time", align: "left", width: 180, fixed: "left" },
   { title: "柜内温度", dataIndex: "cabinetTemperature", align: "center", width: 120 },
   { title: "柜内湿度", dataIndex: "cabinetHumidity", align: "center", width: 120 },
-  { title: "采集时间", dataIndex: "time", align: "left", width: 180 },
   { title: "告警故障", dataIndex: "A", children: [
     { title: "柜内温湿度传感器", dataIndex: "cabinetTemperatureAndHumiditySensorFailureText", align: "center", className: "warningColor", width: 180 },
     { title: "高湿告警", dataIndex: "highHumidityAlarmText", align: "center", className: "warningColor", width: 120 },
