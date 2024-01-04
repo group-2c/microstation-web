@@ -12,8 +12,8 @@
         <template #tags>
           <a-radio-group v-model:value="pageType" @change="pageTypeChange">
             <a-radio-button value="day"> <ClockCircleOutlined /> 按日 </a-radio-button>
-            <a-radio-button value="week"> <InsertRowBelowOutlined /> 按周 </a-radio-button>
             <a-radio-button value="month"> <ExperimentOutlined /> 按月 </a-radio-button>
+            <a-radio-button value="year"> <InsertRowBelowOutlined /> 按年 </a-radio-button>
           </a-radio-group>
         </template>
         <template #extra>
@@ -26,19 +26,14 @@
           <a-col>
             <a-form :model="searchForm" layout="inline" class="complexSearch" ref="formRef">
               <a-form-item label="微 站" name="controllerId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.controllerId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择微站" @change="controllerChange">
+                <a-select v-model:value="searchForm.controllerId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择微站">
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
-                </a-select>
-              </a-form-item>
-              <a-form-item label="多功能电表" name="electricityMeterId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.electricityMeterId" popupClassName="modalSelect" mode="multiple" :maxTagCount="1" showSearch option-filter-prop="name" placeholder="请选择电表">
-                  <a-select-option v-for="item in electricityList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
               <a-form-item label="日期" name="date" :rules="[{ required: true }]">
                 <a-date-picker 
                   v-model:value="searchForm.date" 
-                  :picker="pageType === 'week' ? 'week' : pageType === 'month' ? 'month' : ''" 
+                  :picker="pageType === 'year' ? 'year' : pageType === 'month' ? 'month' : ''" 
                   placeholder="请选择" 
                 />
               </a-form-item>
@@ -90,6 +85,7 @@ import { message } from "ant-design-vue"
 import { ClockCircleOutlined, InsertRowBelowOutlined, FileExcelOutlined, ExperimentOutlined, SearchOutlined, BarChartOutlined } from "@ant-design/icons-vue"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
+import { micrositeEnergyRingApi } from "_api/dataAnalysis"
 import controllerApi from "_api/controller"
 import BarChart from "_components/charts/BarChart.vue"
 
@@ -100,7 +96,6 @@ const searchForm = ref({})
 const tableList = ref([])
 const pageType = ref("day")
 const controllerList = ref([])
-const electricityList = ref([])
 const pagination = ref({
   total: 0,
   current: 1,
@@ -109,7 +104,7 @@ const pagination = ref({
   pageSizeOptions: ["10", "20", "30", "40", "50", "100", "200", "500", "1000"],
   showTotal: total => `共有 ${total} 条数据`
 })
-const pageTypeDist = { day: "日", week: "周", month: "月" }
+const pageTypeDist = { day: "日", month: "月", year: "年" }
 const chartLegend = { top: null, bottom: 0 }
 const chartGrid = { top: "10%", left: "10%", right: "10%", bottom: "15%" }
 const visible = ref(false)
@@ -139,24 +134,6 @@ const _getControllerList = async () => {
   }
 }
 
-const controllerChange = async () => {
-  electricityList.value = []
-  delete searchForm.value.electricityMeterId
-  loading.value = true
-  try {
-    const res = await controllerApi.getDeviceByDeviceType({
-      deviceType: "electricity_meter",
-      controllerID: searchForm.value.controllerId
-    })
-    electricityList.value = res
-  } catch(err) {
-    console.log(err)
-    message.error(`获取多功能电表列表失败:${err}`)
-  } finally {
-    loading.value = false 
-  }  
-}
-
 const _calibration = callback => {
   formRef.value.validate().then(() => callback(true)).catch(() => callback(false))
 }
@@ -171,16 +148,16 @@ const _getTableList = async () => {
   }
   if(pageType.value === "day") data.date = dayjs(data.date).format("YYYY-MM-DD")
   if(pageType.value === "month") data.date = dayjs(data.date).format("YYYY-MM")
-  if(pageType.value === "week") data.date = dayjs(dayjs(data.date).day(1)).format("YYYY-MM-DD")
+  if(pageType.value === "year") data.date = dayjs(data.date).format("YYYY")
 
-  console.log(JSON.stringify(data))
-
-  loading.value = true
   try {
-    pagination.value.total = 10
-    pagination.value.current = 1
+    loading.value = true
+    const res = await micrositeEnergyRingApi.pageBySheet(data)
+    tableList.value = res.content
+    pagination.value.total = res.totalElements
+    pagination.value.current = res.pageNumber
   } catch (err) {
-    message.error("列表数据失败: " + err)
+    message.error("获取统计列表数据失败: " + err)
   } finally {
     loading.value = false
   }
@@ -193,8 +170,7 @@ const handleTableChange = _pagination => {
 }
 
 const pageTypeChange = () => {
-  searchForm.value = {}
-  pagination.value.current = 1
+  _searchPrefix()
 }
 
 const _searchPrefix = () => {
@@ -246,29 +222,11 @@ const exportExcel = () => {
     Object.keys(dataArray[0]).forEach(key => data[key] = item[key])
     dataArray.push(data)
   })
-  ExportXlsx.downloadExcel(dataArray, `微站能耗分析数据表_${new Date().toLocaleString()}`)
+  ExportXlsx.downloadExcel(dataArray, `微站能耗环比分析数据表_${new Date().toLocaleString()}`)
 }
 
 onMounted(() => {
   _getControllerList()
-  tableList.value = [
-    {
-      id: 1,
-      name: "回路1",
-      current: 100,
-      last: 120,
-      added: 0,
-      scale: "0"
-    },
-    {
-      id: 2,
-      name: "回路2",
-      current: 200,
-      last: 120,
-      added: 80,
-      scale: "40"
-    }
-  ]
 })
 </script>
 

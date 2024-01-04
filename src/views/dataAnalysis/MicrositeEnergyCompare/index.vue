@@ -62,6 +62,7 @@
             row-key="id" 
             :columns="columns" 
             :data-source="tableList" 
+            :scroll="{ y: 'calc(100vh - 360px)', x: 'max-content' }" 
             :pagination="false"
           />
         </div>
@@ -77,6 +78,7 @@ import { message } from "ant-design-vue"
 import { LineChartOutlined, BarChartOutlined, FileExcelOutlined, SearchOutlined } from "@ant-design/icons-vue"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
+import { micrositeEnergyCompareApi } from "_api/dataAnalysis"
 import controllerApi from "_api/controller"
 import BarChart from "_components/charts/BarChart.vue"
 
@@ -89,25 +91,15 @@ const pageType = ref("1")
 const controllerList = ref([])
 const electricityList = ref([])
 const statisticsData = ref([])
-const pagination = ref({
-  total: 0,
-  current: 1,
-  pageSize: 10,
-  showSizeChanger: true,
-  pageSizeOptions: ["10", "20", "30", "40", "50", "100", "200", "500", "1000"],
-  showTotal: total => `共有 ${total} 条数据`
-})
 
 const formRef = ref()
 const barChartRef = ref()
 
 const columns = ref([
-  { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1 },
   { title: "月份", dataIndex: "month" },
   { title: "本期", dataIndex: "period" },
   { title: "同期", dataIndex: "same" },
-  { title: "同比(%)", dataIndex: "scale" },
-  { title: "累计同比(%)", dataIndex: "grandScale" },
+  { title: "同比(%)", dataIndex: "scale" }
 ])
 
 watch(searchForm.value, () => {
@@ -148,22 +140,16 @@ const controllerChange = async () => {
 const _getStatistics = async () => {
   loading.value = true
   try {
-    let date = [], array = [
-      {
-        name: "本期",
-        data: []
-      },
-      {
-        name: "同期",
-        data: []
-      }
-    ]
-    
-    new Array(12).fill("-").forEach((_x, index) => {
-      date.push(`${index+1}月`)
-      array[0].data.push(Math.random() * 300)
-      array[1].data.push(Math.random() * 300)
+    const data = await micrositeEnergyCompareApi.getStatistics({ 
+      ...searchForm.value,
+      year: dayjs(searchForm.value.year).format("YYYY")
     })
+
+    const date = new Array(12).fill("-").map((_i, index) => `${index+1}月`)
+    const array = [
+      { name: "本期", data: JSON.parse(data.period) },
+      { name: "同期", data: JSON.parse(data.same) }
+    ]
 
     statisticsData.value = array
     nextTick(() => {
@@ -181,33 +167,22 @@ const _calibration = callback => {
 }
 
 const _getTableList = async () => {
-  const { current, pageSize } = pagination.value
-  const { year } = searchForm.value
-  const data = { 
-    ...searchForm.value,
-    page: current, 
-    size: pageSize 
-  }
-  if(year) data.year = dayjs(year).format("YYYY")
-
-  loading.value = true
   try {
-    tableList.value = [
-      {
-        id: 1,
-      }
-    ]
-    pagination.value.total = 10
-    pagination.value.current = 1
+    loading.value = true
+
+    const data = await micrositeEnergyCompareApi.pageBySheet({ 
+      ...searchForm.value,
+      year: dayjs(searchForm.value.year).format("YYYY")
+    })
+    tableList.value = data
   } catch (err) {
-    message.error("列表数据失败: " + err)
+    message.error("获取统计列表数据失败: " + err)
   } finally {
     loading.value = false
   }
 }
 
 const _searchPrefix = () => {
-  pagination.value.current = 1
   if(pageType.value === "1") {
     _getStatistics()
   } else {

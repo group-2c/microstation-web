@@ -50,3 +50,20 @@ export const micrositeEnergyApi = {
     request.post("/micrositeEnergy/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// 微站能耗同比
+export const micrositeEnergyCompareApi = {
+  getStatistics: data => new Promise((resolve, reject) => {
+    request.post("/micrositeEnergyCompare/getStatistics", data).then(res => resolve(res.data), err => reject(err))
+  }),
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/micrositeEnergyCompare/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
+
+// 微站能耗环比
+export const micrositeEnergyRingApi = {
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/micrositeEnergyRing/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
