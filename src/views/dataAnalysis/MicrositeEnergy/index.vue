@@ -26,13 +26,8 @@
           <a-col>
             <a-form :model="searchForm" layout="inline" class="complexSearch" ref="formRef">
               <a-form-item label="微 站" name="controllerId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.controllerId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择微站" @change="controllerChange">
+                <a-select v-model:value="searchForm.controllerId" popupClassName="modalSelect" showSearch option-filter-prop="name" placeholder="请选择微站">
                   <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
-                </a-select>
-              </a-form-item>
-              <a-form-item label="多功能电表" name="electricityMeterId" :rules="[{ required: true }]">
-                <a-select v-model:value="searchForm.electricityMeterId" popupClassName="modalSelect" mode="multiple" :maxTagCount="1" showSearch option-filter-prop="name" placeholder="请选择电表">
-                  <a-select-option v-for="item in electricityList" :key="item.id" :value="item.id" :name="item.name">{{item.name}}</a-select-option>
                 </a-select>
               </a-form-item>
               <a-form-item label="日期" name="date" :rules="[{ required: true }]">
@@ -76,9 +71,8 @@
           row-key="id" 
           :columns="columns" 
           :data-source="tableList" 
-          :pagination="pagination"
+          :pagination="true"
           :scroll="{ y: 'calc(100vh - 410px)', x: 'max-content' }" 
-          @change="handleTableChange"
         />
       </div>
     </a-spin>
@@ -90,6 +84,7 @@ import { onMounted, ref, h } from "vue"
 import { message } from "ant-design-vue"
 import { getPermissions } from "@/router"
 import { ClockCircleOutlined, InsertRowBelowOutlined, FileExcelOutlined, ExperimentOutlined, SearchOutlined } from "@ant-design/icons-vue"
+import { micrositeEnergyApi } from "_api/dataAnalysis"
 import ExportXlsx from "_utils/exportXlsx"
 import dayjs from "dayjs"
 import controllerApi from "_api/controller"
@@ -101,18 +96,9 @@ const searchForm = ref({})
 const tableList = ref([])
 const pageType = ref("day")
 const controllerList = ref([])
-const electricityList = ref([])
 const dayList = new Array(31).fill("-").map((_x, index) => index + 1)
 const monthList = new Array(12).fill("-").map((_x, index) => index + 1)
 const hourList = new Array(25).fill("-").map((_x, index) => index)
-const pagination = ref({
-  total: 0,
-  current: 1,
-  pageSize: 10,
-  showSizeChanger: true,
-  pageSizeOptions: ["10", "20", "30", "40", "50", "100", "200", "500", "1000"],
-  showTotal: total => `共有 ${total} 条数据`
-})
 
 const formRef = ref()
 
@@ -127,24 +113,6 @@ const _getControllerList = async () => {
   }
 }
 
-const controllerChange = async () => {
-  electricityList.value = []
-  delete searchForm.value.electricityMeterId
-  loading.value = true
-  try {
-    const res = await controllerApi.getDeviceByDeviceType({
-      deviceType: "electricity_meter",
-      controllerID: searchForm.value.controllerId
-    })
-    electricityList.value = res
-  } catch(err) {
-    console.log(err)
-    message.error(`获取多功能电表列表失败:${err}`)
-  } finally {
-    loading.value = false 
-  }  
-}
-
 const _calibration = callback => {
   formRef.value.validate().then(() => callback(true)).catch(() => callback(false))
 }
@@ -156,6 +124,7 @@ const _setDynamicColumns = data => {
   const _columns = [
     { title: "序 号", dataIndex: "index", align: "center", width: 80, customRender: data => data.index + 1, fixed: "left" },
     { title: "回路名称/KW.h", dataIndex: "name", align: "left", width: 200, ellipsis: true, fixed: "left" },
+    { title: "设备名称", dataIndex: "deviceName", align: "left", width: 150, ellipsis: true, fixed: "left" },
   ]
   new Array(count+1).fill("-").forEach((_x, index) => {
     const number = searchForm.value.start + index
@@ -175,36 +144,14 @@ const _setDynamicColumns = data => {
 }
 
 const _getTableList = async () => {
-  const { current, pageSize } = pagination.value
-  const data = { 
-    ...searchForm.value,
-    type: pageType.value,
-    date: dayjs(searchForm.value.date).format(pageType.value === 'day' ? 'YYYY-MM-DD' : pageType.value === 'month' ? 'YYYY-MM' : 'YYYY'),
-    page: current, 
-    size: pageSize 
-  }
-
-  console.log(JSON.stringify(data))
-  _setDynamicColumns([
-    {
-      id: 1,
-      name: "回路1",
-      count: 10000,
-      values: [100, 200, 300, 400, 500, 600]
-    },
-    {
-      id: 2,
-      name: "回路2",
-      count: 20000,
-      values: [1000, 2000, 3000, 4000, 5000, 6000]
-    },
-  ])
-
-
   loading.value = true
   try {
-    pagination.value.total = 10
-    pagination.value.current = 1
+    const data = await micrositeEnergyApi.pageBySheet({ 
+      ...searchForm.value,
+      type: pageType.value,
+      date: dayjs(searchForm.value.date).format(pageType.value === 'day' ? 'YYYY-MM-DD' : pageType.value === 'month' ? 'YYYY-MM' : 'YYYY')
+    })
+    _setDynamicColumns(data)
   } catch (err) {
     message.error("列表数据失败: " + err)
   } finally {
@@ -212,21 +159,12 @@ const _getTableList = async () => {
   }
 }
 
-const handleTableChange = pagination => {
-  pagination.value.current = pagination.current
-  pagination.value.pageSize = pagination.pageSize
-  _getTableList()
-}
-
 const pageTypeChange = () => {
   searchForm.value = {}
   tableList.value = []
-  pagination.value.current = 1
-  handleSearch()
 }
 
 const _searchPrefix = () => {
-  pagination.value.current = 1
   _getTableList()
 }
 

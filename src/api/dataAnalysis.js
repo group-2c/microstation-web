@@ -43,3 +43,10 @@ export const soeEventsApi = {
     request.post("/soeEvents/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
   })
 }
+
+// 微站能耗
+export const micrositeEnergyApi = {
+  pageBySheet: data => new Promise((resolve, reject) => {
+    request.post("/micrositeEnergy/pageBySheet", data).then(res => resolve(res.data), err => reject(err))
+  })
+}
