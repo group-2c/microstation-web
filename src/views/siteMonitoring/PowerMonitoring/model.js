@@ -13,11 +13,14 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js"
 class PowerModel {
   mixer
   clock
+  container
   renderer
   scene
   camera
   controls
   model
+  raycaster
+  mouse
 
   _animate = () => {
     requestAnimationFrame(this._animate)
@@ -38,6 +41,7 @@ class PowerModel {
     this.renderer.setPixelRatio(window.devicePixelRatio)
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     container.appendChild(this.renderer.domElement)
+    this.container = container
 
     const pmremGenerator = new THREE.PMREMGenerator(this.renderer)
 
@@ -54,13 +58,16 @@ class PowerModel {
     this.controls.enablePan = false
     this.controls.enableDamping = true
 
+    this.raycaster = new THREE.Raycaster() 
+    this.mouse = new THREE.Vector2()
+
     const manager = new THREE.LoadingManager()
     manager.onLoad = () => {
       callBack && callBack()
     }
 
     const loader = new GLTFLoader(manager)
-    loader.load(url, gltf => {
+    loader.load("/NoLod_0.glb", gltf => {
       console.log(gltf)
       this.model = gltf.scene
       this.model.position.set(1, 1, 0)
@@ -71,6 +78,23 @@ class PowerModel {
 
       this._animate()
     })
+
+    container.addEventListener("click", this.onMouseClick, false)
+  }
+
+  onMouseClick = event => {
+    this.mouse.x = (event.clientX / this.container.clientWidth) * 2 - 1
+    this.mouse.y = -(event.clientY / this.container.clientHeight) * 2 + 1
+
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+
+    let intersects = this.raycaster.intersectObjects(this.scene.children, true)
+    console.log("intersects", intersects)
+    if (intersects.length !== 0 && intersects[0].object instanceof THREE.Mesh) {
+      let item = intersects[0]
+      console.log("event", event)
+      console.log("item", item)
+    }
   }
 }
 

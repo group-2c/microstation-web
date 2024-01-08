@@ -104,7 +104,13 @@
                 @change="handleTableChange"
                 :row-class-name="_record => (_record.id === tableActiveItem.id ? 'itemActive' : '')"
                 :customRow="customRow"
-              />
+              >
+                <template #bodyCell="{ column, record }">
+                  <template v-if="column.dataIndex === 'statusName'">
+                    <div :class="['status', `status-${record.status}`]">{{ record.statusName }}</div>
+                  </template>
+                </template>
+              </a-table>
             </a-spin>
           </div>
         </div>
