@@ -24,9 +24,9 @@
             <a-select-option v-for="item in controllerList" :key="item.id" :value="item.id">{{item.name}}</a-select-option>
           </a-select>
         </div>
-        <div class="unTitle">微站设备占比</div>
+        <div class="unTitle">微站设备数据</div>
         <!-- <div class="chart" ref="chartRef" /> -->
-        <div class="chartImg" />
+        <!-- <div class="chartImg" /> -->
         <div class="equipmentStatistics">
           <div v-for="item, index in deviceList" :key="index" 
             :class="[

@@ -85,102 +85,102 @@ export const dict_unmanned_equipment = {
   access_control_controller: {
     name: "门禁控制器",
     drawerWidth: 950,
-    subKey: "microstation:$microstation_id:accesscontrol:$equipment_id:status",
+    subKey: "microstation/$microstation_id/accesscontrol/$equipment_id/status",
     controlSubKeys: [
-      "microstation:$microstation_id:accesscontrol:$accesscontrol_id:remotecontrol"
+      "microstation/$microstation_id/accesscontrol/$equipment_id/remotecontrol"
     ]
   },
   air_conditioning: {
     name: "空调",
-    subKey: "microstation:$microstation_id:airconditioning:$equipment_id:status",
+    subKey: "microstation/$microstation_id/airconditioning/$equipment_id/status",
     controlSubKeys: [
-      "microstation:$microstation_id:airconditioning:$equipment_id:remotecontrol"
+      "microstation/$microstation_id/airconditioning/$equipment_id/remotecontrol"
     ]
   },
   camera: {
     name: "摄像机",
     drawerWidth: 550,
-    subKey: "microstation:$microstation_id:camera:$equipment_id:online"
+    subKey: "microstation/$microstation_id/camera/$equipment_id/online"
   },
   dc_screen: {
     name: "直流屏",
-    subKey: "microstation:$microstation_id:dcsreen:$equipment_id:status"
+    subKey: "microstation/$microstation_id/dcsreen/$equipment_id/status"
   },
   diesel_engine: {
     name: "柴油发动机",
     drawerWidth: 1200,
-    subKey: "microstation:$microstation_id:dieselEngine:$equipment_id:status",
+    subKey: "microstation/$microstation_id/dieselEngine/$equipment_id/status",
     controlSubKeys: [
-      "microstation:$microstation_id:dieselEngine:$equipment_id:remotecontrol"
+      "microstation/$microstation_id/dieselEngine/$equipment_id/remotecontrol"
     ]
   },
   double_power_controller: {
     name: "双电源控制器",
     drawerWidth: 850,
-    subKey: "microstation:$microstation_id:doublepowercontroller:$equipment_id:status",
+    subKey: "microstation/$microstation_id/doublepowercontroller/$equipment_id/status",
     controlSubKeys: [
-      "microstation:$microstation_id:doublepowercontroller:$equipment_id:remotecontrol"
+      "microstation/$microstation_id/doublepowercontroller/$equipment_id/remotecontrol"
     ]
   },
   dry_temperature_controller: {
     name: "干变温控器",
     drawerWidth: 450,
-    subKey: "microstation:$microstation_id:drytemperaturecontroller:$equipment_id:status"
+    subKey: "microstation/$microstation_id/drytemperaturecontroller/$equipment_id/status"
   },
   electricity_meter: {
     name: "多功能电表",
-    subKey: "microstation:$microstation_id:electricitymeter:$equipment_id:status",
+    subKey: "microstation/$microstation_id/electricitymeter/$equipment_id/status",
     controlSubKeys: [
-      "microstation:$microstation_id:electricitymeter:$equipment_id:remotecontrol"
+      "microstation/$microstation_id/electricitymeter/$equipment_id/remotecontrol"
     ]
   },
   eps: {
     name: "EPS电源",
-    subKey: "microstation:$microstation_id:eps:$equipment_id:status"
+    subKey: "microstation/$microstation_id/eps/$equipment_id/status"
   },
   ups: {
     name: "UPS电源",
     drawerWidth: 1400,
-    subKey: "microstation:$microstation_id:ups:$equipment_id:status"
+    subKey: "microstation/$microstation_id/ups/$equipment_id/status"
   },
   inverter: {
     name: "逆变器",
     drawerWidth: 600,
-    subKey: "microstation:$microstation_id:inverter:$equipment_id:status",
+    subKey: "microstation/$microstation_id/inverter/$equipment_id/status",
     controlSubKeys: [
-      "microstation:$microstation_id:inverter:$equipment_id:remotecontrol"
+      "microstation/$microstation_id/inverter/$equipment_id/remotecontrol"
     ]
   },
   line_protective_device: {
     name: "线路保护装置",
-    subKey: "microstation:$microstation_id:linepotectivedevice:$equipment_id:status"
+    subKey: "microstation/$microstation_id/linepotectivedevice/$equipment_id/status"
   },
   reactive_power_compensator: {
     name: "无功补偿器",
-    subKey: "microstation:$microstation_id:reactivepowercompensator:$equipment_id:status"
+    subKey: "microstation/$microstation_id/reactivepowercompensator/$equipment_id/status"
   },
   rvb: {
     name: "局放监测装置",
-    subKey: "microstation:$microstation_id:rvb:$equipment_id:status"
+    subKey: "microstation/$microstation_id/rvb/$equipment_id/status"
   },
   telemetry_unit: {
     name: "遥信遥测单元",
     drawerWidth: 600,
-    subKey: "microstation:$microstation_id:telemetryunit:$equipment_id:status"
+    subKey: "microstation/$microstation_id/telemetryunit/$equipment_id/status"
   },
   temperature_humidity_equipment: {
     name: "数显温湿度器",
     drawerWidth: 600,
-    subKey: "microstation:$microstation_id:temperaturehumidityequipment:$equipment_id:status"
+    subKey: "microstation/$microstation_id/temperaturehumidityequipment/$equipment_id/status"
   },
   transformer_protection_device: {
     name: "变压器保护装置",
-    subKey: "microstation:$microstation_id:transformerprotectiondevice:$equipment_id:status"
+    subKey: "microstation/$microstation_id/transformerprotectiondevice/$equipment_id/status"
   },
   water_immersion_sensor: {
     name: "水浸传感器",
     drawerWidth: 600,
-    subKey: "microstation:$microstation_id:waterimmersionsensor:$equipment_id:status"
+    subKey: "microstation/$microstation_id/waterimmersionsensor/$equipment_id/status"
   }
 }
 
