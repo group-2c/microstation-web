@@ -67,7 +67,7 @@ class PowerModel {
     }
 
     const loader = new GLTFLoader(manager)
-    loader.load("/NoLod_0.glb", gltf => {
+    loader.load("/NoLod_1.glb", gltf => {
       console.log(gltf)
       this.model = gltf.scene
       this.model.position.set(1, 1, 0)
@@ -89,7 +89,7 @@ class PowerModel {
     this.raycaster.setFromCamera(this.mouse, this.camera)
 
     let intersects = this.raycaster.intersectObjects(this.scene.children, true)
-    console.log("intersects", intersects)
+    console.log("this.scene.children", this.scene.children)
     if (intersects.length !== 0 && intersects[0].object instanceof THREE.Mesh) {
       let item = intersects[0]
       console.log("event", event)

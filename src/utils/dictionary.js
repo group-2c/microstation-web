@@ -104,7 +104,7 @@ export const dict_unmanned_equipment = {
   },
   dc_screen: {
     name: "直流屏",
-    subKey: "microstation/$microstation_id/dcsreen/$equipment_id/status"
+    subKey: "microstation/$microstation_id/dcscreen/$equipment_id/status"
   },
   diesel_engine: {
     name: "柴油发动机",

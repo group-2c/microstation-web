@@ -13,7 +13,6 @@ export default {
     { title: "微站控制器ID", dataIndex: "controllerId", align: "left", width: 120, ellipsis: true },
     { title: "设备名称", dataIndex: "name", align: "left", width: 120 },
     { title: "设备ID", dataIndex: "id", align: "left", width: 120 },
-    { title: "设备地址", dataIndex: "ip", align: "left", width: 120 },
     { title: "波特率", dataIndex: "baudRate", align: "left", width: 120 },
     { title: "数据位", dataIndex: "dataBit", align: "left", width: 120 },
     { title: "停止位", dataIndex: "stopBit", align: "left", width: 120 },
