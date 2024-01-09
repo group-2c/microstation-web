@@ -103,7 +103,7 @@ const _getHistory = async () => {
   }
 }
 
-const handleShow = (item = {}) => {
+const handleShow = async (item = {}) => {
   const { subKey, controlSubKeys, type } = props.deviceGroup
 
   visible.value = true
@@ -122,7 +122,7 @@ const handleShow = (item = {}) => {
   const componentName = Lodash.upperFirst(Lodash.camelCase(type))
   currentCompoent.value = defineAsyncComponent(() => import(`@/views/Unmanned/form/${componentName}.vue`))
 
-  _getHistory()
+  await _getHistory()
   _connectMqtt()
 }
 

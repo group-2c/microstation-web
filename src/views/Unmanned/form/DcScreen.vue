@@ -31,7 +31,11 @@
 import { ref, watch } from "vue"
 import BitDataTidy from "./BitDataTidy.vue"
 
-const props = defineProps({ record: Object })
+const props = defineProps({ 
+  record: Object,
+  deviceItem: Object,
+  publish: Function
+})
 const singleBatteryVoltage = ref([])
 const singleRecord = ref({})
 
@@ -94,12 +98,14 @@ const binaryChs = ref([
 watch(() => props.record, () => {
   singleBatteryVoltage.value = []
   singleRecord.value = {}
-  if(props.record?.single_battery_voltage) {
-    JSON.parse(props.record.single_battery_voltage).forEach((item, index) => {
+
+  if(props.record.single_battery_voltage) {
+    props.record?.single_battery_voltage.forEach((item, index) => {
       singleRecord.value[`si_${index}`] = item / 100
       singleBatteryVoltage.value.push({ label: `电池${index+1}`, field: `si_${index}`, unit: "V" })
     })
   }
+
   bitRef.value.bitDataTidy(props.record)
 })
 </script>
