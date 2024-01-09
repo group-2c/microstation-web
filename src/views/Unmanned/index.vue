@@ -117,7 +117,7 @@
       </div>
     </div>
   </div>
-  <realTime-data ref="drawerRef" :controllerId="controllerId" :deviceGroup="currentDevice" :onCancel="realTimeCancel"/>
+  <realTime-data ref="drawerRef" :deviceGroup="currentDevice" :onCancel="realTimeCancel"/>
   <layout-footer />
 </template>
 
@@ -202,7 +202,7 @@
       if(inception) {
         equipmentItemClick(deviceList.value[0])
       } else {
-        handleSearch()
+        handleSearch(inception)
       }
       deviceCount.value = Lodash.sumBy(deviceList.value, x => x.count)
       // setChartData(deviceList.value)
@@ -239,9 +239,11 @@
     handleSearch()
   }
 
-  const _getTableList = async () => {
-    loading.value = true
-    
+  const _getTableList = async (inception = true) => {
+    if(inception) {
+      loading.value = true
+    }
+     
     const { current, pageSize } = pagination.value
     const data = {
       controllerID: controllerId.value,
@@ -275,9 +277,9 @@
     _getTableList()
   }
 
-  const handleSearch = () => {
+  const handleSearch = (inception = true) => {
     pagination.value.current = 1
-    _getTableList()
+    _getTableList(inception)
   }
 
   const _computeEdgeScale = () => {

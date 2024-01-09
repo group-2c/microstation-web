@@ -30,7 +30,6 @@ import Lodash from "lodash"
 import unmannedApi from "_api/unmanned"
 
 const props = defineProps({
-  controllerId: [String, Number],
   deviceGroup: Object,
   onCancel: Function
 })
@@ -91,7 +90,7 @@ const publishMqtt = (data, keyIndex) => {
 
 const _getHistory = async () => {
   const data = {
-    controllerID: props.controllerId,
+    controllerID: deviceItem.value.controllerId,
     deviceType: props.deviceGroup.type,
     deviceID: deviceItem.value.id
   }
@@ -109,12 +108,12 @@ const handleShow = async (item = {}) => {
   visible.value = true
   deviceItem.value = item
 
-  const microstation = Lodash.replace(subKey, "$microstation_id", props.controllerId)
+  const microstation = Lodash.replace(subKey, "$microstation_id", item.controllerId)
   subscribeKey.value = Lodash.replace(microstation, "$equipment_id", item.id)
 
   if(controlSubKeys) {
     deviceItem.value.controlSubKeys = controlSubKeys.map(key => {
-      const replace1 = Lodash.replace(key, "$microstation_id", props.controllerId)
+      const replace1 = Lodash.replace(key, "$microstation_id", item.controllerId)
       return Lodash.replace(replace1, "$equipment_id", item.id)
     })
   }
